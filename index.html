@@ -6,6 +6,9 @@
   <meta name="theme-color" content="#0f172a" />
   <title>RH Simples - 2 Lojas</title>
 
+  <!-- evita 404 favicon.ico -->
+  <link rel="icon" href="data:,">
+
   <!-- Tailwind CDN (warning no console é normal) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -70,7 +73,7 @@
           </div>
 
           <div class="text-xs text-slate-500">
-            Dica (se der problema de login): limpe os dados do site/app (cache do PWA).
+            Se o login não entrar, limpe os dados do site/app (cache do PWA).
           </div>
         </div>
       </div>
@@ -245,8 +248,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
               <h2 class="text-xl font-bold">Cálculo de Rescisão (simples)</h2>
               <p class="text-sm text-slate-600">
-                Você escolhe o funcionário, a data, e decide incluir ou não: INSS, FGTS e multa 40%.
-                Exportar PDF: botão “Exportar PDF”.
+                Exportar PDF: botão “Exportar PDF”. (Sem inserir &lt;/script&gt; dentro de template)
               </p>
 
               <div class="mt-4 grid md:grid-cols-3 gap-3 no-print">
@@ -369,12 +371,9 @@
   </main>
 
   <script>
-    // ==========================================================
-    // PWA "single file": cria manifest + tenta registrar SW via blob
-    // ==========================================================
+    // ========= PWA single-file (manifest via blob) =========
     (function setupPWA(){
       try {
-        // Manifest em blob
         const manifest = {
           name: "RH Simples",
           short_name: "RH",
@@ -391,7 +390,6 @@
         document.head.appendChild(link);
       } catch {}
 
-      // Install prompt (se o navegador liberar)
       let deferredPrompt = null;
       const btnInstall = document.getElementById("btnInstall");
       window.addEventListener("beforeinstallprompt", (e) => {
@@ -405,25 +403,9 @@
         deferredPrompt = null;
         btnInstall.classList.add("hidden");
       });
-
-      // Service Worker via blob (pode falhar em alguns navegadores; app continua funcionando)
-      if ("serviceWorker" in navigator) {
-        try {
-          const swCode = `
-            const CACHE = "rh-singlefile-v3";
-            self.addEventListener("install", e => self.skipWaiting());
-            self.addEventListener("activate", e => self.clients.claim());
-          `;
-          const swBlob = new Blob([swCode], {type:"text/javascript"});
-          const swUrl = URL.createObjectURL(swBlob);
-          navigator.serviceWorker.register(swUrl).catch(()=>{});
-        } catch {}
-      }
     })();
 
-    // ==========================================================
-    // Helpers
-    // ==========================================================
+    // ========= Helpers / Storage =========
     const LS_KEY = "pwa_rh_simples_v1";
     const SESSION_KEY = "pwa_rh_session_v1";
 
@@ -446,12 +428,8 @@
       if (d.getDate() < day) d.setDate(0);
       return d.toISOString().slice(0,10);
     }
-    function vacationDueISO(admissionISO){
-      if (!admissionISO) return "";
-      return addMonths(admissionISO, 24);
-    }
+    function vacationDueISO(admissionISO){ return admissionISO ? addMonths(admissionISO, 24) : ""; }
 
-    // Hash PIN com fallback (para não travar login em ambientes problemáticos)
     async function hashPin(text){
       text = String(text ?? "");
       if (window.crypto && crypto.subtle && window.isSecureContext) {
@@ -518,9 +496,7 @@
       return { session: s, db, storeKey: s.storeKey, store: db.stores[s.storeKey] };
     }
 
-    // ==========================================================
-    // UI refs
-    // ==========================================================
+    // ========= UI refs =========
     const viewLogin = document.getElementById("viewLogin");
     const viewApp = document.getElementById("viewApp");
     const btnLogout = document.getElementById("btnLogout");
@@ -534,7 +510,6 @@
       settings: document.getElementById("tab_settings"),
     };
 
-    // Employees UI
     const empTable = document.getElementById("empTable");
     const empSearch = document.getElementById("empSearch");
     const empSort = document.getElementById("empSort");
@@ -560,7 +535,6 @@
     const btnDeleteEmp = document.getElementById("btnDeleteEmp");
     const salaryHistoryTable = document.getElementById("salaryHistoryTable");
 
-    // Calc UI
     const calcEmp = document.getElementById("calcEmp");
     const calcDate = document.getElementById("calcDate");
     const calcType = document.getElementById("calcType");
@@ -576,7 +550,6 @@
     const btnPdf = document.getElementById("btnPdf");
     const calcResult = document.getElementById("calcResult");
 
-    // Settings UI
     const pinOld = document.getElementById("pinOld");
     const pinNew = document.getElementById("pinNew");
     const btnChangePin = document.getElementById("btnChangePin");
@@ -584,9 +557,7 @@
     const fileImport = document.getElementById("fileImport");
     const btnReset = document.getElementById("btnReset");
 
-    // ==========================================================
-    // State & Tabs
-    // ==========================================================
+    // ========= Tabs/Auth =========
     let currentTab = "employees";
     let showDismissed = false;
     let editingEmpId = null;
@@ -625,12 +596,8 @@
       return true;
     }
 
-    // ==========================================================
-    // Employees
-    // ==========================================================
-    function getEmpById(store, id){
-      return (store.employees || []).find(e=>e.id===id) || null;
-    }
+    // ========= Employees =========
+    function getEmpById(store, id){ return (store.employees || []).find(e=>e.id===id) || null; }
     function upsertEmp(store, emp){
       store.employees = store.employees || [];
       const idx = store.employees.findIndex(e=>e.id===emp.id);
@@ -884,17 +851,11 @@
       renderEmployees();
     }
 
-    // ==========================================================
-    // Rescisão (simples)
-    // ==========================================================
+    // ========= Rescisão (simples) =========
     function calcINSSSimple(base){
-      // Modelo simples e aproximado (p/ não travar o app).
-      // Você pode desligar no checkbox.
       base = Math.max(0, base);
-      // Aproximação: 11% até teto, cap 900 (placeholder). Ajuste se quiser.
       return Math.min(base * 0.11, 900);
     }
-
     function monthsFor13th(terminationISO){
       if (!terminationISO) return 0;
       const d = new Date(terminationISO + "T00:00:00");
@@ -902,7 +863,6 @@
       const day = d.getDate();
       return (m - 1) + (day >= 15 ? 1 : 0);
     }
-
     function labelType(t){
       if (t==="sem_justa_causa") return "Sem justa causa";
       if (t==="pedido_demissao") return "Pedido de demissão";
@@ -926,7 +886,6 @@
       calcEmp.innerHTML = emps.map(e=>`<option value="${e.id}">${escapeHTML(e.name)}</option>`).join("");
 
       calcDate.value = calcDate.value || todayISO();
-
       const selected = getEmpById(ctx.store, calcEmp.value);
       if (selected) calcLoanDiscount.value = safeNum(selected.loanBalance);
     }
@@ -1028,9 +987,11 @@
       return { emp, term, type };
     }
 
+    // ✅ CORRIGIDO: sem inserir <script> no HTML (evita quebrar o script principal)
     function exportPDF(){
       const r = doCalc();
       if (!r) return;
+
       const ctx = getStoreCtx();
       const win = window.open("", "_blank");
       win.document.open();
@@ -1041,7 +1002,6 @@
         <title>Rescisão - ${escapeHTML(r.emp.name)}</title>
         <style>
           body{font-family:Arial,sans-serif;padding:18px}
-          .no-print{display:none}
         </style>
         </head><body>
           <h2>Rescisão (simples)</h2>
@@ -1051,15 +1011,13 @@
           </div>
           <div style="height:12px"></div>
           ${calcResult.innerHTML}
-<script>window.onload=()=>window.print();<\/script>
         </body></html>
       `);
       win.document.close();
+      win.onload = () => win.print();
     }
 
-    // ==========================================================
-    // Settings
-    // ==========================================================
+    // ========= Settings =========
     async function changePin(){
       const ctx = getStoreCtx();
       const userKey = ctx.session.userKey;
@@ -1127,15 +1085,13 @@
       alert("Loja resetada.");
     }
 
-    // ==========================================================
-    // Events
-    // ==========================================================
+    // ========= Events =========
     document.getElementById("btnLogin").addEventListener("click", async () => {
       const user = document.getElementById("loginUser").value;
       const pin = (document.getElementById("loginPin").value || "").trim();
       if (!pin) return alert("Informe o PIN.");
 
-      await ensureDefaultPins(); // garante que pins existem antes do login
+      await ensureDefaultPins();
 
       const storeKey = resolveStoreFromUser(user);
       const db = loadDB();
@@ -1150,7 +1106,6 @@
     });
 
     btnLogout.addEventListener("click", () => { clearSession(); requireAuth(); });
-
     tabBtns.forEach(b => b.addEventListener("click", ()=> openTab(b.dataset.tab)));
 
     empSearch.addEventListener("input", renderEmployees);
@@ -1195,4 +1150,3 @@
   </script>
 </body>
 </html>
-

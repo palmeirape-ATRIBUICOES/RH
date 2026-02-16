@@ -21,16 +21,12 @@
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
     <div class="min-w-0">
       <div class="font-bold truncate">RH Simples</div>
-      <div class="text-xs text-slate-500">Offline (localStorage) • 2 lojas • Gerentes</div>
+      <div class="text-xs text-slate-500" id="hdrSub">Offline (localStorage) • Firebase opcional</div>
     </div>
 
     <div class="flex items-center gap-2">
-      <button id="btnInstall" class="hidden no-print px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">
-        Instalar
-      </button>
-      <button id="btnLogout" class="hidden no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">
-        Sair
-      </button>
+      <button id="btnInstall" class="hidden no-print px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">Instalar</button>
+      <button id="btnLogout" class="hidden no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">Sair</button>
     </div>
   </div>
 </header>
@@ -93,13 +89,16 @@
         </div>
 
         <div class="mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-          <div class="text-sm font-semibold">Padrões</div>
+          <div class="text-sm font-semibold">Sincronização</div>
           <div class="text-sm text-slate-600 mt-1">
-            • Datas: <b>DD/MM/AAAA</b><br>
-            • 13º: registra <b>ano + data</b><br>
-            • Férias: registra <b>período + valor</b><br>
-            • “Comprei férias”: registra <b>somente a data</b>
+            Você pode usar só offline ou ativar Firebase.
           </div>
+          <div class="mt-3 flex flex-wrap gap-2 no-print">
+            <button id="btnFbConnect" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">Conectar Firebase</button>
+            <button id="btnFbSyncDown" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Baixar</button>
+            <button id="btnFbSyncUp" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Enviar</button>
+          </div>
+          <div class="mt-2 text-xs text-slate-500" id="fbStatus">Firebase: desconectado</div>
         </div>
       </aside>
 
@@ -111,7 +110,9 @@
             <div class="flex flex-col md:flex-row md:items-center gap-3 md:justify-between">
               <div>
                 <h2 class="text-xl font-bold">Funcionários</h2>
-                <p class="text-sm text-slate-600">Controle simples: férias (períodos), 13º (ano+data) e compra de férias (data).</p>
+                <p class="text-sm text-slate-600">
+                  Clique no funcionário para abrir o <b>drop-down</b> com todos os lançamentos (salários recebidos, férias, 13º e compra de férias).
+                </p>
               </div>
               <div class="flex gap-2 no-print">
                 <button id="btnNewEmp" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">+ Novo</button>
@@ -131,10 +132,9 @@
               <table class="w-full text-sm">
                 <thead class="text-slate-500">
                 <tr class="border-b">
-                  <th class="text-left py-2">Nome</th>
+                  <th class="text-left py-2">Funcionário</th>
                   <th class="text-left py-2">Entrada</th>
                   <th class="text-left py-2">Salário atual</th>
-                  <th class="text-left py-2">Resumo</th>
                   <th class="text-left py-2">Empréstimo</th>
                   <th class="text-right py-2 no-print">Ações</th>
                 </tr>
@@ -149,7 +149,7 @@
             <div class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-bold" id="empEditorTitle">Novo funcionário</h3>
-                <p class="text-sm text-slate-600">Dados básicos + registros simples (férias / 13º / compra de férias).</p>
+                <p class="text-sm text-slate-600">Editor completo (lançamentos ficam no drop-down da lista também).</p>
               </div>
               <button id="btnCloseEmpEditor" class="no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">Fechar</button>
             </div>
@@ -179,102 +179,139 @@
               </label>
             </div>
 
-            <!-- REGISTROS SIMPLES -->
-            <div class="mt-4 grid gap-4">
-              <!-- FÉRIAS (PERÍODOS) -->
-              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                <div class="text-sm font-semibold">Férias (períodos)</div>
-                <div class="text-sm text-slate-600">Ex.: Tirou 1 férias no período 15/01/2024 a 14/02/2024 (com valor).</div>
+            <!-- SALÁRIO RECEBIDO (MÊS A MÊS) -->
+            <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <div class="text-sm font-semibold">Salário recebido (mês a mês)</div>
+              <div class="text-sm text-slate-600">Ex.: Salário recebido no mês 01/2026 na data 05/01/2026 (R$ ...)</div>
 
-                <div class="mt-3 grid md:grid-cols-4 gap-3 no-print">
-                  <label class="text-sm">
-                    <span class="block text-slate-600 mb-1">Início</span>
-                    <input id="vacStart" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="15/01/2024" />
-                  </label>
-                  <label class="text-sm">
-                    <span class="block text-slate-600 mb-1">Fim</span>
-                    <input id="vacEnd" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="14/02/2024" />
-                  </label>
-                  <label class="text-sm">
-                    <span class="block text-slate-600 mb-1">Valor pago (R$)</span>
-                    <input id="vacPaidValue" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 2500" />
-                  </label>
-                  <button id="btnAddVacation" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
-                    + Adicionar
-                  </button>
-                </div>
-
-                <div class="mt-3 overflow-x-auto">
-                  <table class="w-full text-sm">
-                    <thead class="text-slate-500">
-                    <tr class="border-b">
-                      <th class="text-left py-2">Texto</th>
-                      <th class="text-right py-2 no-print">Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody id="vacationsTable"></tbody>
-                  </table>
-                </div>
+              <div class="mt-3 grid md:grid-cols-5 gap-3 no-print">
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Ano</span>
+                  <input id="payYear" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="2026" />
+                </label>
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Mês (1-12)</span>
+                  <input id="payMonth" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="1" />
+                </label>
+                <label class="text-sm md:col-span-2">
+                  <span class="block text-slate-600 mb-1">Data do pagamento</span>
+                  <input id="payDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="05/01/2026" />
+                </label>
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Valor (R$)</span>
+                  <input id="payAmount" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="1800" />
+                </label>
+                <button id="btnAddPay" class="md:col-span-5 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
+                  + Registrar salário recebido
+                </button>
               </div>
 
-              <!-- 13º (ANO + DATA) -->
-              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                <div class="text-sm font-semibold">13º salário (ano + data)</div>
-                <div class="text-sm text-slate-600">Ex.: 13º do ano de 2024 foi pago na data 20/12/2024.</div>
+              <div class="mt-3 overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="text-slate-500">
+                  <tr class="border-b">
+                    <th class="text-left py-2">Texto</th>
+                    <th class="text-right py-2 no-print">Ações</th>
+                  </tr>
+                  </thead>
+                  <tbody id="payTable"></tbody>
+                </table>
+              </div>
+            </div>
 
-                <div class="mt-3 grid md:grid-cols-3 gap-3 no-print">
-                  <label class="text-sm">
-                    <span class="block text-slate-600 mb-1">Ano</span>
-                    <input id="thYear" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="2024" />
-                  </label>
-                  <label class="text-sm">
-                    <span class="block text-slate-600 mb-1">Data do pagamento</span>
-                    <input id="thDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="20/12/2024" />
-                  </label>
-                  <button id="btnAddTh" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
-                    + Registrar
-                  </button>
-                </div>
+            <!-- FÉRIAS (PERÍODOS) => DROPDOWN MOSTRA "Tirou férias na data ..." -->
+            <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <div class="text-sm font-semibold">Férias (períodos)</div>
+              <div class="text-sm text-slate-600">No drop-down da lista vai aparecer: <b>Tirou férias na data (início)</b>.</div>
 
-                <div class="mt-3 overflow-x-auto">
-                  <table class="w-full text-sm">
-                    <thead class="text-slate-500">
-                    <tr class="border-b">
-                      <th class="text-left py-2">Texto</th>
-                      <th class="text-right py-2 no-print">Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody id="thTable"></tbody>
-                  </table>
-                </div>
+              <div class="mt-3 grid md:grid-cols-4 gap-3 no-print">
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Início</span>
+                  <input id="vacStart" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="15/01/2024" />
+                </label>
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Fim</span>
+                  <input id="vacEnd" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="14/02/2024" />
+                </label>
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Valor pago (R$)</span>
+                  <input id="vacPaidValue" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 2500" />
+                </label>
+                <button id="btnAddVacation" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
+                  + Adicionar férias
+                </button>
               </div>
 
-              <!-- COMPRA DE FÉRIAS (DATA) -->
-              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                <div class="text-sm font-semibold">Compra de férias (data)</div>
-                <div class="text-sm text-slate-600">Ex.: Comprei as férias na data 10/01/2025.</div>
+              <div class="mt-3 overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="text-slate-500">
+                  <tr class="border-b">
+                    <th class="text-left py-2">Texto</th>
+                    <th class="text-right py-2 no-print">Ações</th>
+                  </tr>
+                  </thead>
+                  <tbody id="vacationsTable"></tbody>
+                </table>
+              </div>
+            </div>
 
-                <div class="mt-3 grid md:grid-cols-3 gap-3 no-print">
-                  <label class="text-sm md:col-span-2">
-                    <span class="block text-slate-600 mb-1">Data</span>
-                    <input id="buyVacDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="10/01/2025" />
-                  </label>
-                  <button id="btnAddBuyVac" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
-                    + Registrar
-                  </button>
-                </div>
+            <!-- 13º (ANO + DATA) -->
+            <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <div class="text-sm font-semibold">13º salário (ano + data)</div>
+              <div class="text-sm text-slate-600">Ex.: 13º do ano de 2024 foi pago na data 20/12/2024.</div>
 
-                <div class="mt-3 overflow-x-auto">
-                  <table class="w-full text-sm">
-                    <thead class="text-slate-500">
-                    <tr class="border-b">
-                      <th class="text-left py-2">Texto</th>
-                      <th class="text-right py-2 no-print">Ações</th>
-                    </tr>
-                    </thead>
-                    <tbody id="buyVacTable"></tbody>
-                  </table>
-                </div>
+              <div class="mt-3 grid md:grid-cols-3 gap-3 no-print">
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Ano</span>
+                  <input id="thYear" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="2024" />
+                </label>
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Data do pagamento</span>
+                  <input id="thDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="20/12/2024" />
+                </label>
+                <button id="btnAddTh" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
+                  + Registrar 13º
+                </button>
+              </div>
+
+              <div class="mt-3 overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="text-slate-500">
+                  <tr class="border-b">
+                    <th class="text-left py-2">Texto</th>
+                    <th class="text-right py-2 no-print">Ações</th>
+                  </tr>
+                  </thead>
+                  <tbody id="thTable"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- COMPRA DE FÉRIAS (DATA) -->
+            <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <div class="text-sm font-semibold">Compra de férias (data)</div>
+              <div class="text-sm text-slate-600">Ex.: Comprei as férias na data 10/01/2025.</div>
+
+              <div class="mt-3 grid md:grid-cols-3 gap-3 no-print">
+                <label class="text-sm md:col-span-2">
+                  <span class="block text-slate-600 mb-1">Data</span>
+                  <input id="buyVacDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="10/01/2025" />
+                </label>
+                <button id="btnAddBuyVac" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
+                  + Registrar compra
+                </button>
+              </div>
+
+              <div class="mt-3 overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="text-slate-500">
+                  <tr class="border-b">
+                    <th class="text-left py-2">Texto</th>
+                    <th class="text-right py-2 no-print">Ações</th>
+                  </tr>
+                  </thead>
+                  <tbody id="buyVacTable"></tbody>
+                </table>
               </div>
             </div>
 
@@ -301,7 +338,7 @@
             </div>
 
             <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-3">
-              <div class="text-sm font-semibold">Histórico de salário</div>
+              <div class="text-sm font-semibold">Histórico de salário (alterações)</div>
               <div class="mt-2 overflow-x-auto">
                 <table class="w-full text-sm">
                   <thead class="text-slate-500">
@@ -427,7 +464,7 @@
             </div>
 
             <div class="mt-4 text-xs text-slate-500">
-              (Firebase será integrado depois que você criar o projeto e pegar o <span class="mono">firebaseConfig</span>.)
+              Firebase Config já está no HTML. Ative Firestore + Auth Anônimo conforme instruções abaixo.
             </div>
           </div>
         </div>
@@ -437,7 +474,32 @@
   </section>
 </main>
 
-<script>
+<!-- Firebase + App JS -->
+<script type="module">
+/* =========================================================
+   Firebase (CDN modular)
+   Versão 12.9.0 (CDN oficial) - conforme docs
+   ========================================================= */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
+import {
+  getFirestore, doc, setDoc, getDoc, deleteDoc,
+  collection, getDocs
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+import {
+  getAuth, signInAnonymously, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCN6TZYTw4wQlAVnsB7uJZtG8KsTTxKJ94",
+  authDomain: "thrh-640ab.firebaseapp.com",
+  projectId: "thrh-640ab",
+  storageBucket: "thrh-640ab.firebasestorage.app",
+  messagingSenderId: "1004522826863",
+  appId: "1:1004522826863:web:0e3a8e6a0a053dfcdfb19a"
+};
+
+let fb = { app:null, db:null, auth:null, ready:false, user:null };
+
 /* ========= PWA single-file (manifest via blob) ========= */
 (function setupPWA(){
   try {
@@ -473,7 +535,7 @@
 })();
 
 /* ========= Storage / Helpers ========= */
-const LS_KEY = "pwa_rh_simples_v3";
+const LS_KEY = "pwa_rh_simples_v4";
 const SESSION_KEY = "pwa_rh_session_v1";
 
 function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
@@ -528,10 +590,10 @@ async function hashPin(text){
   return "fb_" + (h >>> 0).toString(16);
 }
 
-/* ========= DB ========= */
+/* ========= DB local ========= */
 function defaultDB(){
   return {
-    version: 3,
+    version: 4,
     stores: {
       mana: {
         name: "MANA DE DEUS",
@@ -582,6 +644,109 @@ function getStoreCtx(){
   return { session: s, db, storeKey: s.storeKey, store: db.stores[s.storeKey] };
 }
 
+/* ========= Firebase helpers ========= */
+const fbStatus = document.getElementById("fbStatus");
+const btnFbConnect = document.getElementById("btnFbConnect");
+const btnFbSyncDown = document.getElementById("btnFbSyncDown");
+const btnFbSyncUp = document.getElementById("btnFbSyncUp");
+const hdrSub = document.getElementById("hdrSub");
+
+function setFbStatus(txt){
+  fbStatus.textContent = txt;
+  hdrSub.textContent = `Offline (localStorage) • ${txt}`;
+}
+
+async function fbConnect(){
+  if (fb.ready) return;
+  try {
+    fb.app = initializeApp(firebaseConfig);
+    fb.db = getFirestore(fb.app);
+    fb.auth = getAuth(fb.app);
+
+    await signInAnonymously(fb.auth);
+
+    await new Promise((resolve) => {
+      const unsub = onAuthStateChanged(fb.auth, (u)=>{
+        if (u) {
+          fb.user = u;
+          fb.ready = true;
+          setFbStatus("Firebase: conectado ✅");
+          unsub();
+          resolve();
+        }
+      });
+    });
+  } catch (e) {
+    console.error(e);
+    setFbStatus("Firebase: ERRO (veja console)");
+    alert("Erro ao conectar Firebase. Confira se Auth Anônimo e Firestore estão ativados.");
+  }
+}
+
+function ensureEmpShape(emp){
+  emp.vacations = emp.vacations || []; // [{id,startISO,endISO,paidValue}]
+  emp.thirteenthPayments = emp.thirteenthPayments || {}; // { "2024": "2024-12-20" }
+  emp.boughtVacations = emp.boughtVacations || []; // ["2025-01-10"]
+  emp.salaryHistory = emp.salaryHistory || [];
+  emp.salaryPayments = emp.salaryPayments || []; // [{id,year,month,paidDateISO,amount}]
+  emp.loanBalance = safeNum(emp.loanBalance);
+  emp.status = emp.status || "active";
+  emp.updatedAt = emp.updatedAt || Date.now();
+  return emp;
+}
+
+function stripEmpForFirestore(emp){
+  // remove campos calculados/temporários se quiser; por ora envia tudo que é útil
+  const e = JSON.parse(JSON.stringify(emp));
+  return e;
+}
+
+async function fbSyncDown(){
+  const ctx = getStoreCtx();
+  if (!ctx) return;
+  if (!fb.ready) return alert("Conecte o Firebase primeiro.");
+
+  const storeKey = ctx.storeKey;
+  const colRef = collection(fb.db, "stores", storeKey, "employees");
+  const snap = await getDocs(colRef);
+
+  const list = [];
+  snap.forEach(d => {
+    const emp = d.data();
+    emp.id = emp.id || d.id;
+    ensureEmpShape(emp);
+    list.push(emp);
+  });
+
+  ctx.db.stores[storeKey].employees = list;
+  saveDB(ctx.db);
+
+  renderEmployees();
+  renderCalcEmployees();
+  alert("Baixado do Firebase.");
+}
+
+async function fbSyncUp(){
+  const ctx = getStoreCtx();
+  if (!ctx) return;
+  if (!fb.ready) return alert("Conecte o Firebase primeiro.");
+
+  const storeKey = ctx.storeKey;
+  const store = ctx.store;
+  const emps = store.employees || [];
+
+  // garante doc da store (opcional)
+  await setDoc(doc(fb.db, "stores", storeKey), { name: store.name, updatedAt: Date.now() }, { merge:true });
+
+  for (const emp of emps){
+    ensureEmpShape(emp);
+    emp.updatedAt = Date.now();
+    const ref = doc(fb.db, "stores", storeKey, "employees", emp.id);
+    await setDoc(ref, stripEmpForFirestore(emp), { merge:true });
+  }
+  alert("Enviado para o Firebase.");
+}
+
 /* ========= UI refs ========= */
 const viewLogin = document.getElementById("viewLogin");
 const viewApp = document.getElementById("viewApp");
@@ -609,6 +774,13 @@ const empName = document.getElementById("empName");
 const empAdmission = document.getElementById("empAdmission");
 const empSalary = document.getElementById("empSalary");
 const empLoan = document.getElementById("empLoan");
+
+const payYear = document.getElementById("payYear");
+const payMonth = document.getElementById("payMonth");
+const payDate = document.getElementById("payDate");
+const payAmount = document.getElementById("payAmount");
+const btnAddPay = document.getElementById("btnAddPay");
+const payTable = document.getElementById("payTable");
 
 const vacStart = document.getElementById("vacStart");
 const vacEnd = document.getElementById("vacEnd");
@@ -708,42 +880,13 @@ function currentSalary(emp){
   return safeNum(sorted[sorted.length-1].salary);
 }
 
-function ensureEmpShape(emp){
-  emp.vacations = emp.vacations || []; // [{id,startISO,endISO,paidValue}]
-  emp.thirteenthPayments = emp.thirteenthPayments || {}; // { "2024": "2024-12-20" }
-  emp.boughtVacations = emp.boughtVacations || []; // ["2025-01-10"]
-  emp.salaryHistory = emp.salaryHistory || [];
-  emp.loanBalance = safeNum(emp.loanBalance);
-  emp.status = emp.status || "active";
-  return emp;
-}
-
-function employeeSummary(emp){
-  ensureEmpShape(emp);
-  const vacCount = emp.vacations.length;
-  const thCount = Object.keys(emp.thirteenthPayments).length;
-  const buyCount = emp.boughtVacations.length;
-
-  const lastVac = emp.vacations.slice().sort((a,b)=> (a.endISO||"").localeCompare(b.endISO||""))[vacCount-1];
-  const lastThYear = Object.keys(emp.thirteenthPayments).sort().pop();
-  const lastBuy = emp.boughtVacations.slice().sort().pop();
-
-  let parts = [];
-  parts.push(`Férias: ${vacCount}`);
-  if (lastVac) parts.push(`última ${formatISOToBR(lastVac.startISO)}–${formatISOToBR(lastVac.endISO)}`);
-  parts.push(`13º: ${thCount}`);
-  if (lastThYear) parts.push(`último ${lastThYear}`);
-  parts.push(`Compra férias: ${buyCount}`);
-  if (lastBuy) parts.push(`última ${formatISOToBR(lastBuy)}`);
-  return parts.join(" • ");
-}
-
 function listEmployeesForUI(){
   const ctx = getStoreCtx();
   const emps = ctx.store.employees || [];
   const q = (empSearch.value || "").trim().toLowerCase();
 
   let filtered = emps.filter(e => {
+    ensureEmpShape(e);
     const isDismissed = e.status === "dismissed";
     if (!showDismissed && isDismissed) return false;
     if (showDismissed && !isDismissed) return false;
@@ -761,18 +904,96 @@ function listEmployeesForUI(){
   return filtered;
 }
 
+function fmtMonth(m){ return String(m).padStart(2,"0"); }
+
+function renderEmployeeDetails(emp){
+  // drop-down com entradas
+  ensureEmpShape(emp);
+
+  const pays = (emp.salaryPayments || [])
+    .slice()
+    .sort((a,b)=> (a.year-b.year) || (a.month-b.month));
+
+  const vacs = (emp.vacations || [])
+    .slice()
+    .sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
+
+  const thYears = Object.keys(emp.thirteenthPayments || {})
+    .sort((a,b)=> Number(a)-Number(b));
+
+  const buys = (emp.boughtVacations || [])
+    .slice()
+    .sort();
+
+  const payLines = pays.length
+    ? pays.map(p => `Salário recebido no mês ${fmtMonth(p.month)}/${p.year} na data ${formatISOToBR(p.paidDateISO)} (${formatBRL(p.amount)})`)
+    : ["Nenhum salário recebido registrado."];
+
+  // >>> pedido: substituir "férias deve tirar até" por "Tirou férias na data ..."
+  // vamos considerar "data" = início do período.
+  const vacLines = vacs.length
+    ? vacs.map((v,idx) => `Tirou férias na data ${formatISOToBR(v.startISO)} (período ${formatISOToBR(v.startISO)} a ${formatISOToBR(v.endISO)} • ${formatBRL(v.paidValue)})`)
+    : ["Nenhuma férias registrada."];
+
+  const thLines = thYears.length
+    ? thYears.map(y => `13º do ano de ${y} foi pago na data ${formatISOToBR(emp.thirteenthPayments[y])}`)
+    : ["Nenhum 13º registrado."];
+
+  const buyLines = buys.length
+    ? buys.map(d => `Comprei as férias na data ${formatISOToBR(d)}`)
+    : ["Nenhuma compra de férias registrada."];
+
+  function ul(lines){
+    return `<ul class="list-disc pl-5 space-y-1">${lines.map(t=>`<li>${escapeHTML(t)}</li>`).join("")}</ul>`;
+  }
+
+  return `
+    <div class="mt-2 bg-slate-50 border border-slate-200 rounded-2xl p-3">
+      <div class="grid md:grid-cols-2 gap-3">
+        <div>
+          <div class="text-xs text-slate-500 font-semibold mb-1">SALÁRIOS RECEBIDOS</div>
+          <div class="text-sm text-slate-700">${ul(payLines)}</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 font-semibold mb-1">FÉRIAS</div>
+          <div class="text-sm text-slate-700">${ul(vacLines)}</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 font-semibold mb-1">13º</div>
+          <div class="text-sm text-slate-700">${ul(thLines)}</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 font-semibold mb-1">COMPRA DE FÉRIAS</div>
+          <div class="text-sm text-slate-700">${ul(buyLines)}</div>
+        </div>
+      </div>
+      <div class="mt-3 text-xs text-slate-500">
+        Dica: clique em <b>Editar</b> para lançar novos itens.
+      </div>
+    </div>
+  `;
+}
+
 function renderEmployees(){
   const rows = listEmployeesForUI();
+  btnToggleDismissed.textContent = showDismissed ? "Ver ativos" : "Ver demitidos";
+
   empTable.innerHTML = rows.map(e=>{
-    ensureEmpShape(e);
     const sal = currentSalary(e);
     const loan = safeNum(e.loanBalance);
+    const detailsId = `det_${e.id.replaceAll(/[^a-zA-Z0-9]/g,"")}`;
     return `
-      <tr class="border-b last:border-b-0">
-        <td class="py-2 font-semibold">${escapeHTML(e.name || "")}</td>
+      <tr class="border-b">
+        <td class="py-2">
+          <button class="text-left font-semibold underline decoration-dotted" onclick="window.__toggleDetails('${detailsId}')">
+            ${escapeHTML(e.name || "")}
+          </button>
+          <div class="text-xs text-slate-500 mt-0.5">
+            clique no nome para ver lançamentos
+          </div>
+        </td>
         <td class="py-2">${formatISOToBR(e.admissionDate) || "—"}</td>
         <td class="py-2">${formatBRL(sal)}</td>
-        <td class="py-2 text-slate-600">${escapeHTML(employeeSummary(e))}</td>
         <td class="py-2">${formatBRL(loan)}</td>
         <td class="py-2 text-right no-print">
           <button class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs" onclick="window.__openEmpEditor('${e.id}')">
@@ -780,13 +1001,25 @@ function renderEmployees(){
           </button>
         </td>
       </tr>
+      <tr class="border-b last:border-b-0">
+        <td colspan="5" class="pb-3">
+          <div id="${detailsId}" class="hidden">
+            ${renderEmployeeDetails(e)}
+          </div>
+        </td>
+      </tr>
     `;
   }).join("");
 
-  btnToggleDismissed.textContent = showDismissed ? "Ver ativos" : "Ver demitidos";
   empEditorWrap.classList.add("hidden");
   editingEmpId = null;
 }
+
+window.__toggleDetails = (id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("hidden");
+};
 
 function renderSalaryHistory(emp){
   const hist = (emp.salaryHistory || []).slice().sort((a,b)=> (a.date||"").localeCompare(b.date||""));
@@ -798,14 +1031,33 @@ function renderSalaryHistory(emp){
   `).join("");
 }
 
-function renderVacations(emp){
-  ensureEmpShape(emp);
-  const list = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
+function renderPayments(emp){
+  const list = (emp.salaryPayments || []).slice().sort((a,b)=> (a.year-b.year) || (a.month-b.month));
   if (!list.length){
-    vacationsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma férias registrada ainda.</td></tr>`;
+    payTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum salário recebido registrado.</td></tr>`;
     return;
   }
-  vacationsTable.innerHTML = list.map((v,idx)=> {
+  payTable.innerHTML = list.map((p,idx)=>{
+    const text = `Salário recebido no mês ${fmtMonth(p.month)}/${p.year} na data ${formatISOToBR(p.paidDateISO)} (${formatBRL(p.amount)})`;
+    return `
+      <tr class="border-b last:border-b-0">
+        <td class="py-2">${escapeHTML(text)}</td>
+        <td class="py-2 text-right no-print">
+          <button class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 text-xs"
+            onclick="window.__deletePay('${emp.id}', ${idx})">Excluir</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderVacations(emp){
+  const list = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
+  if (!list.length){
+    vacationsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma férias registrada.</td></tr>`;
+    return;
+  }
+  vacationsTable.innerHTML = list.map((v,idx)=>{
     const text = `Tirou ${idx+1} férias no período ${formatISOToBR(v.startISO)} a ${formatISOToBR(v.endISO)} (${formatBRL(v.paidValue)})`;
     return `
       <tr class="border-b last:border-b-0">
@@ -820,13 +1072,12 @@ function renderVacations(emp){
 }
 
 function renderThPayments(emp){
-  ensureEmpShape(emp);
   const years = Object.keys(emp.thirteenthPayments || {}).sort((a,b)=> Number(a)-Number(b));
   if (!years.length){
-    thTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum 13º registrado ainda.</td></tr>`;
+    thTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum 13º registrado.</td></tr>`;
     return;
   }
-  thTable.innerHTML = years.map((y,idx)=>{
+  thTable.innerHTML = years.map(y=>{
     const iso = emp.thirteenthPayments[y];
     const text = `13º do ano de ${y} foi pago na data ${formatISOToBR(iso)}`;
     return `
@@ -842,7 +1093,6 @@ function renderThPayments(emp){
 }
 
 function renderBuyVac(emp){
-  ensureEmpShape(emp);
   const list = (emp.boughtVacations || []).slice().sort();
   if (!list.length){
     buyVacTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma compra de férias registrada.</td></tr>`;
@@ -880,14 +1130,18 @@ window.__openEmpEditor = (id) => {
   empActive.checked = (emp.status !== "dismissed");
   empDismissal.value = formatISOToBR(emp.dismissalDate) || "";
 
+  // limpa inputs
+  payYear.value = ""; payMonth.value = ""; payDate.value = ""; payAmount.value = "";
   vacStart.value = ""; vacEnd.value = ""; vacPaidValue.value = "";
   thYear.value = ""; thDate.value = "";
   buyVacDate.value = "";
 
   renderSalaryHistory(emp);
+  renderPayments(emp);
   renderVacations(emp);
   renderThPayments(emp);
   renderBuyVac(emp);
+
   renderCalcEmployees();
 };
 
@@ -904,13 +1158,15 @@ function openNewEmp(){
   empActive.checked = true;
   empDismissal.value = "";
 
+  payYear.value = ""; payMonth.value = ""; payDate.value = ""; payAmount.value = "";
   vacStart.value = ""; vacEnd.value = ""; vacPaidValue.value = "";
   thYear.value = ""; thDate.value = "";
   buyVacDate.value = "";
 
   salaryHistoryTable.innerHTML = "";
-  vacationsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma férias registrada ainda.</td></tr>`;
-  thTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum 13º registrado ainda.</td></tr>`;
+  payTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum salário recebido registrado.</td></tr>`;
+  vacationsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma férias registrada.</td></tr>`;
+  thTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum 13º registrado.</td></tr>`;
   buyVacTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma compra de férias registrada.</td></tr>`;
 }
 
@@ -920,6 +1176,28 @@ function loadAndUpdateEmp(updatedEmp){
   upsertEmp(store, updatedEmp);
   ctx.db.stores[ctx.storeKey] = store;
   return ctx.db;
+}
+
+async function maybePushEmpToFirebase(emp){
+  const ctx = getStoreCtx();
+  if (!ctx || !fb.ready) return;
+  try {
+    emp.updatedAt = Date.now();
+    await setDoc(doc(fb.db, "stores", ctx.storeKey, "employees", emp.id), stripEmpForFirestore(emp), { merge:true });
+  } catch (e) {
+    console.error(e);
+    // não trava a operação offline
+  }
+}
+
+async function maybeDeleteEmpFromFirebase(empId){
+  const ctx = getStoreCtx();
+  if (!ctx || !fb.ready) return;
+  try {
+    await deleteDoc(doc(fb.db, "stores", ctx.storeKey, "employees", empId));
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 function saveEmp(){
@@ -933,7 +1211,7 @@ function saveEmp(){
   const loanBalance = safeNum(empLoan.value);
 
   if (!name) return alert("Informe o nome.");
-  if (!admissionISO) return alert("Data de entrada inválida. Use DD/MM/AAAA (ex.: 17/01/2024).");
+  if (!admissionISO) return alert("Data de entrada inválida. Use DD/MM/AAAA.");
   if (salary <= 0) return alert("Informe um salário válido.");
 
   let emp = null;
@@ -944,12 +1222,14 @@ function saveEmp(){
       name: "",
       admissionDate: "",
       salaryHistory: [],
+      salaryPayments: [],
       vacations: [],
       thirteenthPayments: {},
       boughtVacations: [],
       loanBalance: 0,
       status: "active",
-      dismissalDate: ""
+      dismissalDate: "",
+      updatedAt: Date.now()
     };
   }
   ensureEmpShape(emp);
@@ -967,14 +1247,19 @@ function saveEmp(){
     emp.dismissalDate = "";
   }
 
+  // salário atual vira “mudança” de hoje (prático)
   const effectiveDate = todayISO();
   const existingToday = emp.salaryHistory.find(h => h.date === effectiveDate);
   if (existingToday) existingToday.salary = salary;
   else emp.salaryHistory.push({ date: effectiveDate, salary });
 
+  emp.updatedAt = Date.now();
+
   upsertEmp(store, emp);
   ctx.db.stores[ctx.storeKey] = store;
   saveDB(ctx.db);
+
+  maybePushEmpToFirebase(emp);
 
   editingEmpId = emp.id;
   renderEmployees();
@@ -985,7 +1270,7 @@ function saveEmp(){
 function addSalaryChange(){
   const ctx = getStoreCtx();
   const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
-  if (!emp) return alert("Abra um funcionário para registrar mudança.");
+  if (!emp) return alert("Abra um funcionário.");
 
   const newSalary = safeNum(prompt("Novo salário (R$):", String(currentSalary(emp) || "")));
   if (!newSalary || newSalary <= 0) return;
@@ -995,19 +1280,25 @@ function addSalaryChange(){
   if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
 
   emp.salaryHistory.push({ date: iso, salary: newSalary });
+  emp.updatedAt = Date.now();
   saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
+
   renderEmployees();
   window.__openEmpEditor(emp.id);
-  alert("Mudança registrada.");
 }
 
 function archiveEmp(){
   const ctx = getStoreCtx();
   const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
   if (!emp) return alert("Abra um funcionário.");
+
   emp.status = "dismissed";
   emp.dismissalDate = emp.dismissalDate || todayISO();
+  emp.updatedAt = Date.now();
   saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
+
   renderEmployees();
   alert("Arquivado como demitido.");
 }
@@ -1026,12 +1317,62 @@ function deleteEmp(){
   ctx.db.stores[ctx.storeKey] = store;
   saveDB(ctx.db);
 
+  maybeDeleteEmpFromFirebase(editingEmpId);
+
   editingEmpId = null;
   empEditorWrap.classList.add("hidden");
   renderEmployees();
 }
 
-/* ========= Registros: Férias / 13º / Compra férias ========= */
+/* ========= Registros: salário recebido / férias / 13º / compra ========= */
+function addPay(){
+  const ctx = getStoreCtx();
+  const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
+  if (!emp) return alert("Abra um funcionário.");
+
+  const year = Number(payYear.value);
+  const month = Number(payMonth.value);
+  if (!year || year < 2000 || year > 2100) return alert("Ano inválido.");
+  if (!month || month < 1 || month > 12) return alert("Mês inválido (1-12).");
+
+  const paidISO = parseBRToISO(payDate.value);
+  if (!paidISO) return alert("Data inválida. Use DD/MM/AAAA.");
+
+  const amount = safeNum(payAmount.value || currentSalary(emp));
+  if (amount <= 0) return alert("Valor inválido.");
+
+  // evita duplicar mesmo mês/ano
+  const exists = emp.salaryPayments.find(p => p.year===year && p.month===month);
+  if (exists) {
+    const ok = confirm(`Já existe salário recebido em ${fmtMonth(month)}/${year}. Substituir?`);
+    if (!ok) return;
+    exists.paidDateISO = paidISO;
+    exists.amount = amount;
+  } else {
+    emp.salaryPayments.push({ id: uid(), year, month, paidDateISO: paidISO, amount });
+  }
+
+  emp.updatedAt = Date.now();
+  saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
+
+  payYear.value=""; payMonth.value=""; payDate.value=""; payAmount.value="";
+  window.__openEmpEditor(emp.id);
+}
+
+window.__deletePay = (empId, idx) => {
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, empId);
+  if (!emp) return;
+  const ok = confirm("Excluir este salário recebido?");
+  if (!ok) return;
+  emp.salaryPayments.splice(idx, 1);
+  emp.updatedAt = Date.now();
+  saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
+  window.__openEmpEditor(emp.id);
+};
+
 function addVacationPeriod(){
   const ctx = getStoreCtx();
   const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
@@ -1039,17 +1380,19 @@ function addVacationPeriod(){
 
   const sISO = parseBRToISO(vacStart.value);
   const eISO = parseBRToISO(vacEnd.value);
-  if (!sISO) return alert("Data de início inválida. Use DD/MM/AAAA.");
-  if (!eISO) return alert("Data de fim inválida. Use DD/MM/AAAA.");
-  if (eISO < sISO) return alert("A data de fim não pode ser menor que a de início.");
+  if (!sISO) return alert("Data de início inválida.");
+  if (!eISO) return alert("Data de fim inválida.");
+  if (eISO < sISO) return alert("Fim não pode ser menor que início.");
 
   const paid = safeNum(vacPaidValue.value);
-  if (paid <= 0) return alert("Informe um valor pago válido.");
+  if (paid <= 0) return alert("Valor pago inválido.");
 
   emp.vacations.push({ id: uid(), startISO: sISO, endISO: eISO, paidValue: paid });
+  emp.updatedAt = Date.now();
   saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
 
-  vacStart.value = ""; vacEnd.value = ""; vacPaidValue.value = "";
+  vacStart.value=""; vacEnd.value=""; vacPaidValue.value="";
   window.__openEmpEditor(emp.id);
 }
 
@@ -1057,10 +1400,12 @@ window.__deleteVacation = (empId, idx) => {
   const ctx = getStoreCtx();
   const emp = getEmpById(ctx.store, empId);
   if (!emp) return;
-  const ok = confirm("Excluir este período de férias?");
+  const ok = confirm("Excluir esta férias?");
   if (!ok) return;
   emp.vacations.splice(idx, 1);
+  emp.updatedAt = Date.now();
   saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
   window.__openEmpEditor(emp.id);
 };
 
@@ -1071,13 +1416,16 @@ function addThPayment(){
 
   const year = Number(thYear.value);
   if (!year || year < 2000 || year > 2100) return alert("Ano inválido.");
+
   const iso = parseBRToISO(thDate.value);
-  if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
+  if (!iso) return alert("Data inválida.");
 
   emp.thirteenthPayments[String(year)] = iso;
+  emp.updatedAt = Date.now();
   saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
 
-  thYear.value = ""; thDate.value = "";
+  thYear.value=""; thDate.value="";
   window.__openEmpEditor(emp.id);
 }
 
@@ -1088,7 +1436,9 @@ window.__deleteTh = (empId, year) => {
   const ok = confirm(`Excluir o 13º do ano ${year}?`);
   if (!ok) return;
   delete emp.thirteenthPayments[year];
+  emp.updatedAt = Date.now();
   saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
   window.__openEmpEditor(emp.id);
 };
 
@@ -1096,13 +1446,16 @@ function addBuyVac(){
   const ctx = getStoreCtx();
   const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
   if (!emp) return alert("Abra um funcionário.");
+
   const iso = parseBRToISO(buyVacDate.value);
-  if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
+  if (!iso) return alert("Data inválida.");
 
   emp.boughtVacations.push(iso);
+  emp.updatedAt = Date.now();
   saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
 
-  buyVacDate.value = "";
+  buyVacDate.value="";
   window.__openEmpEditor(emp.id);
 }
 
@@ -1113,7 +1466,9 @@ window.__deleteBuyVac = (empId, idx) => {
   const ok = confirm("Excluir esta compra de férias?");
   if (!ok) return;
   emp.boughtVacations.splice(idx, 1);
+  emp.updatedAt = Date.now();
   saveDB(loadAndUpdateEmp(emp));
+  maybePushEmpToFirebase(emp);
   window.__openEmpEditor(emp.id);
 };
 
@@ -1146,7 +1501,7 @@ function line(label, value){
 function renderCalcEmployees(){
   const ctx = getStoreCtx();
   if (!ctx) return;
-  const emps = (ctx.store.employees || []).filter(e => e.status !== "dismissed");
+  const emps = (ctx.store.employees || []).filter(e => (e.status || "active") !== "dismissed");
   calcEmp.innerHTML = emps.map(e=>`<option value="${e.id}">${escapeHTML(e.name)}</option>`).join("");
   calcDate.value = calcDate.value || todayISO();
   const selected = getEmpById(ctx.store, calcEmp.value);
@@ -1188,10 +1543,10 @@ function doCalc(){
   let fgtsRate = 0.40;
   if (type === "acordo") fgtsRate = 0.20;
   if (type === "pedido_demissao") fgtsRate = 0.00;
-  const multaFgts = (optFgts.checked ? fgtsBal * fgtsRate : 0);
+  const multaFgts = (document.getElementById("optFgts").checked ? fgtsBal * fgtsRate : 0);
 
   const baseInss = saldoSalario + avisoPrevio + decimoTerceiro;
-  const inss = (optInss.checked ? calcINSSSimple(baseInss) : 0);
+  const inss = (document.getElementById("optInss").checked ? calcINSSSimple(baseInss) : 0);
 
   const bruto = saldoSalario + decimoTerceiro + feriasTotal + umTerco + avisoPrevio + multaFgts;
   const descontos = inss + loanDisc;
@@ -1369,12 +1724,14 @@ btnAddSalaryChange.addEventListener("click", addSalaryChange);
 btnArchiveEmp.addEventListener("click", archiveEmp);
 btnDeleteEmp.addEventListener("click", deleteEmp);
 
+btnAddPay.addEventListener("click", addPay);
 btnAddVacation.addEventListener("click", addVacationPeriod);
 btnAddTh.addEventListener("click", addThPayment);
 btnAddBuyVac.addEventListener("click", addBuyVac);
 
 empAdmission.addEventListener("blur", ()=> normalizeBRDateInput(empAdmission));
 empDismissal.addEventListener("blur", ()=> { if (empDismissal.value.trim()) normalizeBRDateInput(empDismissal); });
+payDate.addEventListener("blur", ()=> { if (payDate.value.trim()) normalizeBRDateInput(payDate); });
 vacStart.addEventListener("blur", ()=> { if (vacStart.value.trim()) normalizeBRDateInput(vacStart); });
 vacEnd.addEventListener("blur", ()=> { if (vacEnd.value.trim()) normalizeBRDateInput(vacEnd); });
 thDate.addEventListener("blur", ()=> { if (thDate.value.trim()) normalizeBRDateInput(thDate); });
@@ -1397,8 +1754,14 @@ fileImport.addEventListener("change", (e)=>{
 });
 btnReset.addEventListener("click", resetStore);
 
+/* Firebase buttons */
+btnFbConnect.addEventListener("click", fbConnect);
+btnFbSyncDown.addEventListener("click", async ()=>{ await fbConnect(); await fbSyncDown(); });
+btnFbSyncUp.addEventListener("click", async ()=>{ await fbConnect(); await fbSyncUp(); });
+
 /* Boot */
 (async function boot(){
+  setFbStatus("Firebase: desconectado");
   await ensureDefaultPins();
   requireAuth();
   calcDate.value = todayISO();

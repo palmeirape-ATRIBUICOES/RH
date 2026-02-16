@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0f172a" />
-  <title>RH Simples - 2 Lojas (Auto Sync)</title>
+  <title>RH Simples - Auto Sync</title>
 
   <link rel="icon" href="data:,">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -93,6 +93,14 @@
           <div class="mt-2 text-xs text-slate-500" id="fbStatus">Firebase: desconectado</div>
           <div class="mt-1 text-xs text-slate-500" id="netStatus">Internet: —</div>
         </div>
+
+        <div class="mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+          <div class="text-sm font-semibold">Padrão de pagamento</div>
+          <div class="text-xs text-slate-600 mt-1">
+            Salário atual: <b>R$ 1650</b> (R$ 650 dia 20 + R$ 1000 dia 05).<br/>
+            Descontos do “caderno”: sempre no dia <b>05</b>.
+          </div>
+        </div>
       </aside>
 
       <!-- Content -->
@@ -104,7 +112,7 @@
               <div>
                 <h2 class="text-xl font-bold">Funcionários</h2>
                 <p class="text-sm text-slate-600">
-                  Clique no nome para abrir o <b>drop-down</b> com tudo que foi lançado no funcionário.
+                  Clique no nome para abrir o <b>drop-down</b> com histórico e lançamentos.
                 </p>
               </div>
               <div class="flex gap-2 no-print">
@@ -128,7 +136,7 @@
                   <th class="text-left py-2">Funcionário</th>
                   <th class="text-left py-2">Entrada</th>
                   <th class="text-left py-2">Salário atual</th>
-                  <th class="text-left py-2">Empréstimo</th>
+                  <th class="text-left py-2">Caderno (pendente)</th>
                   <th class="text-right py-2 no-print">Ações</th>
                 </tr>
                 </thead>
@@ -142,7 +150,7 @@
             <div class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-bold" id="empEditorTitle">Novo funcionário</h3>
-                <p class="text-sm text-slate-600">Editor completo (tudo sincroniza automaticamente).</p>
+                <p class="text-sm text-slate-600">Tudo sincroniza automaticamente.</p>
               </div>
               <button id="btnCloseEmpEditor" class="no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">Fechar</button>
             </div>
@@ -157,43 +165,59 @@
                 <span class="block text-slate-600 mb-1">Data de entrada (DD/MM/AAAA)</span>
                 <input id="empAdmission" inputmode="numeric"
                        class="w-full rounded-xl border border-slate-300 px-3 py-2"
-                       placeholder="17/01/2024" />
-                <div class="help mt-1">Ex.: 17/01/2024</div>
+                       placeholder="05/02/2026" />
+                <div class="help mt-1">Padrão recomendado: sempre dia 05 (como você faz).</div>
               </label>
 
               <label class="text-sm">
                 <span class="block text-slate-600 mb-1">Salário atual (R$)</span>
-                <input id="empSalary" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 1800" />
+                <input id="empSalary" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="1650" />
               </label>
 
               <label class="text-sm">
-                <span class="block text-slate-600 mb-1">Empréstimo atual (R$)</span>
-                <input id="empLoan" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 200" />
+                <span class="block text-slate-600 mb-1">Empréstimo atual (R$) (para rescisão)</span>
+                <input id="empLoan" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="0" />
               </label>
             </div>
 
-            <!-- SALÁRIO RECEBIDO -->
+            <!-- PAGAMENTOS (2x no ciclo) -->
             <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
-              <div class="text-sm font-semibold">Salário recebido (mês a mês)</div>
-              <div class="mt-3 grid md:grid-cols-5 gap-3 no-print">
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Ano</span>
-                  <input id="payYear" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="2026" />
-                </label>
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Mês (1-12)</span>
-                  <input id="payMonth" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="1" />
-                </label>
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                <div>
+                  <div class="text-sm font-semibold">Pagamentos (Dia 20 e Dia 05)</div>
+                  <div class="text-xs text-slate-600 mt-1">
+                    Dia 20: R$ 650 (05→20) • Dia 05: R$ 1000 (20→05) com desconto do caderno.
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3 grid md:grid-cols-6 gap-3 no-print">
                 <label class="text-sm md:col-span-2">
-                  <span class="block text-slate-600 mb-1">Data do pagamento</span>
-                  <input id="payDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="05/01/2026" />
+                  <span class="block text-slate-600 mb-1">Data do pagamento (DD/MM/AAAA)</span>
+                  <input id="pay2Date" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="20/02/2026" />
                 </label>
+
                 <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Valor (R$)</span>
-                  <input id="payAmount" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="1800" />
+                  <span class="block text-slate-600 mb-1">Tipo</span>
+                  <select id="pay2Type" class="w-full rounded-xl border border-slate-300 px-3 py-2">
+                    <option value="PAG20">Dia 20</option>
+                    <option value="PAG05">Dia 05</option>
+                  </select>
                 </label>
-                <button id="btnAddPay" class="md:col-span-5 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
-                  + Registrar salário recebido
+
+                <label class="text-sm md:col-span-2">
+                  <span class="block text-slate-600 mb-1">Valor bruto (R$)</span>
+                  <input id="pay2Gross" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="650 ou 1000" />
+                  <div class="help mt-1">Sugestão: 650 (Dia 20) / 1000 (Dia 05)</div>
+                </label>
+
+                <label class="text-sm flex items-end gap-2">
+                  <input id="pay2AlsoDiscountOn20" type="checkbox" class="h-4 w-4" />
+                  <span class="text-xs text-slate-600">Descontar no dia 20 também</span>
+                </label>
+
+                <button id="btnRegisterPay" class="md:col-span-6 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
+                  + Registrar pagamento
                 </button>
               </div>
 
@@ -201,11 +225,50 @@
                 <table class="w-full text-sm">
                   <thead class="text-slate-500">
                   <tr class="border-b">
-                    <th class="text-left py-2">Texto</th>
+                    <th class="text-left py-2">Histórico</th>
                     <th class="text-right py-2 no-print">Ações</th>
                   </tr>
                   </thead>
-                  <tbody id="payTable"></tbody>
+                  <tbody id="paymentsTable"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- CADERNO (DESCONTOS) -->
+            <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+              <div class="text-sm font-semibold">Caderno (descontos)</div>
+              <div class="text-xs text-slate-600 mt-1">
+                Registre tudo que ela pegou. No pagamento do <b>dia 05</b>, o sistema desconta automaticamente os pendentes.
+              </div>
+
+              <div class="mt-3 grid md:grid-cols-6 gap-3 no-print">
+                <label class="text-sm md:col-span-2">
+                  <span class="block text-slate-600 mb-1">Data (DD/MM/AAAA)</span>
+                  <input id="ledDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="03/02/2026" />
+                </label>
+                <label class="text-sm md:col-span-3">
+                  <span class="block text-slate-600 mb-1">Descrição</span>
+                  <input id="ledDesc" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: Café / pão / produto" />
+                </label>
+                <label class="text-sm">
+                  <span class="block text-slate-600 mb-1">Valor (R$)</span>
+                  <input id="ledAmount" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="12.50" />
+                </label>
+
+                <button id="btnAddLedger" class="md:col-span-6 px-4 py-2 rounded-xl border border-slate-300 bg-white font-semibold">
+                  + Adicionar item no caderno
+                </button>
+              </div>
+
+              <div class="mt-3 overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="text-slate-500">
+                  <tr class="border-b">
+                    <th class="text-left py-2">Itens</th>
+                    <th class="text-right py-2 no-print">Ações</th>
+                  </tr>
+                  </thead>
+                  <tbody id="ledgerTable"></tbody>
                 </table>
               </div>
             </div>
@@ -213,9 +276,6 @@
             <!-- FÉRIAS -->
             <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
               <div class="text-sm font-semibold">Férias (períodos)</div>
-              <div class="text-sm text-slate-600">
-                No drop-down da lista aparece: <b>Tirou férias na data XX/XX/XXXX</b>.
-              </div>
 
               <div class="mt-3 grid md:grid-cols-4 gap-3 no-print">
                 <label class="text-sm">
@@ -228,7 +288,7 @@
                 </label>
                 <label class="text-sm">
                   <span class="block text-slate-600 mb-1">Valor pago (R$)</span>
-                  <input id="vacPaidValue" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 2500" />
+                  <input id="vacPaidValue" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="2500" />
                 </label>
                 <button id="btnAddVacation" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
                   + Adicionar férias
@@ -443,7 +503,7 @@
               <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
                 <div class="font-semibold">Firebase (Definitivo)</div>
                 <div class="text-sm text-slate-600 mt-1">
-                  Recomendado: usar <b>Email/Senha</b> (mais seguro por anos).
+                  Use <b>Email/Senha</b> para sincronização automática por anos.
                 </div>
 
                 <label class="text-sm block mt-3">
@@ -461,7 +521,7 @@
                 </div>
 
                 <div class="mt-2 text-xs text-slate-500">
-                  Após conectar, a sincronização é automática e em tempo real.
+                  Após conectar, tudo sincroniza em tempo real (offline também).
                 </div>
               </div>
             </div>
@@ -511,11 +571,16 @@ const firebaseConfig = {
   appId: "1:1004522826863:web:0e3a8e6a0a053dfcdfb19a"
 };
 
-/* ========= PWA (manifest via blob) ========= */
+/* ========= PWA Manifest via blob (sem start_url para evitar erro) ========= */
 (function setupPWA(){
   try {
-    const manifest = { name:"RH Simples", short_name:"RH", start_url:"./", display:"standalone",
-      background_color:"#f8fafc", theme_color:"#0f172a" };
+    const manifest = {
+      name:"RH Simples",
+      short_name:"RH",
+      display:"standalone",
+      background_color:"#f8fafc",
+      theme_color:"#0f172a"
+    };
     const blob = new Blob([JSON.stringify(manifest)], {type:"application/manifest+json"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("link");
@@ -540,7 +605,7 @@ const firebaseConfig = {
 })();
 
 /* ========= Helpers ========= */
-const LS_KEY = "pwa_rh_autosync_v1";
+const LS_KEY = "pwa_rh_autosync_v2";
 const SESSION_KEY = "pwa_rh_session_v1";
 
 function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
@@ -592,10 +657,30 @@ async function hashPin(text){
 }
 function fmtMonth(m){ return String(m).padStart(2,"0"); }
 
+/* ========= Pagamentos 20/05 ========= */
+function isoFromYMD(y,m,d){ return `${y}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`; }
+function addMonthsISO(iso, delta){
+  const dt = new Date(iso+"T00:00:00");
+  dt.setMonth(dt.getMonth()+delta);
+  return isoFromYMD(dt.getFullYear(), dt.getMonth()+1, dt.getDate());
+}
+function computePayPeriod(payType, payDateISO){
+  const [Y,M] = payDateISO.split("-").map(Number);
+
+  if (payType === "PAG20"){
+    return { start: isoFromYMD(Y,M,5), end: isoFromYMD(Y,M,20) };
+  }
+  // PAG05: 20/(MM-1) -> 05/MM
+  const thisMonth05 = isoFromYMD(Y,M,5);
+  const prevMonth05 = addMonthsISO(thisMonth05, -1);
+  const [y2,m2] = prevMonth05.split("-").map(Number);
+  return { start: isoFromYMD(y2,m2,20), end: thisMonth05 };
+}
+
 /* ========= Local DB ========= */
 function defaultDB(){
   return {
-    version: 1,
+    version: 2,
     stores: {
       mana: {
         name: "MANA DE DEUS",
@@ -646,16 +731,49 @@ function getStoreCtx(){
   return { session: s, db, storeKey: s.storeKey, store: db.stores[s.storeKey] };
 }
 
-/* ========= Employee shape ========= */
+/* ========= Employee shape + migração ========= */
 function ensureEmpShape(emp){
   emp.vacations = emp.vacations || [];
   emp.thirteenthPayments = emp.thirteenthPayments || {};
   emp.boughtVacations = emp.boughtVacations || [];
   emp.salaryHistory = emp.salaryHistory || [];
-  emp.salaryPayments = emp.salaryPayments || [];
   emp.loanBalance = safeNum(emp.loanBalance);
   emp.status = emp.status || "active";
   emp.updatedAt = safeNum(emp.updatedAt) || 0;
+
+  // NOVO: caderno e pagamentos
+  emp.ledger = emp.ledger || [];     // itens pendentes/descontados
+  emp.payments = emp.payments || []; // registros de pagamento 20/05
+
+  // Migração: se existir salaryPayments antigo, transforma em payments simples (sem descontos)
+  if (Array.isArray(emp.salaryPayments) && emp.salaryPayments.length){
+    const alreadyMigrated = emp.payments && emp.payments.some(p => p.migratedFrom === "salaryPayments");
+    if (!alreadyMigrated){
+      emp.salaryPayments.forEach(sp=>{
+        const payDateISO = sp.paidDateISO || todayISO();
+        // inferir tipo: se dia 5 -> PAG05, se dia 20 -> PAG20 (senão "OUTRO")
+        const day = Number((payDateISO.split("-")[2]||"0"));
+        let type = "OUTRO";
+        if (day === 5) type = "PAG05";
+        if (day === 20) type = "PAG20";
+        const period = (type==="PAG05"||type==="PAG20") ? computePayPeriod(type, payDateISO) : { start:"", end:"" };
+        emp.payments.push({
+          id: uid(),
+          payDateISO,
+          type,
+          periodStartISO: period.start,
+          periodEndISO: period.end,
+          gross: safeNum(sp.amount),
+          discountsTotal: 0,
+          net: safeNum(sp.amount),
+          discountItems: [],
+          migratedFrom: "salaryPayments"
+        });
+      });
+      emp.salaryPayments = []; // limpa antigo
+    }
+  }
+
   return emp;
 }
 function getEmpById(store, id){ return (store.employees || []).find(e=>e.id===id) || null; }
@@ -670,14 +788,61 @@ function currentSalary(emp){
   const sorted = [...emp.salaryHistory].sort((a,b)=> (a.date||"").localeCompare(b.date||""));
   return safeNum(sorted[sorted.length-1].salary);
 }
+function sumLedgerPending(emp){
+  ensureEmpShape(emp);
+  return emp.ledger.filter(x=>x.status==="pending").reduce((s,x)=>s+safeNum(x.amount),0);
+}
+
+/* ========= Ledger + Payments core ========= */
+function addLedgerItem(emp, dateISO, desc, amount){
+  ensureEmpShape(emp);
+  emp.ledger.push({
+    id: uid(),
+    dateISO,
+    desc: (desc||"").trim(),
+    amount: safeNum(amount),
+    status: "pending",
+    deductedOnPaymentId: null
+  });
+  emp.updatedAt = Date.now();
+}
+function registerPayment(emp, payType, payDateISO, gross, alsoDiscountOn20=false){
+  ensureEmpShape(emp);
+
+  const useDiscounts = (payType==="PAG05") || (payType==="PAG20" && !!alsoDiscountOn20);
+  const pending = useDiscounts
+    ? emp.ledger.filter(x => x.status==="pending" && x.dateISO <= payDateISO)
+    : [];
+
+  const discountsTotal = pending.reduce((s,x)=>s+safeNum(x.amount),0);
+  const net = safeNum(gross) - discountsTotal;
+
+  const { start, end } = (payType==="PAG05"||payType==="PAG20") ? computePayPeriod(payType, payDateISO) : { start:"", end:"" };
+  const paymentId = uid();
+
+  pending.forEach(x=>{
+    x.status = "deducted";
+    x.deductedOnPaymentId = paymentId;
+  });
+
+  emp.payments.push({
+    id: paymentId,
+    payDateISO,
+    type: payType,
+    periodStartISO: start,
+    periodEndISO: end,
+    gross: safeNum(gross),
+    discountsTotal,
+    net,
+    discountItems: pending.map(x=>({ ledgerId:x.id, desc:x.desc, amount:x.amount }))
+  });
+
+  emp.updatedAt = Date.now();
+  return paymentId;
+}
 
 /* ========= Firebase (Auto Sync) ========= */
-let fb = {
-  app:null, db:null, auth:null,
-  connected:false, user:null,
-  unsubEmployees:null,
-  syncing:false, // evita loop de render em cascata
-};
+let fb = { app:null, db:null, auth:null, connected:false, user:null, unsubEmployees:null };
 const fbStatus = document.getElementById("fbStatus");
 const netStatus = document.getElementById("netStatus");
 const hdrSub = document.getElementById("hdrSub");
@@ -699,8 +864,7 @@ function initFirebaseOnce(){
   fb.db = getFirestore(fb.app);
   fb.auth = getAuth(fb.app);
 
-  // Persistência offline do Firestore (ótimo pra anos de uso)
-  enableIndexedDbPersistence(fb.db).catch(()=>{ /* multi-tab / permissões */ });
+  enableIndexedDbPersistence(fb.db).catch(()=>{});
 
   onAuthStateChanged(fb.auth, (u)=>{
     fb.user = u || null;
@@ -709,18 +873,14 @@ function initFirebaseOnce(){
     if (u) startAutoSync(); else stopAutoSync();
   });
 }
-
 function stopAutoSync(){
   if (fb.unsubEmployees) { fb.unsubEmployees(); fb.unsubEmployees = null; }
 }
-
 function shouldApplyRemote(localEmp, remoteEmp){
-  // Regra simples e robusta: aplica remoto se for mais novo
   const l = safeNum(localEmp?.updatedAt);
   const r = safeNum(remoteEmp?.updatedAt);
   return r > l;
 }
-
 function startAutoSync(){
   const ctx = getStoreCtx();
   if (!ctx) return;
@@ -736,11 +896,9 @@ function startAutoSync(){
     const store = ctx2.store;
     const localMap = new Map((store.employees||[]).map(e => [e.id, e]));
 
-    // aplica mudanças
     snap.docChanges().forEach((ch)=>{
       const id = ch.doc.id;
       if (ch.type === "removed"){
-        // remove local também
         store.employees = (store.employees||[]).filter(e=>e.id !== id);
         return;
       }
@@ -754,21 +912,16 @@ function startAutoSync(){
         upsertEmp(store, remote);
       } else {
         ensureEmpShape(local);
-        if (shouldApplyRemote(local, remote)) {
-          upsertEmp(store, remote);
-        }
+        if (shouldApplyRemote(local, remote)) upsertEmp(store, remote);
       }
     });
 
-    // salva e renderiza
     ctx2.db.stores[ctx2.storeKey] = store;
     saveDB(ctx2.db);
     renderEmployees();
     renderCalcEmployees();
   });
 }
-
-/* ====== Push (auto) com debounce ====== */
 const pushTimers = new Map();
 function schedulePushEmp(emp){
   if (!fb.connected || !fb.db || !fb.user) return;
@@ -787,7 +940,6 @@ function schedulePushEmp(emp){
     }
   }, 350));
 }
-
 async function pushDeleteEmp(empId){
   if (!fb.connected || !fb.db) return;
   const ctx = getStoreCtx();
@@ -827,12 +979,18 @@ const empAdmission = document.getElementById("empAdmission");
 const empSalary = document.getElementById("empSalary");
 const empLoan = document.getElementById("empLoan");
 
-const payYear = document.getElementById("payYear");
-const payMonth = document.getElementById("payMonth");
-const payDate = document.getElementById("payDate");
-const payAmount = document.getElementById("payAmount");
-const btnAddPay = document.getElementById("btnAddPay");
-const payTable = document.getElementById("payTable");
+const pay2Date = document.getElementById("pay2Date");
+const pay2Type = document.getElementById("pay2Type");
+const pay2Gross = document.getElementById("pay2Gross");
+const pay2AlsoDiscountOn20 = document.getElementById("pay2AlsoDiscountOn20");
+const btnRegisterPay = document.getElementById("btnRegisterPay");
+const paymentsTable = document.getElementById("paymentsTable");
+
+const ledDate = document.getElementById("ledDate");
+const ledDesc = document.getElementById("ledDesc");
+const ledAmount = document.getElementById("ledAmount");
+const btnAddLedger = document.getElementById("btnAddLedger");
+const ledgerTable = document.getElementById("ledgerTable");
 
 const vacStart = document.getElementById("vacStart");
 const vacEnd = document.getElementById("vacEnd");
@@ -921,7 +1079,6 @@ function requireAuth(){
   whoami.textContent = ctx.store.managers[s.userKey].label;
   storeName.textContent = ctx.store.name;
 
-  // se firebase já estiver conectado, garante autosync na loja certa
   if (fb.connected) startAutoSync();
 
   openTab(currentTab);
@@ -938,18 +1095,28 @@ window.__toggleDetails = (id) => {
 function renderEmployeeDetails(emp){
   ensureEmpShape(emp);
 
-  const pays = (emp.salaryPayments || []).slice().sort((a,b)=> (a.year-b.year) || (a.month-b.month));
-  const vacs = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
-  const thYears = Object.keys(emp.thirteenthPayments || {}).sort((a,b)=> Number(a)-Number(b));
-  const buys = (emp.boughtVacations || []).slice().sort();
+  const pendingSum = sumLedgerPending(emp);
+  const pendingItems = emp.ledger.filter(x=>x.status==="pending").sort((a,b)=> (a.dateISO||"").localeCompare(b.dateISO||""));
+  const payments = (emp.payments||[]).slice().sort((a,b)=> (a.payDateISO||"").localeCompare(b.payDateISO||""));
+  const vacs = (emp.vacations||[]).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
+  const thYears = Object.keys(emp.thirteenthPayments||{}).sort((a,b)=> Number(a)-Number(b));
+  const buys = (emp.boughtVacations||[]).slice().sort();
 
-  const payLines = pays.length
-    ? pays.map(p => `Salário recebido no mês ${fmtMonth(p.month)}/${p.year} na data ${formatISOToBR(p.paidDateISO)} (${formatBRL(p.amount)})`)
-    : ["Nenhum salário recebido registrado."];
+  const pendingLines = pendingItems.length
+    ? pendingItems.map(x=> `Pendente ${formatISOToBR(x.dateISO)}: ${x.desc} (${formatBRL(x.amount)})`)
+    : ["Nenhum desconto pendente."];
 
-  // Pedido: “Férias deve tirar até” substituído — aqui aparece “Tirou férias na data …”
+  const payLines = payments.length
+    ? payments.map(p=>{
+        const typ = p.type==="PAG20" ? "Pagamento dia 20" : (p.type==="PAG05" ? "Pagamento dia 05" : "Pagamento");
+        const period = (p.periodStartISO && p.periodEndISO) ? ` • período ${formatISOToBR(p.periodStartISO)} a ${formatISOToBR(p.periodEndISO)}` : "";
+        const disc = p.discountsTotal ? ` • descontos ${formatBRL(p.discountsTotal)}` : "";
+        return `${typ} em ${formatISOToBR(p.payDateISO)}${period} • bruto ${formatBRL(p.gross)}${disc} • líquido ${formatBRL(p.net)}`;
+      })
+    : ["Nenhum pagamento registrado."];
+
   const vacLines = vacs.length
-    ? vacs.map(v => `Tirou férias na data ${formatISOToBR(v.startISO)}`)
+    ? vacs.map((v,i)=> `Tirou ${i+1} férias no período ${formatISOToBR(v.startISO)} a ${formatISOToBR(v.endISO)} (${formatBRL(v.paidValue)})`)
     : ["Nenhuma férias registrada."];
 
   const thLines = thYears.length
@@ -966,25 +1133,28 @@ function renderEmployeeDetails(emp){
 
   return `
     <div class="mt-2 bg-slate-50 border border-slate-200 rounded-2xl p-3">
-      <div class="grid md:grid-cols-2 gap-3">
+      <div class="text-sm font-semibold text-slate-700">Resumo rápido</div>
+      <div class="text-xs text-slate-600 mt-1">Caderno pendente: <b>${formatBRL(pendingSum)}</b></div>
+
+      <div class="grid md:grid-cols-2 gap-3 mt-3">
         <div>
-          <div class="text-xs text-slate-500 font-semibold mb-1">SALÁRIOS RECEBIDOS</div>
+          <div class="text-xs text-slate-500 font-semibold mb-1">PAGAMENTOS</div>
           <div class="text-sm text-slate-700">${ul(payLines)}</div>
+        </div>
+        <div>
+          <div class="text-xs text-slate-500 font-semibold mb-1">CADERNO (PENDENTE)</div>
+          <div class="text-sm text-slate-700">${ul(pendingLines)}</div>
         </div>
         <div>
           <div class="text-xs text-slate-500 font-semibold mb-1">FÉRIAS</div>
           <div class="text-sm text-slate-700">${ul(vacLines)}</div>
         </div>
         <div>
-          <div class="text-xs text-slate-500 font-semibold mb-1">13º</div>
-          <div class="text-sm text-slate-700">${ul(thLines)}</div>
-        </div>
-        <div>
-          <div class="text-xs text-slate-500 font-semibold mb-1">COMPRA DE FÉRIAS</div>
-          <div class="text-sm text-slate-700">${ul(buyLines)}</div>
+          <div class="text-xs text-slate-500 font-semibold mb-1">13º / COMPRA DE FÉRIAS</div>
+          <div class="text-sm text-slate-700">${ul(thLines.concat(buyLines))}</div>
         </div>
       </div>
-      <div class="mt-3 text-xs text-slate-500">Para lançar itens, clique em <b>Editar</b>.</div>
+      <div class="mt-3 text-xs text-slate-500">Para lançar itens/pagamentos, clique em <b>Editar</b>.</div>
     </div>
   `;
 }
@@ -1019,8 +1189,8 @@ function renderEmployees(){
   btnToggleDismissed.textContent = showDismissed ? "Ver ativos" : "Ver demitidos";
 
   empTable.innerHTML = rows.map(e=>{
-    const sal = currentSalary(e);
-    const loan = safeNum(e.loanBalance);
+    const sal = currentSalary(e) || 1650;
+    const pending = sumLedgerPending(e);
     const detailsId = `det_${e.id.replaceAll(/[^a-zA-Z0-9]/g,"")}`;
     return `
       <tr class="border-b">
@@ -1028,11 +1198,11 @@ function renderEmployees(){
           <button class="text-left font-semibold underline decoration-dotted" onclick="window.__toggleDetails('${detailsId}')">
             ${escapeHTML(e.name || "")}
           </button>
-          <div class="text-xs text-slate-500 mt-0.5">clique no nome para ver lançamentos</div>
+          <div class="text-xs text-slate-500 mt-0.5">clique no nome para ver histórico</div>
         </td>
         <td class="py-2">${formatISOToBR(e.admissionDate) || "—"}</td>
         <td class="py-2">${formatBRL(sal)}</td>
-        <td class="py-2">${formatBRL(loan)}</td>
+        <td class="py-2">${formatBRL(pending)}</td>
         <td class="py-2 text-right no-print">
           <button class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs" onclick="window.__openEmpEditor('${e.id}')">
             Editar
@@ -1061,25 +1231,68 @@ function renderSalaryHistory(emp){
     </tr>
   `).join("");
 }
+
 function renderPayments(emp){
-  const list = (emp.salaryPayments || []).slice().sort((a,b)=> (a.year-b.year) || (a.month-b.month));
+  ensureEmpShape(emp);
+  const list = (emp.payments || []).slice().sort((a,b)=> (a.payDateISO||"").localeCompare(b.payDateISO||""));
   if (!list.length){
-    payTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum salário recebido registrado.</td></tr>`;
+    paymentsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum pagamento registrado.</td></tr>`;
     return;
   }
-  payTable.innerHTML = list.map((p,idx)=>{
-    const text = `Salário recebido no mês ${fmtMonth(p.month)}/${p.year} na data ${formatISOToBR(p.paidDateISO)} (${formatBRL(p.amount)})`;
+  paymentsTable.innerHTML = list.map((p,idx)=>{
+    const typ = p.type==="PAG20" ? "Pagamento dia 20" : (p.type==="PAG05" ? "Pagamento dia 05" : "Pagamento");
+    const period = (p.periodStartISO && p.periodEndISO) ? `período ${formatISOToBR(p.periodStartISO)} → ${formatISOToBR(p.periodEndISO)}` : "período —";
+    const disc = p.discountsTotal ? ` • descontos ${formatBRL(p.discountsTotal)}` : "";
+    const text = `${typ} em ${formatISOToBR(p.payDateISO)} • ${period} • bruto ${formatBRL(p.gross)}${disc} • líquido ${formatBRL(p.net)}`;
     return `
       <tr class="border-b last:border-b-0">
         <td class="py-2">${escapeHTML(text)}</td>
         <td class="py-2 text-right no-print">
           <button class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 text-xs"
-            onclick="window.__deletePay('${emp.id}', ${idx})">Excluir</button>
+            onclick="window.__deletePayment('${emp.id}', ${idx})">Excluir</button>
         </td>
       </tr>
     `;
   }).join("");
 }
+
+function renderLedger(emp){
+  ensureEmpShape(emp);
+  const list = (emp.ledger || []).slice().sort((a,b)=> (a.dateISO||"").localeCompare(b.dateISO||""));
+  if (!list.length){
+    ledgerTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum item no caderno.</td></tr>`;
+    return;
+  }
+  ledgerTable.innerHTML = list.map((x,idx)=>{
+    const status = x.status==="pending" ? "PENDENTE" : "DESCONTADO";
+    const badge = x.status==="pending"
+      ? `<span class="px-2 py-1 rounded-lg bg-amber-100 text-amber-800 text-xs font-semibold">PENDENTE</span>`
+      : `<span class="px-2 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-semibold">DESCONTADO</span>`;
+    const extra = x.status==="deducted" && x.deductedOnPaymentId
+      ? ` (no pagamento ${x.deductedOnPaymentId.slice(-6)})`
+      : "";
+    const text = `${formatISOToBR(x.dateISO)} • ${x.desc} • ${formatBRL(x.amount)} ${extra}`;
+    return `
+      <tr class="border-b last:border-b-0">
+        <td class="py-2">
+          <div class="flex items-center gap-2">
+            ${badge}
+            <div>${escapeHTML(text)}</div>
+          </div>
+        </td>
+        <td class="py-2 text-right no-print">
+          ${x.status==="pending"
+            ? `<button class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 text-xs"
+                 onclick="window.__deleteLedger('${emp.id}', ${idx})">Excluir</button>`
+            : `<button class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs"
+                 onclick="window.__undoLedger('${emp.id}', ${idx})">Voltar p/ pendente</button>`
+          }
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
 function renderVacations(emp){
   const list = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
   if (!list.length){
@@ -1152,20 +1365,27 @@ window.__openEmpEditor = (id) => {
 
   empName.value = emp.name || "";
   empAdmission.value = formatISOToBR(emp.admissionDate) || "";
-  empSalary.value = currentSalary(emp) || "";
-  empLoan.value = safeNum(emp.loanBalance) || "";
+  empSalary.value = currentSalary(emp) || 1650;
+  empLoan.value = safeNum(emp.loanBalance) || 0;
 
   empActive.checked = (emp.status !== "dismissed");
   empDismissal.value = formatISOToBR(emp.dismissalDate) || "";
 
-  // limpa inputs
-  payYear.value = ""; payMonth.value = ""; payDate.value = ""; payAmount.value = "";
+  // defaults dos inputs de pagamento (sugestões)
+  pay2Date.value = "";
+  pay2Type.value = "PAG20";
+  pay2Gross.value = 650;
+  pay2AlsoDiscountOn20.checked = false;
+
+  ledDate.value = ""; ledDesc.value = ""; ledAmount.value = "";
+
   vacStart.value = ""; vacEnd.value = ""; vacPaidValue.value = "";
   thYear.value = ""; thDate.value = "";
   buyVacDate.value = "";
 
   renderSalaryHistory(emp);
   renderPayments(emp);
+  renderLedger(emp);
   renderVacations(emp);
   renderThPayments(emp);
   renderBuyVac(emp);
@@ -1180,19 +1400,26 @@ function openNewEmp(){
 
   empName.value = "";
   empAdmission.value = "";
-  empSalary.value = "";
-  empLoan.value = "";
+  empSalary.value = 1650;
+  empLoan.value = 0;
 
   empActive.checked = true;
   empDismissal.value = "";
 
-  payYear.value = ""; payMonth.value = ""; payDate.value = ""; payAmount.value = "";
+  pay2Date.value = "";
+  pay2Type.value = "PAG20";
+  pay2Gross.value = 650;
+  pay2AlsoDiscountOn20.checked = false;
+
+  ledDate.value = ""; ledDesc.value = ""; ledAmount.value = "";
+
   vacStart.value = ""; vacEnd.value = ""; vacPaidValue.value = "";
   thYear.value = ""; thDate.value = "";
   buyVacDate.value = "";
 
   salaryHistoryTable.innerHTML = "";
-  payTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum salário recebido registrado.</td></tr>`;
+  paymentsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum pagamento registrado.</td></tr>`;
+  ledgerTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum item no caderno.</td></tr>`;
   vacationsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma férias registrada.</td></tr>`;
   thTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum 13º registrado.</td></tr>`;
   buyVacTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma compra de férias registrada.</td></tr>`;
@@ -1225,7 +1452,7 @@ function saveEmp(){
   let emp = null;
   if (editingEmpId) emp = getEmpById(store, editingEmpId);
   if (!emp) {
-    emp = { id: uid(), name:"", admissionDate:"", salaryHistory:[], salaryPayments:[], vacations:[],
+    emp = { id: uid(), name:"", admissionDate:"", salaryHistory:[], ledger:[], payments:[], vacations:[],
       thirteenthPayments:{}, boughtVacations:[], loanBalance:0, status:"active", dismissalDate:"", updatedAt:0 };
   }
   ensureEmpShape(emp);
@@ -1243,6 +1470,7 @@ function saveEmp(){
     emp.dismissalDate = "";
   }
 
+  // grava salário (histórico)
   const effectiveDate = todayISO();
   const existingToday = emp.salaryHistory.find(h => h.date === effectiveDate);
   if (existingToday) existingToday.salary = salary;
@@ -1267,7 +1495,7 @@ function addSalaryChange(){
   const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
   if (!emp) return alert("Abra um funcionário.");
 
-  const newSalary = safeNum(prompt("Novo salário (R$):", String(currentSalary(emp) || "")));
+  const newSalary = safeNum(prompt("Novo salário (R$):", String(currentSalary(emp) || 1650)));
   if (!newSalary || newSalary <= 0) return;
 
   const br = prompt("Data efetiva (DD/MM/AAAA):", formatISOToBR(todayISO()));
@@ -1312,51 +1540,102 @@ function deleteEmp(){
   renderEmployees();
 }
 
-/* ========= Lançamentos ========= */
-function addPay(){
+/* ========= Ledger/Pagamentos actions ========= */
+function addLedger(){
   const ctx = getStoreCtx();
   const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
   if (!emp) return alert("Abra um funcionário.");
 
-  const year = Number(payYear.value);
-  const month = Number(payMonth.value);
-  if (!year || year < 2000 || year > 2100) return alert("Ano inválido.");
-  if (!month || month < 1 || month > 12) return alert("Mês inválido (1-12).");
+  const dateISO = parseBRToISO(ledDate.value);
+  if (!dateISO) return alert("Data inválida (DD/MM/AAAA).");
 
-  const paidISO = parseBRToISO(payDate.value);
-  if (!paidISO) return alert("Data inválida.");
+  const desc = (ledDesc.value || "").trim();
+  if (!desc) return alert("Informe a descrição.");
 
-  const amount = safeNum(payAmount.value || currentSalary(emp));
+  const amount = safeNum(ledAmount.value);
   if (amount <= 0) return alert("Valor inválido.");
 
-  const exists = emp.salaryPayments.find(p => p.year===year && p.month===month);
-  if (exists) {
-    const ok = confirm(`Já existe salário recebido em ${fmtMonth(month)}/${year}. Substituir?`);
-    if (!ok) return;
-    exists.paidDateISO = paidISO;
-    exists.amount = amount;
-  } else {
-    emp.salaryPayments.push({ id: uid(), year, month, paidDateISO: paidISO, amount });
-  }
-
-  emp.updatedAt = Date.now();
+  addLedgerItem(emp, dateISO, desc, amount);
   saveLocalAndPush(emp);
 
-  payYear.value=""; payMonth.value=""; payDate.value=""; payAmount.value="";
+  ledDate.value=""; ledDesc.value=""; ledAmount.value="";
   window.__openEmpEditor(emp.id);
 }
-window.__deletePay = (empId, idx) => {
+window.__deleteLedger = (empId, idx) => {
   const ctx = getStoreCtx();
   const emp = getEmpById(ctx.store, empId);
   if (!emp) return;
-  const ok = confirm("Excluir este salário recebido?");
+  const item = emp.ledger?.[idx];
+  if (!item) return;
+
+  if (item.status !== "pending") return alert("Só é possível excluir itens pendentes.");
+  const ok = confirm("Excluir este item do caderno?");
   if (!ok) return;
-  emp.salaryPayments.splice(idx, 1);
+
+  emp.ledger.splice(idx,1);
+  emp.updatedAt = Date.now();
+  saveLocalAndPush(emp);
+  window.__openEmpEditor(emp.id);
+};
+window.__undoLedger = (empId, idx) => {
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, empId);
+  if (!emp) return;
+  const item = emp.ledger?.[idx];
+  if (!item) return;
+
+  const ok = confirm("Voltar este item para PENDENTE? (não apaga pagamento registrado)");
+  if (!ok) return;
+
+  item.status = "pending";
+  item.deductedOnPaymentId = null;
   emp.updatedAt = Date.now();
   saveLocalAndPush(emp);
   window.__openEmpEditor(emp.id);
 };
 
+function autoSuggestGrossByType(){
+  const t = pay2Type.value;
+  pay2Gross.value = (t==="PAG05") ? 1000 : 650;
+}
+function registerPay(){
+  const ctx = getStoreCtx();
+  const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
+  if (!emp) return alert("Abra um funcionário.");
+
+  const payDateISO = parseBRToISO(pay2Date.value);
+  if (!payDateISO) return alert("Data do pagamento inválida (DD/MM/AAAA).");
+
+  const type = pay2Type.value;
+  if (!["PAG20","PAG05"].includes(type)) return alert("Tipo inválido.");
+
+  const gross = safeNum(pay2Gross.value);
+  if (gross <= 0) return alert("Valor bruto inválido.");
+
+  const alsoOn20 = pay2AlsoDiscountOn20.checked;
+
+  registerPayment(emp, type, payDateISO, gross, alsoOn20);
+  saveLocalAndPush(emp);
+
+  pay2Date.value = "";
+  pay2AlsoDiscountOn20.checked = false;
+  autoSuggestGrossByType();
+  window.__openEmpEditor(emp.id);
+}
+window.__deletePayment = (empId, idx) => {
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, empId);
+  if (!emp) return;
+  const ok = confirm("Excluir este pagamento? (não reverte descontos automaticamente)");
+  if (!ok) return;
+
+  emp.payments.splice(idx,1);
+  emp.updatedAt = Date.now();
+  saveLocalAndPush(emp);
+  window.__openEmpEditor(emp.id);
+};
+
+/* ========= Férias / 13º / compra ========= */
 function addVacationPeriod(){
   const ctx = getStoreCtx();
   const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
@@ -1642,6 +1921,8 @@ function importJSON(file){
       const parsed = JSON.parse(fr.result);
       if (!parsed || !parsed.store) return alert("JSON inválido.");
       ctx.db.stores[ctx.storeKey].employees = parsed.store.employees || [];
+      // garante shape
+      ctx.db.stores[ctx.storeKey].employees.forEach(ensureEmpShape);
       saveDB(ctx.db);
       renderEmployees();
       alert("Importado.");
@@ -1671,7 +1952,6 @@ async function fbSignIn(){
   try {
     await signInWithEmailAndPassword(fb.auth, email, pass);
   } catch (e) {
-    // se não existir, cria
     if (String(e?.code||"").includes("auth/user-not-found")) {
       await createUserWithEmailAndPassword(fb.auth, email, pass);
       return;
@@ -1719,14 +1999,21 @@ btnAddSalaryChange.addEventListener("click", addSalaryChange);
 btnArchiveEmp.addEventListener("click", archiveEmp);
 btnDeleteEmp.addEventListener("click", deleteEmp);
 
-btnAddPay.addEventListener("click", addPay);
+btnRegisterPay.addEventListener("click", registerPay);
+pay2Type.addEventListener("change", autoSuggestGrossByType);
+
+btnAddLedger.addEventListener("click", addLedger);
+
 btnAddVacation.addEventListener("click", addVacationPeriod);
 btnAddTh.addEventListener("click", addThPayment);
 btnAddBuyVac.addEventListener("click", addBuyVac);
 
 empAdmission.addEventListener("blur", ()=> normalizeBRDateInput(empAdmission));
 empDismissal.addEventListener("blur", ()=> { if (empDismissal.value.trim()) normalizeBRDateInput(empDismissal); });
-payDate.addEventListener("blur", ()=> { if (payDate.value.trim()) normalizeBRDateInput(payDate); });
+
+pay2Date.addEventListener("blur", ()=> { if (pay2Date.value.trim()) normalizeBRDateInput(pay2Date); });
+ledDate.addEventListener("blur", ()=> { if (ledDate.value.trim()) normalizeBRDateInput(ledDate); });
+
 vacStart.addEventListener("blur", ()=> { if (vacStart.value.trim()) normalizeBRDateInput(vacStart); });
 vacEnd.addEventListener("blur", ()=> { if (vacEnd.value.trim()) normalizeBRDateInput(vacEnd); });
 thDate.addEventListener("blur", ()=> { if (thDate.value.trim()) normalizeBRDateInput(thDate); });
@@ -1749,7 +2036,6 @@ fileImport.addEventListener("change", (e)=>{
 });
 btnReset.addEventListener("click", resetStore);
 
-/* Firebase UI buttons */
 btnFbSignIn.addEventListener("click", fbSignIn);
 btnFbSignOut.addEventListener("click", fbSignOut);
 
@@ -1758,6 +2044,16 @@ btnFbSignOut.addEventListener("click", fbSignOut);
   initFirebaseOnce();
   setFbStatus("Firebase: desconectado");
   await ensureDefaultPins();
+
+  // garante migração/shape em todos os funcionários locais
+  const s = getSession();
+  if (s){
+    const ctx = getStoreCtx();
+    (ctx.store.employees||[]).forEach(ensureEmpShape);
+    ctx.db.stores[ctx.storeKey] = ctx.store;
+    saveDB(ctx.db);
+  }
+
   requireAuth();
   calcDate.value = todayISO();
 })();

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0f172a" />
-  <title>RH Simples - 2 Lojas</title>
+  <title>RH Simples - 2 Lojas (Auto Sync)</title>
 
   <link rel="icon" href="data:,">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -21,7 +21,7 @@
   <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
     <div class="min-w-0">
       <div class="font-bold truncate">RH Simples</div>
-      <div class="text-xs text-slate-500" id="hdrSub">Offline (localStorage) • Firebase opcional</div>
+      <div class="text-xs text-slate-500" id="hdrSub">Offline + Auto Sync Firebase</div>
     </div>
 
     <div class="flex items-center gap-2">
@@ -89,16 +89,9 @@
         </div>
 
         <div class="mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-          <div class="text-sm font-semibold">Sincronização</div>
-          <div class="text-sm text-slate-600 mt-1">
-            Você pode usar só offline ou ativar Firebase.
-          </div>
-          <div class="mt-3 flex flex-wrap gap-2 no-print">
-            <button id="btnFbConnect" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">Conectar Firebase</button>
-            <button id="btnFbSyncDown" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Baixar</button>
-            <button id="btnFbSyncUp" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Enviar</button>
-          </div>
+          <div class="text-sm font-semibold">Status Sync</div>
           <div class="mt-2 text-xs text-slate-500" id="fbStatus">Firebase: desconectado</div>
+          <div class="mt-1 text-xs text-slate-500" id="netStatus">Internet: —</div>
         </div>
       </aside>
 
@@ -111,7 +104,7 @@
               <div>
                 <h2 class="text-xl font-bold">Funcionários</h2>
                 <p class="text-sm text-slate-600">
-                  Clique no funcionário para abrir o <b>drop-down</b> com todos os lançamentos (salários recebidos, férias, 13º e compra de férias).
+                  Clique no nome para abrir o <b>drop-down</b> com tudo que foi lançado no funcionário.
                 </p>
               </div>
               <div class="flex gap-2 no-print">
@@ -149,7 +142,7 @@
             <div class="flex items-start justify-between gap-3">
               <div>
                 <h3 class="text-lg font-bold" id="empEditorTitle">Novo funcionário</h3>
-                <p class="text-sm text-slate-600">Editor completo (lançamentos ficam no drop-down da lista também).</p>
+                <p class="text-sm text-slate-600">Editor completo (tudo sincroniza automaticamente).</p>
               </div>
               <button id="btnCloseEmpEditor" class="no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">Fechar</button>
             </div>
@@ -179,11 +172,9 @@
               </label>
             </div>
 
-            <!-- SALÁRIO RECEBIDO (MÊS A MÊS) -->
+            <!-- SALÁRIO RECEBIDO -->
             <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
               <div class="text-sm font-semibold">Salário recebido (mês a mês)</div>
-              <div class="text-sm text-slate-600">Ex.: Salário recebido no mês 01/2026 na data 05/01/2026 (R$ ...)</div>
-
               <div class="mt-3 grid md:grid-cols-5 gap-3 no-print">
                 <label class="text-sm">
                   <span class="block text-slate-600 mb-1">Ano</span>
@@ -219,10 +210,12 @@
               </div>
             </div>
 
-            <!-- FÉRIAS (PERÍODOS) => DROPDOWN MOSTRA "Tirou férias na data ..." -->
+            <!-- FÉRIAS -->
             <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
               <div class="text-sm font-semibold">Férias (períodos)</div>
-              <div class="text-sm text-slate-600">No drop-down da lista vai aparecer: <b>Tirou férias na data (início)</b>.</div>
+              <div class="text-sm text-slate-600">
+                No drop-down da lista aparece: <b>Tirou férias na data XX/XX/XXXX</b>.
+              </div>
 
               <div class="mt-3 grid md:grid-cols-4 gap-3 no-print">
                 <label class="text-sm">
@@ -255,10 +248,9 @@
               </div>
             </div>
 
-            <!-- 13º (ANO + DATA) -->
+            <!-- 13º -->
             <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
               <div class="text-sm font-semibold">13º salário (ano + data)</div>
-              <div class="text-sm text-slate-600">Ex.: 13º do ano de 2024 foi pago na data 20/12/2024.</div>
 
               <div class="mt-3 grid md:grid-cols-3 gap-3 no-print">
                 <label class="text-sm">
@@ -287,10 +279,9 @@
               </div>
             </div>
 
-            <!-- COMPRA DE FÉRIAS (DATA) -->
+            <!-- COMPRA FÉRIAS -->
             <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
               <div class="text-sm font-semibold">Compra de férias (data)</div>
-              <div class="text-sm text-slate-600">Ex.: Comprei as férias na data 10/01/2025.</div>
 
               <div class="mt-3 grid md:grid-cols-3 gap-3 no-print">
                 <label class="text-sm md:col-span-2">
@@ -450,22 +441,44 @@
               </div>
 
               <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                <div class="font-semibold">Backup</div>
-                <div class="text-sm text-slate-600 mt-1">Exporta/Importa JSON com os dados desta loja.</div>
+                <div class="font-semibold">Firebase (Definitivo)</div>
+                <div class="text-sm text-slate-600 mt-1">
+                  Recomendado: usar <b>Email/Senha</b> (mais seguro por anos).
+                </div>
+
+                <label class="text-sm block mt-3">
+                  <span class="block text-slate-600 mb-1">Email</span>
+                  <input id="fbEmail" type="email" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="ex.: mana@seudominio.com" />
+                </label>
+                <label class="text-sm block mt-2">
+                  <span class="block text-slate-600 mb-1">Senha</span>
+                  <input id="fbPass" type="password" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="••••••••" />
+                </label>
+
                 <div class="mt-3 flex flex-wrap gap-2">
-                  <button id="btnExport" class="px-4 py-2 rounded-xl border border-slate-300">Exportar JSON</button>
-                  <label class="px-4 py-2 rounded-xl border border-slate-300 cursor-pointer">
-                    Importar JSON
-                    <input id="fileImport" type="file" accept="application/json" class="hidden" />
-                  </label>
-                  <button id="btnReset" class="px-4 py-2 rounded-xl border border-rose-300 text-rose-700">Reset loja</button>
+                  <button id="btnFbSignIn" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">Conectar</button>
+                  <button id="btnFbSignOut" class="px-4 py-2 rounded-xl border border-slate-300">Desconectar</button>
+                </div>
+
+                <div class="mt-2 text-xs text-slate-500">
+                  Após conectar, a sincronização é automática e em tempo real.
                 </div>
               </div>
             </div>
 
-            <div class="mt-4 text-xs text-slate-500">
-              Firebase Config já está no HTML. Ative Firestore + Auth Anônimo conforme instruções abaixo.
+            <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 no-print">
+              <div class="font-semibold">Backup local (extra)</div>
+              <div class="text-sm text-slate-600 mt-1">Se quiser: exportar/importar JSON.</div>
+              <div class="mt-3 flex flex-wrap gap-2">
+                <button id="btnExport" class="px-4 py-2 rounded-xl border border-slate-300">Exportar JSON</button>
+                <label class="px-4 py-2 rounded-xl border border-slate-300 cursor-pointer">
+                  Importar JSON
+                  <input id="fileImport" type="file" accept="application/json" class="hidden" />
+                </label>
+                <button id="btnReset" class="px-4 py-2 rounded-xl border border-rose-300 text-rose-700">Reset loja</button>
+              </div>
             </div>
+
           </div>
         </div>
 
@@ -474,21 +487,21 @@
   </section>
 </main>
 
-<!-- Firebase + App JS -->
 <script type="module">
 /* =========================================================
    Firebase (CDN modular)
-   Versão 12.9.0 (CDN oficial) - conforme docs
    ========================================================= */
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
 import {
-  getFirestore, doc, setDoc, getDoc, deleteDoc,
-  collection, getDocs
+  getFirestore, doc, setDoc, deleteDoc, collection, onSnapshot,
+  enableIndexedDbPersistence
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 import {
-  getAuth, signInAnonymously, onAuthStateChanged
+  getAuth, onAuthStateChanged, signOut,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
+/* === Seu firebaseConfig === */
 const firebaseConfig = {
   apiKey: "AIzaSyCN6TZYTw4wQlAVnsB7uJZtG8KsTTxKJ94",
   authDomain: "thrh-640ab.firebaseapp.com",
@@ -498,19 +511,11 @@ const firebaseConfig = {
   appId: "1:1004522826863:web:0e3a8e6a0a053dfcdfb19a"
 };
 
-let fb = { app:null, db:null, auth:null, ready:false, user:null };
-
-/* ========= PWA single-file (manifest via blob) ========= */
+/* ========= PWA (manifest via blob) ========= */
 (function setupPWA(){
   try {
-    const manifest = {
-      name: "RH Simples",
-      short_name: "RH",
-      start_url: "./",
-      display: "standalone",
-      background_color: "#f8fafc",
-      theme_color: "#0f172a"
-    };
+    const manifest = { name:"RH Simples", short_name:"RH", start_url:"./", display:"standalone",
+      background_color:"#f8fafc", theme_color:"#0f172a" };
     const blob = new Blob([JSON.stringify(manifest)], {type:"application/manifest+json"});
     const url = URL.createObjectURL(blob);
     const link = document.createElement("link");
@@ -534,8 +539,8 @@ let fb = { app:null, db:null, auth:null, ready:false, user:null };
   });
 })();
 
-/* ========= Storage / Helpers ========= */
-const LS_KEY = "pwa_rh_simples_v4";
+/* ========= Helpers ========= */
+const LS_KEY = "pwa_rh_autosync_v1";
 const SESSION_KEY = "pwa_rh_session_v1";
 
 function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
@@ -550,8 +555,6 @@ function todayISO(){
   const pad = n => String(n).padStart(2,"0");
   return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 }
-
-/* --- Datas DD/MM/AAAA <-> ISO --- */
 function formatISOToBR(iso){
   if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
   const [y,m,d] = iso.split("-");
@@ -576,8 +579,6 @@ function normalizeBRDateInput(el){
   el.value = formatISOToBR(iso);
   return true;
 }
-
-/* --- Hash PIN com fallback --- */
 async function hashPin(text){
   text = String(text ?? "");
   if (window.crypto && crypto.subtle && window.isSecureContext) {
@@ -589,11 +590,12 @@ async function hashPin(text){
   for (let i = 0; i < text.length; i++) h = ((h << 5) + h) + text.charCodeAt(i);
   return "fb_" + (h >>> 0).toString(16);
 }
+function fmtMonth(m){ return String(m).padStart(2,"0"); }
 
-/* ========= DB local ========= */
+/* ========= Local DB ========= */
 function defaultDB(){
   return {
-    version: 4,
+    version: 1,
     stores: {
       mana: {
         name: "MANA DE DEUS",
@@ -644,107 +646,157 @@ function getStoreCtx(){
   return { session: s, db, storeKey: s.storeKey, store: db.stores[s.storeKey] };
 }
 
-/* ========= Firebase helpers ========= */
+/* ========= Employee shape ========= */
+function ensureEmpShape(emp){
+  emp.vacations = emp.vacations || [];
+  emp.thirteenthPayments = emp.thirteenthPayments || {};
+  emp.boughtVacations = emp.boughtVacations || [];
+  emp.salaryHistory = emp.salaryHistory || [];
+  emp.salaryPayments = emp.salaryPayments || [];
+  emp.loanBalance = safeNum(emp.loanBalance);
+  emp.status = emp.status || "active";
+  emp.updatedAt = safeNum(emp.updatedAt) || 0;
+  return emp;
+}
+function getEmpById(store, id){ return (store.employees || []).find(e=>e.id===id) || null; }
+function upsertEmp(store, emp){
+  store.employees = store.employees || [];
+  const idx = store.employees.findIndex(e=>e.id===emp.id);
+  if (idx >= 0) store.employees[idx] = emp;
+  else store.employees.push(emp);
+}
+function currentSalary(emp){
+  if (!emp.salaryHistory?.length) return safeNum(emp.salary || 0);
+  const sorted = [...emp.salaryHistory].sort((a,b)=> (a.date||"").localeCompare(b.date||""));
+  return safeNum(sorted[sorted.length-1].salary);
+}
+
+/* ========= Firebase (Auto Sync) ========= */
+let fb = {
+  app:null, db:null, auth:null,
+  connected:false, user:null,
+  unsubEmployees:null,
+  syncing:false, // evita loop de render em cascata
+};
 const fbStatus = document.getElementById("fbStatus");
-const btnFbConnect = document.getElementById("btnFbConnect");
-const btnFbSyncDown = document.getElementById("btnFbSyncDown");
-const btnFbSyncUp = document.getElementById("btnFbSyncUp");
+const netStatus = document.getElementById("netStatus");
 const hdrSub = document.getElementById("hdrSub");
 
 function setFbStatus(txt){
   fbStatus.textContent = txt;
-  hdrSub.textContent = `Offline (localStorage) • ${txt}`;
+  hdrSub.textContent = `Offline + Auto Sync Firebase • ${txt}`;
 }
-
-async function fbConnect(){
-  if (fb.ready) return;
-  try {
-    fb.app = initializeApp(firebaseConfig);
-    fb.db = getFirestore(fb.app);
-    fb.auth = getAuth(fb.app);
-
-    await signInAnonymously(fb.auth);
-
-    await new Promise((resolve) => {
-      const unsub = onAuthStateChanged(fb.auth, (u)=>{
-        if (u) {
-          fb.user = u;
-          fb.ready = true;
-          setFbStatus("Firebase: conectado ✅");
-          unsub();
-          resolve();
-        }
-      });
-    });
-  } catch (e) {
-    console.error(e);
-    setFbStatus("Firebase: ERRO (veja console)");
-    alert("Erro ao conectar Firebase. Confira se Auth Anônimo e Firestore estão ativados.");
-  }
+function setNetStatus(){
+  netStatus.textContent = `Internet: ${navigator.onLine ? "online ✅" : "offline ⚠️"}`;
 }
+window.addEventListener("online", setNetStatus);
+window.addEventListener("offline", setNetStatus);
+setNetStatus();
 
-function ensureEmpShape(emp){
-  emp.vacations = emp.vacations || []; // [{id,startISO,endISO,paidValue}]
-  emp.thirteenthPayments = emp.thirteenthPayments || {}; // { "2024": "2024-12-20" }
-  emp.boughtVacations = emp.boughtVacations || []; // ["2025-01-10"]
-  emp.salaryHistory = emp.salaryHistory || [];
-  emp.salaryPayments = emp.salaryPayments || []; // [{id,year,month,paidDateISO,amount}]
-  emp.loanBalance = safeNum(emp.loanBalance);
-  emp.status = emp.status || "active";
-  emp.updatedAt = emp.updatedAt || Date.now();
-  return emp;
-}
+function initFirebaseOnce(){
+  if (fb.app) return;
+  fb.app = initializeApp(firebaseConfig);
+  fb.db = getFirestore(fb.app);
+  fb.auth = getAuth(fb.app);
 
-function stripEmpForFirestore(emp){
-  // remove campos calculados/temporários se quiser; por ora envia tudo que é útil
-  const e = JSON.parse(JSON.stringify(emp));
-  return e;
-}
+  // Persistência offline do Firestore (ótimo pra anos de uso)
+  enableIndexedDbPersistence(fb.db).catch(()=>{ /* multi-tab / permissões */ });
 
-async function fbSyncDown(){
-  const ctx = getStoreCtx();
-  if (!ctx) return;
-  if (!fb.ready) return alert("Conecte o Firebase primeiro.");
-
-  const storeKey = ctx.storeKey;
-  const colRef = collection(fb.db, "stores", storeKey, "employees");
-  const snap = await getDocs(colRef);
-
-  const list = [];
-  snap.forEach(d => {
-    const emp = d.data();
-    emp.id = emp.id || d.id;
-    ensureEmpShape(emp);
-    list.push(emp);
+  onAuthStateChanged(fb.auth, (u)=>{
+    fb.user = u || null;
+    fb.connected = !!u;
+    setFbStatus(u ? `Firebase: conectado ✅ (${u.email || "conta"})` : "Firebase: desconectado");
+    if (u) startAutoSync(); else stopAutoSync();
   });
-
-  ctx.db.stores[storeKey].employees = list;
-  saveDB(ctx.db);
-
-  renderEmployees();
-  renderCalcEmployees();
-  alert("Baixado do Firebase.");
 }
 
-async function fbSyncUp(){
+function stopAutoSync(){
+  if (fb.unsubEmployees) { fb.unsubEmployees(); fb.unsubEmployees = null; }
+}
+
+function shouldApplyRemote(localEmp, remoteEmp){
+  // Regra simples e robusta: aplica remoto se for mais novo
+  const l = safeNum(localEmp?.updatedAt);
+  const r = safeNum(remoteEmp?.updatedAt);
+  return r > l;
+}
+
+function startAutoSync(){
   const ctx = getStoreCtx();
   if (!ctx) return;
-  if (!fb.ready) return alert("Conecte o Firebase primeiro.");
 
-  const storeKey = ctx.storeKey;
-  const store = ctx.store;
-  const emps = store.employees || [];
+  stopAutoSync();
 
-  // garante doc da store (opcional)
-  await setDoc(doc(fb.db, "stores", storeKey), { name: store.name, updatedAt: Date.now() }, { merge:true });
+  const colRef = collection(fb.db, "stores", ctx.storeKey, "employees");
 
-  for (const emp of emps){
-    ensureEmpShape(emp);
-    emp.updatedAt = Date.now();
-    const ref = doc(fb.db, "stores", storeKey, "employees", emp.id);
-    await setDoc(ref, stripEmpForFirestore(emp), { merge:true });
+  fb.unsubEmployees = onSnapshot(colRef, (snap)=>{
+    const ctx2 = getStoreCtx();
+    if (!ctx2) return;
+
+    const store = ctx2.store;
+    const localMap = new Map((store.employees||[]).map(e => [e.id, e]));
+
+    // aplica mudanças
+    snap.docChanges().forEach((ch)=>{
+      const id = ch.doc.id;
+      if (ch.type === "removed"){
+        // remove local também
+        store.employees = (store.employees||[]).filter(e=>e.id !== id);
+        return;
+      }
+
+      const remote = ch.doc.data();
+      remote.id = remote.id || id;
+      ensureEmpShape(remote);
+
+      const local = localMap.get(remote.id);
+      if (!local) {
+        upsertEmp(store, remote);
+      } else {
+        ensureEmpShape(local);
+        if (shouldApplyRemote(local, remote)) {
+          upsertEmp(store, remote);
+        }
+      }
+    });
+
+    // salva e renderiza
+    ctx2.db.stores[ctx2.storeKey] = store;
+    saveDB(ctx2.db);
+    renderEmployees();
+    renderCalcEmployees();
+  });
+}
+
+/* ====== Push (auto) com debounce ====== */
+const pushTimers = new Map();
+function schedulePushEmp(emp){
+  if (!fb.connected || !fb.db || !fb.user) return;
+  const ctx = getStoreCtx();
+  if (!ctx) return;
+
+  const key = emp.id;
+  if (pushTimers.has(key)) clearTimeout(pushTimers.get(key));
+
+  pushTimers.set(key, setTimeout(async ()=>{
+    try {
+      const ref = doc(fb.db, "stores", ctx.storeKey, "employees", emp.id);
+      await setDoc(ref, emp, { merge:true });
+    } catch (e) {
+      console.error("push error:", e);
+    }
+  }, 350));
+}
+
+async function pushDeleteEmp(empId){
+  if (!fb.connected || !fb.db) return;
+  const ctx = getStoreCtx();
+  if (!ctx) return;
+  try {
+    await deleteDoc(doc(fb.db, "stores", ctx.storeKey, "employees", empId));
+  } catch (e) {
+    console.error("delete error:", e);
   }
-  alert("Enviado para o Firebase.");
 }
 
 /* ========= UI refs ========= */
@@ -814,12 +866,17 @@ const calcVacOverdue = document.getElementById("calcVacOverdue");
 const calcNoticeDays = document.getElementById("calcNoticeDays");
 const calcFgtsBalance = document.getElementById("calcFgtsBalance");
 const calcLoanDiscount = document.getElementById("calcLoanDiscount");
-const optInss = document.getElementById("optInss");
-const optFgts = document.getElementById("optFgts");
 const btnCalc = document.getElementById("btnCalc");
 const btnPdf = document.getElementById("btnPdf");
 const calcResult = document.getElementById("calcResult");
 
+/* Firebase UI */
+const fbEmail = document.getElementById("fbEmail");
+const fbPass = document.getElementById("fbPass");
+const btnFbSignIn = document.getElementById("btnFbSignIn");
+const btnFbSignOut = document.getElementById("btnFbSignOut");
+
+/* Settings backup */
 const pinOld = document.getElementById("pinOld");
 const pinNew = document.getElementById("pinNew");
 const btnChangePin = document.getElementById("btnChangePin");
@@ -853,6 +910,7 @@ function requireAuth(){
     viewApp.classList.add("hidden");
     viewLogin.classList.remove("hidden");
     btnLogout.classList.add("hidden");
+    stopAutoSync();
     return false;
   }
   viewLogin.classList.add("hidden");
@@ -862,77 +920,36 @@ function requireAuth(){
   const ctx = getStoreCtx();
   whoami.textContent = ctx.store.managers[s.userKey].label;
   storeName.textContent = ctx.store.name;
+
+  // se firebase já estiver conectado, garante autosync na loja certa
+  if (fb.connected) startAutoSync();
+
   openTab(currentTab);
   return true;
 }
 
-/* ========= Employees ========= */
-function getEmpById(store, id){ return (store.employees || []).find(e=>e.id===id) || null; }
-function upsertEmp(store, emp){
-  store.employees = store.employees || [];
-  const idx = store.employees.findIndex(e=>e.id===emp.id);
-  if (idx >= 0) store.employees[idx] = emp;
-  else store.employees.push(emp);
-}
-function currentSalary(emp){
-  if (!emp.salaryHistory?.length) return safeNum(emp.salary || 0);
-  const sorted = [...emp.salaryHistory].sort((a,b)=> (a.date||"").localeCompare(b.date||""));
-  return safeNum(sorted[sorted.length-1].salary);
-}
-
-function listEmployeesForUI(){
-  const ctx = getStoreCtx();
-  const emps = ctx.store.employees || [];
-  const q = (empSearch.value || "").trim().toLowerCase();
-
-  let filtered = emps.filter(e => {
-    ensureEmpShape(e);
-    const isDismissed = e.status === "dismissed";
-    if (!showDismissed && isDismissed) return false;
-    if (showDismissed && !isDismissed) return false;
-    if (q && !(e.name || "").toLowerCase().includes(q)) return false;
-    return true;
-  });
-
-  const sortBy = empSort.value;
-  filtered.sort((a,b)=>{
-    if (sortBy === "name") return (a.name||"").localeCompare(b.name||"");
-    if (sortBy === "admission") return (a.admissionDate||"").localeCompare(b.admissionDate||"");
-    return 0;
-  });
-
-  return filtered;
-}
-
-function fmtMonth(m){ return String(m).padStart(2,"0"); }
+/* ========= Drop-down (detalhes) ========= */
+window.__toggleDetails = (id) => {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle("hidden");
+};
 
 function renderEmployeeDetails(emp){
-  // drop-down com entradas
   ensureEmpShape(emp);
 
-  const pays = (emp.salaryPayments || [])
-    .slice()
-    .sort((a,b)=> (a.year-b.year) || (a.month-b.month));
-
-  const vacs = (emp.vacations || [])
-    .slice()
-    .sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
-
-  const thYears = Object.keys(emp.thirteenthPayments || {})
-    .sort((a,b)=> Number(a)-Number(b));
-
-  const buys = (emp.boughtVacations || [])
-    .slice()
-    .sort();
+  const pays = (emp.salaryPayments || []).slice().sort((a,b)=> (a.year-b.year) || (a.month-b.month));
+  const vacs = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
+  const thYears = Object.keys(emp.thirteenthPayments || {}).sort((a,b)=> Number(a)-Number(b));
+  const buys = (emp.boughtVacations || []).slice().sort();
 
   const payLines = pays.length
     ? pays.map(p => `Salário recebido no mês ${fmtMonth(p.month)}/${p.year} na data ${formatISOToBR(p.paidDateISO)} (${formatBRL(p.amount)})`)
     : ["Nenhum salário recebido registrado."];
 
-  // >>> pedido: substituir "férias deve tirar até" por "Tirou férias na data ..."
-  // vamos considerar "data" = início do período.
+  // Pedido: “Férias deve tirar até” substituído — aqui aparece “Tirou férias na data …”
   const vacLines = vacs.length
-    ? vacs.map((v,idx) => `Tirou férias na data ${formatISOToBR(v.startISO)} (período ${formatISOToBR(v.startISO)} a ${formatISOToBR(v.endISO)} • ${formatBRL(v.paidValue)})`)
+    ? vacs.map(v => `Tirou férias na data ${formatISOToBR(v.startISO)}`)
     : ["Nenhuma férias registrada."];
 
   const thLines = thYears.length
@@ -967,11 +984,34 @@ function renderEmployeeDetails(emp){
           <div class="text-sm text-slate-700">${ul(buyLines)}</div>
         </div>
       </div>
-      <div class="mt-3 text-xs text-slate-500">
-        Dica: clique em <b>Editar</b> para lançar novos itens.
-      </div>
+      <div class="mt-3 text-xs text-slate-500">Para lançar itens, clique em <b>Editar</b>.</div>
     </div>
   `;
+}
+
+/* ========= Lista ========= */
+function listEmployeesForUI(){
+  const ctx = getStoreCtx();
+  const emps = ctx.store.employees || [];
+  const q = (empSearch.value || "").trim().toLowerCase();
+
+  let filtered = emps.filter(e => {
+    ensureEmpShape(e);
+    const isDismissed = e.status === "dismissed";
+    if (!showDismissed && isDismissed) return false;
+    if (showDismissed && !isDismissed) return false;
+    if (q && !(e.name || "").toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const sortBy = empSort.value;
+  filtered.sort((a,b)=>{
+    if (sortBy === "name") return (a.name||"").localeCompare(b.name||"");
+    if (sortBy === "admission") return (a.admissionDate||"").localeCompare(b.admissionDate||"");
+    return 0;
+  });
+
+  return filtered;
 }
 
 function renderEmployees(){
@@ -988,9 +1028,7 @@ function renderEmployees(){
           <button class="text-left font-semibold underline decoration-dotted" onclick="window.__toggleDetails('${detailsId}')">
             ${escapeHTML(e.name || "")}
           </button>
-          <div class="text-xs text-slate-500 mt-0.5">
-            clique no nome para ver lançamentos
-          </div>
+          <div class="text-xs text-slate-500 mt-0.5">clique no nome para ver lançamentos</div>
         </td>
         <td class="py-2">${formatISOToBR(e.admissionDate) || "—"}</td>
         <td class="py-2">${formatBRL(sal)}</td>
@@ -1003,9 +1041,7 @@ function renderEmployees(){
       </tr>
       <tr class="border-b last:border-b-0">
         <td colspan="5" class="pb-3">
-          <div id="${detailsId}" class="hidden">
-            ${renderEmployeeDetails(e)}
-          </div>
+          <div id="${detailsId}" class="hidden">${renderEmployeeDetails(e)}</div>
         </td>
       </tr>
     `;
@@ -1015,12 +1051,7 @@ function renderEmployees(){
   editingEmpId = null;
 }
 
-window.__toggleDetails = (id) => {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.toggle("hidden");
-};
-
+/* ========= Editor renderers ========= */
 function renderSalaryHistory(emp){
   const hist = (emp.salaryHistory || []).slice().sort((a,b)=> (a.date||"").localeCompare(b.date||""));
   salaryHistoryTable.innerHTML = hist.map(h=>`
@@ -1030,7 +1061,6 @@ function renderSalaryHistory(emp){
     </tr>
   `).join("");
 }
-
 function renderPayments(emp){
   const list = (emp.salaryPayments || []).slice().sort((a,b)=> (a.year-b.year) || (a.month-b.month));
   if (!list.length){
@@ -1050,7 +1080,6 @@ function renderPayments(emp){
     `;
   }).join("");
 }
-
 function renderVacations(emp){
   const list = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
   if (!list.length){
@@ -1070,7 +1099,6 @@ function renderVacations(emp){
     `;
   }).join("");
 }
-
 function renderThPayments(emp){
   const years = Object.keys(emp.thirteenthPayments || {}).sort((a,b)=> Number(a)-Number(b));
   if (!years.length){
@@ -1091,7 +1119,6 @@ function renderThPayments(emp){
     `;
   }).join("");
 }
-
 function renderBuyVac(emp){
   const list = (emp.boughtVacations || []).slice().sort();
   if (!list.length){
@@ -1112,6 +1139,7 @@ function renderBuyVac(emp){
   }).join("");
 }
 
+/* ========= Editor open/new ========= */
 window.__openEmpEditor = (id) => {
   const ctx = getStoreCtx();
   const emp = getEmpById(ctx.store, id);
@@ -1170,43 +1198,23 @@ function openNewEmp(){
   buyVacTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma compra de férias registrada.</td></tr>`;
 }
 
-function loadAndUpdateEmp(updatedEmp){
+function saveLocalAndPush(emp){
   const ctx = getStoreCtx();
-  const store = ctx.store;
-  upsertEmp(store, updatedEmp);
-  ctx.db.stores[ctx.storeKey] = store;
-  return ctx.db;
+  upsertEmp(ctx.store, emp);
+  ctx.db.stores[ctx.storeKey] = ctx.store;
+  saveDB(ctx.db);
+  renderEmployees();
+  renderCalcEmployees();
+  schedulePushEmp(emp);
 }
 
-async function maybePushEmpToFirebase(emp){
-  const ctx = getStoreCtx();
-  if (!ctx || !fb.ready) return;
-  try {
-    emp.updatedAt = Date.now();
-    await setDoc(doc(fb.db, "stores", ctx.storeKey, "employees", emp.id), stripEmpForFirestore(emp), { merge:true });
-  } catch (e) {
-    console.error(e);
-    // não trava a operação offline
-  }
-}
-
-async function maybeDeleteEmpFromFirebase(empId){
-  const ctx = getStoreCtx();
-  if (!ctx || !fb.ready) return;
-  try {
-    await deleteDoc(doc(fb.db, "stores", ctx.storeKey, "employees", empId));
-  } catch (e) {
-    console.error(e);
-  }
-}
-
+/* ========= CRUD ========= */
 function saveEmp(){
   const ctx = getStoreCtx();
   const store = ctx.store;
 
   const name = (empName.value || "").trim();
   const admissionISO = parseBRToISO(empAdmission.value);
-
   const salary = safeNum(empSalary.value);
   const loanBalance = safeNum(empLoan.value);
 
@@ -1217,20 +1225,8 @@ function saveEmp(){
   let emp = null;
   if (editingEmpId) emp = getEmpById(store, editingEmpId);
   if (!emp) {
-    emp = {
-      id: uid(),
-      name: "",
-      admissionDate: "",
-      salaryHistory: [],
-      salaryPayments: [],
-      vacations: [],
-      thirteenthPayments: {},
-      boughtVacations: [],
-      loanBalance: 0,
-      status: "active",
-      dismissalDate: "",
-      updatedAt: Date.now()
-    };
+    emp = { id: uid(), name:"", admissionDate:"", salaryHistory:[], salaryPayments:[], vacations:[],
+      thirteenthPayments:{}, boughtVacations:[], loanBalance:0, status:"active", dismissalDate:"", updatedAt:0 };
   }
   ensureEmpShape(emp);
 
@@ -1247,7 +1243,6 @@ function saveEmp(){
     emp.dismissalDate = "";
   }
 
-  // salário atual vira “mudança” de hoje (prático)
   const effectiveDate = todayISO();
   const existingToday = emp.salaryHistory.find(h => h.date === effectiveDate);
   if (existingToday) existingToday.salary = salary;
@@ -1259,7 +1254,7 @@ function saveEmp(){
   ctx.db.stores[ctx.storeKey] = store;
   saveDB(ctx.db);
 
-  maybePushEmpToFirebase(emp);
+  schedulePushEmp(emp);
 
   editingEmpId = emp.id;
   renderEmployees();
@@ -1277,14 +1272,11 @@ function addSalaryChange(){
 
   const br = prompt("Data efetiva (DD/MM/AAAA):", formatISOToBR(todayISO()));
   const iso = parseBRToISO(br);
-  if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
+  if (!iso) return alert("Data inválida.");
 
   emp.salaryHistory.push({ date: iso, salary: newSalary });
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
-
-  renderEmployees();
+  saveLocalAndPush(emp);
   window.__openEmpEditor(emp.id);
 }
 
@@ -1296,35 +1288,31 @@ function archiveEmp(){
   emp.status = "dismissed";
   emp.dismissalDate = emp.dismissalDate || todayISO();
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
-
-  renderEmployees();
+  saveLocalAndPush(emp);
   alert("Arquivado como demitido.");
 }
 
 function deleteEmp(){
   const ctx = getStoreCtx();
-  const store = ctx.store;
   if (!editingEmpId) return alert("Abra um funcionário.");
-  const emp = getEmpById(store, editingEmpId);
+  const emp = getEmpById(ctx.store, editingEmpId);
   if (!emp) return;
 
-  const ok = confirm(`Excluir "${emp.name}"? Isso apaga os dados da loja.`);
+  const ok = confirm(`Excluir "${emp.name}"? (Remove em todos os dispositivos)`);
   if (!ok) return;
 
-  store.employees = (store.employees || []).filter(e => e.id !== editingEmpId);
-  ctx.db.stores[ctx.storeKey] = store;
+  ctx.store.employees = (ctx.store.employees || []).filter(e=>e.id !== editingEmpId);
+  ctx.db.stores[ctx.storeKey] = ctx.store;
   saveDB(ctx.db);
 
-  maybeDeleteEmpFromFirebase(editingEmpId);
+  pushDeleteEmp(editingEmpId);
 
   editingEmpId = null;
   empEditorWrap.classList.add("hidden");
   renderEmployees();
 }
 
-/* ========= Registros: salário recebido / férias / 13º / compra ========= */
+/* ========= Lançamentos ========= */
 function addPay(){
   const ctx = getStoreCtx();
   const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
@@ -1336,12 +1324,11 @@ function addPay(){
   if (!month || month < 1 || month > 12) return alert("Mês inválido (1-12).");
 
   const paidISO = parseBRToISO(payDate.value);
-  if (!paidISO) return alert("Data inválida. Use DD/MM/AAAA.");
+  if (!paidISO) return alert("Data inválida.");
 
   const amount = safeNum(payAmount.value || currentSalary(emp));
   if (amount <= 0) return alert("Valor inválido.");
 
-  // evita duplicar mesmo mês/ano
   const exists = emp.salaryPayments.find(p => p.year===year && p.month===month);
   if (exists) {
     const ok = confirm(`Já existe salário recebido em ${fmtMonth(month)}/${year}. Substituir?`);
@@ -1353,13 +1340,11 @@ function addPay(){
   }
 
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
+  saveLocalAndPush(emp);
 
   payYear.value=""; payMonth.value=""; payDate.value=""; payAmount.value="";
   window.__openEmpEditor(emp.id);
 }
-
 window.__deletePay = (empId, idx) => {
   const ctx = getStoreCtx();
   const emp = getEmpById(ctx.store, empId);
@@ -1368,8 +1353,7 @@ window.__deletePay = (empId, idx) => {
   if (!ok) return;
   emp.salaryPayments.splice(idx, 1);
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
+  saveLocalAndPush(emp);
   window.__openEmpEditor(emp.id);
 };
 
@@ -1380,8 +1364,8 @@ function addVacationPeriod(){
 
   const sISO = parseBRToISO(vacStart.value);
   const eISO = parseBRToISO(vacEnd.value);
-  if (!sISO) return alert("Data de início inválida.");
-  if (!eISO) return alert("Data de fim inválida.");
+  if (!sISO) return alert("Início inválido.");
+  if (!eISO) return alert("Fim inválido.");
   if (eISO < sISO) return alert("Fim não pode ser menor que início.");
 
   const paid = safeNum(vacPaidValue.value);
@@ -1389,13 +1373,11 @@ function addVacationPeriod(){
 
   emp.vacations.push({ id: uid(), startISO: sISO, endISO: eISO, paidValue: paid });
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
+  saveLocalAndPush(emp);
 
   vacStart.value=""; vacEnd.value=""; vacPaidValue.value="";
   window.__openEmpEditor(emp.id);
 }
-
 window.__deleteVacation = (empId, idx) => {
   const ctx = getStoreCtx();
   const emp = getEmpById(ctx.store, empId);
@@ -1404,8 +1386,7 @@ window.__deleteVacation = (empId, idx) => {
   if (!ok) return;
   emp.vacations.splice(idx, 1);
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
+  saveLocalAndPush(emp);
   window.__openEmpEditor(emp.id);
 };
 
@@ -1422,13 +1403,11 @@ function addThPayment(){
 
   emp.thirteenthPayments[String(year)] = iso;
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
+  saveLocalAndPush(emp);
 
   thYear.value=""; thDate.value="";
   window.__openEmpEditor(emp.id);
 }
-
 window.__deleteTh = (empId, year) => {
   const ctx = getStoreCtx();
   const emp = getEmpById(ctx.store, empId);
@@ -1437,8 +1416,7 @@ window.__deleteTh = (empId, year) => {
   if (!ok) return;
   delete emp.thirteenthPayments[year];
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
+  saveLocalAndPush(emp);
   window.__openEmpEditor(emp.id);
 };
 
@@ -1452,13 +1430,11 @@ function addBuyVac(){
 
   emp.boughtVacations.push(iso);
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
+  saveLocalAndPush(emp);
 
   buyVacDate.value="";
   window.__openEmpEditor(emp.id);
 }
-
 window.__deleteBuyVac = (empId, idx) => {
   const ctx = getStoreCtx();
   const emp = getEmpById(ctx.store, empId);
@@ -1467,16 +1443,12 @@ window.__deleteBuyVac = (empId, idx) => {
   if (!ok) return;
   emp.boughtVacations.splice(idx, 1);
   emp.updatedAt = Date.now();
-  saveDB(loadAndUpdateEmp(emp));
-  maybePushEmpToFirebase(emp);
+  saveLocalAndPush(emp);
   window.__openEmpEditor(emp.id);
 };
 
 /* ========= Rescisão (simples) ========= */
-function calcINSSSimple(base){
-  base = Math.max(0, base);
-  return Math.min(base * 0.11, 900);
-}
+function calcINSSSimple(base){ base = Math.max(0, base); return Math.min(base * 0.11, 900); }
 function monthsFor13th(terminationISO){
   if (!terminationISO) return 0;
   const d = new Date(terminationISO + "T00:00:00");
@@ -1603,7 +1575,6 @@ function doCalc(){
 function exportPDF(){
   const r = doCalc();
   if (!r) return;
-
   const ctx = getStoreCtx();
   const win = window.open("", "_blank");
   win.document.open();
@@ -1627,7 +1598,7 @@ function exportPDF(){
   win.onload = () => win.print();
 }
 
-/* ========= Settings ========= */
+/* ========= PIN Settings ========= */
 async function changePin(){
   const ctx = getStoreCtx();
   const userKey = ctx.session.userKey;
@@ -1635,7 +1606,6 @@ async function changePin(){
 
   const oldPin = (pinOld.value || "").trim();
   const newPin = (pinNew.value || "").trim();
-
   if (newPin.length < 4) return alert("Novo PIN muito curto (mínimo 4).");
   if (!oldPin) return alert("Informe o PIN atual.");
 
@@ -1646,10 +1616,11 @@ async function changePin(){
   ctx.db.stores[ctx.storeKey] = ctx.store;
   saveDB(ctx.db);
 
-  pinOld.value = "";
-  pinNew.value = "";
+  pinOld.value = ""; pinNew.value = "";
   alert("PIN alterado.");
 }
+
+/* ========= Backup local ========= */
 function exportJSON(){
   const ctx = getStoreCtx();
   const payload = { storeKey: ctx.storeKey, exportedAt: new Date().toISOString(), store: ctx.store };
@@ -1681,7 +1652,7 @@ function importJSON(file){
   fr.readAsText(file);
 }
 function resetStore(){
-  const ok = confirm("Resetar dados desta loja? (Funcionários e registros).");
+  const ok = confirm("Resetar dados desta loja?");
   if (!ok) return;
   const ctx = getStoreCtx();
   ctx.db.stores[ctx.storeKey].employees = [];
@@ -1690,7 +1661,31 @@ function resetStore(){
   alert("Loja resetada.");
 }
 
-/* ========= Events ========= */
+/* ========= Firebase Auth (Email/Senha) ========= */
+async function fbSignIn(){
+  initFirebaseOnce();
+  const email = (fbEmail.value || "").trim();
+  const pass = (fbPass.value || "").trim();
+  if (!email || !pass) return alert("Informe email e senha.");
+
+  try {
+    await signInWithEmailAndPassword(fb.auth, email, pass);
+  } catch (e) {
+    // se não existir, cria
+    if (String(e?.code||"").includes("auth/user-not-found")) {
+      await createUserWithEmailAndPassword(fb.auth, email, pass);
+      return;
+    }
+    console.error(e);
+    alert("Falha ao conectar Firebase. Veja o console.");
+  }
+}
+async function fbSignOut(){
+  initFirebaseOnce();
+  await signOut(fb.auth);
+}
+
+/* ========= Login por PIN ========= */
 document.getElementById("btnLogin").addEventListener("click", async () => {
   const user = document.getElementById("loginUser").value;
   const pin = (document.getElementById("loginPin").value || "").trim();
@@ -1709,12 +1704,12 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
   requireAuth();
 });
 
+/* ========= UI events ========= */
 btnLogout.addEventListener("click", () => { clearSession(); requireAuth(); });
 tabBtns.forEach(b => b.addEventListener("click", ()=> openTab(b.dataset.tab)));
 
 empSearch.addEventListener("input", renderEmployees);
 empSort.addEventListener("change", renderEmployees);
-
 btnNewEmp.addEventListener("click", openNewEmp);
 btnCloseEmpEditor.addEventListener("click", ()=> empEditorWrap.classList.add("hidden"));
 btnToggleDismissed.addEventListener("click", ()=>{ showDismissed = !showDismissed; renderEmployees(); });
@@ -1754,13 +1749,13 @@ fileImport.addEventListener("change", (e)=>{
 });
 btnReset.addEventListener("click", resetStore);
 
-/* Firebase buttons */
-btnFbConnect.addEventListener("click", fbConnect);
-btnFbSyncDown.addEventListener("click", async ()=>{ await fbConnect(); await fbSyncDown(); });
-btnFbSyncUp.addEventListener("click", async ()=>{ await fbConnect(); await fbSyncUp(); });
+/* Firebase UI buttons */
+btnFbSignIn.addEventListener("click", fbSignIn);
+btnFbSignOut.addEventListener("click", fbSignOut);
 
 /* Boot */
 (async function boot(){
+  initFirebaseOnce();
   setFbStatus("Firebase: desconectado");
   await ensureDefaultPins();
   requireAuth();

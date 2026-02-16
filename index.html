@@ -6,227 +6,193 @@
   <meta name="theme-color" content="#0f172a" />
   <title>RH Simples - 2 Lojas</title>
 
-  <!-- evita 404 favicon.ico -->
   <link rel="icon" href="data:,">
-
-  <!-- Tailwind CDN (warning no console é normal) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
     @media print { .no-print { display:none !important; } body { background:#fff !important; } }
     .help { font-size: 12px; color: rgb(100 116 139); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
   </style>
 </head>
 
 <body class="bg-slate-50 text-slate-900">
-  <header class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-slate-200">
-    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <div class="min-w-0">
-        <div class="font-bold truncate">RH Simples</div>
-        <div class="text-xs text-slate-500" id="subHeader">Offline (localStorage) • 2 lojas • Gerentes</div>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <button id="btnInstall" class="hidden no-print px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">
-          Instalar
-        </button>
-        <button id="btnLogout" class="hidden no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">
-          Sair
-        </button>
-      </div>
+<header class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+    <div class="min-w-0">
+      <div class="font-bold truncate">RH Simples</div>
+      <div class="text-xs text-slate-500">Offline (localStorage) • 2 lojas • Gerentes</div>
     </div>
-  </header>
 
-  <main class="max-w-6xl mx-auto px-4 py-5">
-    <!-- LOGIN -->
-    <section id="viewLogin" class="max-w-lg mx-auto">
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
-        <h1 class="text-xl font-bold">Entrar</h1>
-        <p class="text-sm text-slate-600 mt-1">
-          Cada gerente acessa apenas sua loja:
-          <span class="font-semibold">MANA DE DEUS (Mana Thiago)</span> e
-          <span class="font-semibold">BOGADOS PADARIA (Ellen)</span>.
-        </p>
+    <div class="flex items-center gap-2">
+      <button id="btnInstall" class="hidden no-print px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">
+        Instalar
+      </button>
+      <button id="btnLogout" class="hidden no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">
+        Sair
+      </button>
+    </div>
+  </div>
+</header>
 
-        <div class="mt-4 grid gap-3">
-          <label class="text-sm">
-            <span class="block text-slate-600 mb-1">Perfil</span>
-            <select id="loginUser" class="w-full rounded-xl border border-slate-300 px-3 py-2">
-              <option value="mana_thiago">Mana Thiago (MANA DE DEUS)</option>
-              <option value="bogados_ellen">Ellen (BOGADOS PADARIA)</option>
-            </select>
-          </label>
+<main class="max-w-6xl mx-auto px-4 py-5">
+  <!-- LOGIN -->
+  <section id="viewLogin" class="max-w-lg mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <h1 class="text-xl font-bold">Entrar</h1>
+      <p class="text-sm text-slate-600 mt-1">
+        Cada gerente acessa apenas sua loja:
+        <span class="font-semibold">MANA DE DEUS (Mana Thiago)</span> e
+        <span class="font-semibold">BOGADOS PADARIA (Ellen)</span>.
+      </p>
 
-          <label class="text-sm">
-            <span class="block text-slate-600 mb-1">PIN</span>
-            <input id="loginPin" type="password" inputmode="numeric"
-              class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 1234" />
-          </label>
+      <div class="mt-4 grid gap-3">
+        <label class="text-sm">
+          <span class="block text-slate-600 mb-1">Perfil</span>
+          <select id="loginUser" class="w-full rounded-xl border border-slate-300 px-3 py-2">
+            <option value="mana_thiago">Mana Thiago (MANA DE DEUS)</option>
+            <option value="bogados_ellen">Ellen (BOGADOS PADARIA)</option>
+          </select>
+        </label>
 
-          <button id="btnLogin" class="mt-1 w-full rounded-xl bg-slate-900 text-white px-4 py-2 font-semibold">
-            Entrar
-          </button>
+        <label class="text-sm">
+          <span class="block text-slate-600 mb-1">PIN</span>
+          <input id="loginPin" type="password" inputmode="numeric"
+                 class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 1234" />
+        </label>
 
-          <div class="text-xs text-slate-500">
-            Primeiro uso (padrão): <span class="font-semibold">Mana Thiago = 1234</span> •
-            <span class="font-semibold">Ellen = 4321</span>.
-            Depois você pode trocar o PIN em <b>Config</b>.
-          </div>
+        <button id="btnLogin" class="mt-1 w-full rounded-xl bg-slate-900 text-white px-4 py-2 font-semibold">
+          Entrar
+        </button>
 
-          <div class="text-xs text-slate-500">
-            Se o login não entrar, limpe os dados do site/app (cache do PWA).
-          </div>
+        <div class="text-xs text-slate-500">
+          Primeiro uso (padrão): <span class="font-semibold">Mana Thiago = 1234</span> •
+          <span class="font-semibold">Ellen = 4321</span>.
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- APP -->
-    <section id="viewApp" class="hidden">
-      <div class="grid lg:grid-cols-12 gap-4">
-        <!-- Sidebar -->
-        <aside class="lg:col-span-3">
+  <!-- APP -->
+  <section id="viewApp" class="hidden">
+    <div class="grid lg:grid-cols-12 gap-4">
+      <!-- Sidebar -->
+      <aside class="lg:col-span-3">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+          <div class="text-sm text-slate-500">Logado como</div>
+          <div class="font-bold" id="whoami">—</div>
+          <div class="text-sm mt-1">
+            Loja: <span class="font-semibold" id="storeName">—</span>
+          </div>
+
+          <div class="mt-4 grid gap-2 no-print">
+            <button class="tabBtn px-3 py-2 rounded-xl border border-slate-300 text-sm text-left" data-tab="employees">👥 Funcionários</button>
+            <button class="tabBtn px-3 py-2 rounded-xl border border-slate-300 text-sm text-left" data-tab="calc">🧮 Rescisão</button>
+            <button class="tabBtn px-3 py-2 rounded-xl border border-slate-300 text-sm text-left" data-tab="settings">⚙️ Config</button>
+          </div>
+        </div>
+
+        <div class="mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+          <div class="text-sm font-semibold">Padrões</div>
+          <div class="text-sm text-slate-600 mt-1">
+            • Datas: <b>DD/MM/AAAA</b><br>
+            • 13º: registra <b>ano + data</b><br>
+            • Férias: registra <b>período + valor</b><br>
+            • “Comprei férias”: registra <b>somente a data</b>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Content -->
+      <section class="lg:col-span-9">
+        <!-- Funcionários -->
+        <div id="tab_employees" class="tabPanel">
           <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-            <div class="text-sm text-slate-500">Logado como</div>
-            <div class="font-bold" id="whoami">—</div>
-            <div class="text-sm mt-1">
-              Loja: <span class="font-semibold" id="storeName">—</span>
+            <div class="flex flex-col md:flex-row md:items-center gap-3 md:justify-between">
+              <div>
+                <h2 class="text-xl font-bold">Funcionários</h2>
+                <p class="text-sm text-slate-600">Controle simples: férias (períodos), 13º (ano+data) e compra de férias (data).</p>
+              </div>
+              <div class="flex gap-2 no-print">
+                <button id="btnNewEmp" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">+ Novo</button>
+                <button id="btnToggleDismissed" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Ver demitidos</button>
+              </div>
             </div>
 
-            <div class="mt-4 grid gap-2 no-print">
-              <button class="tabBtn px-3 py-2 rounded-xl border border-slate-300 text-sm text-left" data-tab="employees">
-                👥 Funcionários
-              </button>
-              <button class="tabBtn px-3 py-2 rounded-xl border border-slate-300 text-sm text-left" data-tab="calc">
-                🧮 Rescisão
-              </button>
-              <button class="tabBtn px-3 py-2 rounded-xl border border-slate-300 text-sm text-left" data-tab="settings">
-                ⚙️ Config
-              </button>
+            <div class="mt-4 grid md:grid-cols-3 gap-3 no-print">
+              <input id="empSearch" class="md:col-span-2 w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Buscar por nome..." />
+              <select id="empSort" class="w-full rounded-xl border border-slate-300 px-3 py-2">
+                <option value="name">Ordenar: Nome</option>
+                <option value="admission">Ordenar: Data de entrada</option>
+              </select>
+            </div>
+
+            <div class="mt-4 overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="text-slate-500">
+                <tr class="border-b">
+                  <th class="text-left py-2">Nome</th>
+                  <th class="text-left py-2">Entrada</th>
+                  <th class="text-left py-2">Salário atual</th>
+                  <th class="text-left py-2">Resumo</th>
+                  <th class="text-left py-2">Empréstimo</th>
+                  <th class="text-right py-2 no-print">Ações</th>
+                </tr>
+                </thead>
+                <tbody id="empTable"></tbody>
+              </table>
             </div>
           </div>
 
-          <div class="mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-            <div class="text-sm font-semibold">Notas</div>
-            <div class="text-sm text-slate-600 mt-1">
-              • “Deve tirar férias até” = entrada + 24 meses (modelo simples).<br>
-              • Marque férias/13º “pago” por ano.<br>
-              • Empréstimo vira desconto na rescisão.<br>
-              • Datas no app: <b>DD/MM/AAAA</b>.
-            </div>
-          </div>
-        </aside>
-
-        <!-- Content -->
-        <section class="lg:col-span-9">
-          <!-- Funcionários -->
-          <div id="tab_employees" class="tabPanel">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-              <div class="flex flex-col md:flex-row md:items-center gap-3 md:justify-between">
-                <div>
-                  <h2 class="text-xl font-bold">Funcionários</h2>
-                  <p class="text-sm text-slate-600">Adicione, edite salário, marque pagamentos e registre férias por período.</p>
-                </div>
-                <div class="flex gap-2 no-print">
-                  <button id="btnNewEmp" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">+ Novo</button>
-                  <button id="btnToggleDismissed" class="px-3 py-2 rounded-xl border border-slate-300 text-sm">Ver demitidos</button>
-                </div>
+          <!-- Editor -->
+          <div id="empEditorWrap" class="hidden mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <h3 class="text-lg font-bold" id="empEditorTitle">Novo funcionário</h3>
+                <p class="text-sm text-slate-600">Dados básicos + registros simples (férias / 13º / compra de férias).</p>
               </div>
-
-              <div class="mt-4 grid md:grid-cols-3 gap-3 no-print">
-                <input id="empSearch" class="md:col-span-2 w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Buscar por nome..." />
-                <select id="empSort" class="w-full rounded-xl border border-slate-300 px-3 py-2">
-                  <option value="name">Ordenar: Nome</option>
-                  <option value="admission">Ordenar: Data de entrada</option>
-                  <option value="vacationDue">Ordenar: Férias (prazo)</option>
-                </select>
-              </div>
-
-              <div class="mt-4 overflow-x-auto">
-                <table class="w-full text-sm">
-                  <thead class="text-slate-500">
-                    <tr class="border-b">
-                      <th class="text-left py-2">Nome</th>
-                      <th class="text-left py-2">Entrada</th>
-                      <th class="text-left py-2">Salário atual</th>
-                      <th class="text-left py-2">Férias deve tirar até</th>
-                      <th class="text-left py-2">Empréstimo</th>
-                      <th class="text-right py-2 no-print">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody id="empTable"></tbody>
-                </table>
-              </div>
+              <button id="btnCloseEmpEditor" class="no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">Fechar</button>
             </div>
 
-            <!-- Editor -->
-            <div id="empEditorWrap" class="hidden mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-              <div class="flex items-start justify-between gap-3">
-                <div>
-                  <h3 class="text-lg font-bold" id="empEditorTitle">Novo funcionário</h3>
-                  <p class="text-sm text-slate-600">Dados básicos + salário + férias (por período).</p>
-                </div>
-                <button id="btnCloseEmpEditor" class="no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">Fechar</button>
-              </div>
+            <div class="mt-4 grid md:grid-cols-2 gap-3">
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Nome</span>
+                <input id="empName" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Nome do funcionário" />
+              </label>
 
-              <div class="mt-4 grid md:grid-cols-2 gap-3">
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Nome</span>
-                  <input id="empName" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Nome do funcionário" />
-                </label>
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Data de entrada (DD/MM/AAAA)</span>
+                <input id="empAdmission" inputmode="numeric"
+                       class="w-full rounded-xl border border-slate-300 px-3 py-2"
+                       placeholder="17/01/2024" />
+                <div class="help mt-1">Ex.: 17/01/2024</div>
+              </label>
 
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Data de entrada (DD/MM/AAAA)</span>
-                  <input id="empAdmission" inputmode="numeric"
-                    class="w-full rounded-xl border border-slate-300 px-3 py-2"
-                    placeholder="17/01/2024" />
-                  <div class="help mt-1">Formato: <b>DD/MM/AAAA</b></div>
-                </label>
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Salário atual (R$)</span>
+                <input id="empSalary" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 1800" />
+              </label>
 
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Salário atual (R$)</span>
-                  <input id="empSalary" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 1800" />
-                </label>
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Empréstimo atual (R$)</span>
+                <input id="empLoan" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 200" />
+              </label>
+            </div>
 
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Empréstimo atual (R$)</span>
-                  <input id="empLoan" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 200" />
-                </label>
-              </div>
-
-              <div class="mt-4 grid md:grid-cols-3 gap-3">
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Férias pagas (ano)</span>
-                  <input id="vacPaidYear" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 2026" />
-                </label>
-                <button id="btnMarkVacPaid" class="no-print mt-6 md:mt-0 px-3 py-2 rounded-xl border border-slate-300 text-sm">
-                  Marcar férias pagas
-                </button>
-
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">13º pago (ano)</span>
-                  <input id="thPaidYear" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 2026" />
-                </label>
-                <button id="btnMarkThPaid" class="no-print mt-6 md:mt-0 px-3 py-2 rounded-xl border border-slate-300 text-sm">
-                  Marcar 13º pago
-                </button>
-              </div>
-
-              <!-- FÉRIAS POR PERÍODO -->
-              <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                <div class="flex items-start justify-between gap-3">
-                  <div>
-                    <div class="text-sm font-semibold">Férias por período</div>
-                    <div class="text-sm text-slate-600">Registre períodos tirados e valor pago.</div>
-                  </div>
-                </div>
+            <!-- REGISTROS SIMPLES -->
+            <div class="mt-4 grid gap-4">
+              <!-- FÉRIAS (PERÍODOS) -->
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <div class="text-sm font-semibold">Férias (períodos)</div>
+                <div class="text-sm text-slate-600">Ex.: Tirou 1 férias no período 15/01/2024 a 14/02/2024 (com valor).</div>
 
                 <div class="mt-3 grid md:grid-cols-4 gap-3 no-print">
                   <label class="text-sm">
-                    <span class="block text-slate-600 mb-1">Início (DD/MM/AAAA)</span>
+                    <span class="block text-slate-600 mb-1">Início</span>
                     <input id="vacStart" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="15/01/2024" />
                   </label>
                   <label class="text-sm">
-                    <span class="block text-slate-600 mb-1">Fim (DD/MM/AAAA)</span>
+                    <span class="block text-slate-600 mb-1">Fim</span>
                     <input id="vacEnd" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="14/02/2024" />
                   </label>
                   <label class="text-sm">
@@ -241,1093 +207,1202 @@
                 <div class="mt-3 overflow-x-auto">
                   <table class="w-full text-sm">
                     <thead class="text-slate-500">
-                      <tr class="border-b">
-                        <th class="text-left py-2">Período</th>
-                        <th class="text-left py-2">Valor pago</th>
-                        <th class="text-right py-2 no-print">Ações</th>
-                      </tr>
+                    <tr class="border-b">
+                      <th class="text-left py-2">Texto</th>
+                      <th class="text-right py-2 no-print">Ações</th>
+                    </tr>
                     </thead>
                     <tbody id="vacationsTable"></tbody>
                   </table>
                 </div>
               </div>
 
-              <div class="mt-4 text-sm">
-                <div class="text-slate-600">Status</div>
-                <div class="flex flex-wrap items-center gap-3 mt-1">
-                  <label class="inline-flex items-center gap-2">
-                    <input id="empActive" type="checkbox" class="h-4 w-4" checked />
-                    <span>Ativo</span>
+              <!-- 13º (ANO + DATA) -->
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <div class="text-sm font-semibold">13º salário (ano + data)</div>
+                <div class="text-sm text-slate-600">Ex.: 13º do ano de 2024 foi pago na data 20/12/2024.</div>
+
+                <div class="mt-3 grid md:grid-cols-3 gap-3 no-print">
+                  <label class="text-sm">
+                    <span class="block text-slate-600 mb-1">Ano</span>
+                    <input id="thYear" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="2024" />
                   </label>
-                  <label class="inline-flex items-center gap-2">
-                    <span class="text-slate-600">Data de demissão (DD/MM/AAAA)</span>
-                    <input id="empDismissal" inputmode="numeric" class="rounded-xl border border-slate-300 px-3 py-2" placeholder="10/02/2026" />
+                  <label class="text-sm">
+                    <span class="block text-slate-600 mb-1">Data do pagamento</span>
+                    <input id="thDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="20/12/2024" />
                   </label>
+                  <button id="btnAddTh" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
+                    + Registrar
+                  </button>
+                </div>
+
+                <div class="mt-3 overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead class="text-slate-500">
+                    <tr class="border-b">
+                      <th class="text-left py-2">Texto</th>
+                      <th class="text-right py-2 no-print">Ações</th>
+                    </tr>
+                    </thead>
+                    <tbody id="thTable"></tbody>
+                  </table>
                 </div>
               </div>
 
-              <div class="mt-4 flex flex-wrap gap-2 no-print">
-                <button id="btnSaveEmp" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">Salvar</button>
-                <button id="btnAddSalaryChange" class="px-4 py-2 rounded-xl border border-slate-300">Registrar mudança de salário</button>
-                <button id="btnArchiveEmp" class="px-4 py-2 rounded-xl border border-amber-300 text-amber-700">Arquivar (demitido)</button>
-                <button id="btnDeleteEmp" class="px-4 py-2 rounded-xl border border-rose-300 text-rose-700">Excluir</button>
-              </div>
+              <!-- COMPRA DE FÉRIAS (DATA) -->
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <div class="text-sm font-semibold">Compra de férias (data)</div>
+                <div class="text-sm text-slate-600">Ex.: Comprei as férias na data 10/01/2025.</div>
 
-              <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-3">
-                <div class="text-sm font-semibold">Histórico de salário</div>
-                <div class="mt-2 overflow-x-auto">
+                <div class="mt-3 grid md:grid-cols-3 gap-3 no-print">
+                  <label class="text-sm md:col-span-2">
+                    <span class="block text-slate-600 mb-1">Data</span>
+                    <input id="buyVacDate" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="10/01/2025" />
+                  </label>
+                  <button id="btnAddBuyVac" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
+                    + Registrar
+                  </button>
+                </div>
+
+                <div class="mt-3 overflow-x-auto">
                   <table class="w-full text-sm">
                     <thead class="text-slate-500">
-                      <tr class="border-b">
-                        <th class="text-left py-2">Data</th>
-                        <th class="text-left py-2">Salário (R$)</th>
-                      </tr>
+                    <tr class="border-b">
+                      <th class="text-left py-2">Texto</th>
+                      <th class="text-right py-2 no-print">Ações</th>
+                    </tr>
                     </thead>
-                    <tbody id="salaryHistoryTable"></tbody>
+                    <tbody id="buyVacTable"></tbody>
                   </table>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Rescisão -->
-          <div id="tab_calc" class="tabPanel hidden">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-              <h2 class="text-xl font-bold">Cálculo de Rescisão (simples)</h2>
-              <p class="text-sm text-slate-600">
-                Exportar PDF: botão “Exportar PDF”.
-              </p>
-
-              <div class="mt-4 grid md:grid-cols-3 gap-3 no-print">
-                <label class="text-sm md:col-span-2">
-                  <span class="block text-slate-600 mb-1">Funcionário</span>
-                  <select id="calcEmp" class="w-full rounded-xl border border-slate-300 px-3 py-2"></select>
+            <!-- STATUS -->
+            <div class="mt-4 text-sm">
+              <div class="text-slate-600">Status</div>
+              <div class="flex flex-wrap items-center gap-3 mt-1">
+                <label class="inline-flex items-center gap-2">
+                  <input id="empActive" type="checkbox" class="h-4 w-4" checked />
+                  <span>Ativo</span>
                 </label>
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Data de desligamento</span>
-                  <input id="calcDate" type="date" class="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                <label class="inline-flex items-center gap-2">
+                  <span class="text-slate-600">Data de demissão (DD/MM/AAAA)</span>
+                  <input id="empDismissal" inputmode="numeric" class="rounded-xl border border-slate-300 px-3 py-2" placeholder="10/02/2026" />
                 </label>
-
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Tipo</span>
-                  <select id="calcType" class="w-full rounded-xl border border-slate-300 px-3 py-2">
-                    <option value="sem_justa_causa">Sem justa causa</option>
-                    <option value="pedido_demissao">Pedido de demissão</option>
-                    <option value="acordo">Acordo (metade aviso + 20% FGTS)</option>
-                  </select>
-                </label>
-
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Dias trabalhados no mês</span>
-                  <input id="calcDaysWorked" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="15" />
-                </label>
-
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Meses p/ férias proporcionais (0–12)</span>
-                  <input id="calcVacMonths" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="0" />
-                </label>
-
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Férias vencidas? (0 ou 1 período)</span>
-                  <input id="calcVacOverdue" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="0" />
-                </label>
-
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Aviso prévio indenizado (dias)</span>
-                  <input id="calcNoticeDays" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="30" />
-                </label>
-
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Saldo FGTS (R$) (para multa)</span>
-                  <input id="calcFgtsBalance" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="0" />
-                </label>
-
-                <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Desconto empréstimo (R$)</span>
-                  <input id="calcLoanDiscount" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="0" />
-                </label>
-              </div>
-
-              <div class="mt-4 flex flex-wrap gap-3 items-center no-print">
-                <label class="inline-flex items-center gap-2 text-sm">
-                  <input id="optInss" type="checkbox" class="h-4 w-4" checked />
-                  <span>Incluir INSS</span>
-                </label>
-                <label class="inline-flex items-center gap-2 text-sm">
-                  <input id="optFgts" type="checkbox" class="h-4 w-4" checked />
-                  <span>Incluir multa FGTS</span>
-                </label>
-
-                <button id="btnCalc" class="ml-auto px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
-                  Calcular
-                </button>
-                <button id="btnPdf" class="px-4 py-2 rounded-xl border border-slate-300">
-                  Exportar PDF
-                </button>
-              </div>
-
-              <div class="mt-4 border-t border-slate-200 pt-4">
-                <div id="calcResult" class="text-sm text-slate-700"></div>
               </div>
             </div>
+
+            <div class="mt-4 flex flex-wrap gap-2 no-print">
+              <button id="btnSaveEmp" class="px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">Salvar</button>
+              <button id="btnAddSalaryChange" class="px-4 py-2 rounded-xl border border-slate-300">Registrar mudança de salário</button>
+              <button id="btnArchiveEmp" class="px-4 py-2 rounded-xl border border-amber-300 text-amber-700">Arquivar (demitido)</button>
+              <button id="btnDeleteEmp" class="px-4 py-2 rounded-xl border border-rose-300 text-rose-700">Excluir</button>
+            </div>
+
+            <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-3">
+              <div class="text-sm font-semibold">Histórico de salário</div>
+              <div class="mt-2 overflow-x-auto">
+                <table class="w-full text-sm">
+                  <thead class="text-slate-500">
+                  <tr class="border-b">
+                    <th class="text-left py-2">Data</th>
+                    <th class="text-left py-2">Salário (R$)</th>
+                  </tr>
+                  </thead>
+                  <tbody id="salaryHistoryTable"></tbody>
+                </table>
+              </div>
+            </div>
+
           </div>
+        </div>
 
-          <!-- Settings -->
-          <div id="tab_settings" class="tabPanel hidden">
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-              <h2 class="text-xl font-bold">Config</h2>
-              <p class="text-sm text-slate-600">Trocar PIN, exportar/importar dados e reset da loja.</p>
+        <!-- Rescisão -->
+        <div id="tab_calc" class="tabPanel hidden">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+            <h2 class="text-xl font-bold">Cálculo de Rescisão (simples)</h2>
 
-              <div class="mt-4 grid md:grid-cols-2 gap-3 no-print">
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                  <div class="font-semibold">Trocar PIN</div>
-                  <label class="text-sm block mt-3">
-                    <span class="block text-slate-600 mb-1">PIN atual</span>
-                    <input id="pinOld" type="password" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" />
+            <div class="mt-4 grid md:grid-cols-3 gap-3 no-print">
+              <label class="text-sm md:col-span-2">
+                <span class="block text-slate-600 mb-1">Funcionário</span>
+                <select id="calcEmp" class="w-full rounded-xl border border-slate-300 px-3 py-2"></select>
+              </label>
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Data de desligamento</span>
+                <input id="calcDate" type="date" class="w-full rounded-xl border border-slate-300 px-3 py-2" />
+              </label>
+
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Tipo</span>
+                <select id="calcType" class="w-full rounded-xl border border-slate-300 px-3 py-2">
+                  <option value="sem_justa_causa">Sem justa causa</option>
+                  <option value="pedido_demissao">Pedido de demissão</option>
+                  <option value="acordo">Acordo (metade aviso + 20% FGTS)</option>
+                </select>
+              </label>
+
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Dias trabalhados no mês</span>
+                <input id="calcDaysWorked" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="15" />
+              </label>
+
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Meses p/ férias proporcionais (0–12)</span>
+                <input id="calcVacMonths" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="0" />
+              </label>
+
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Férias vencidas? (0 ou 1 período)</span>
+                <input id="calcVacOverdue" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="0" />
+              </label>
+
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Aviso prévio indenizado (dias)</span>
+                <input id="calcNoticeDays" type="number" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="30" />
+              </label>
+
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Saldo FGTS (R$) (para multa)</span>
+                <input id="calcFgtsBalance" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="0" />
+              </label>
+
+              <label class="text-sm">
+                <span class="block text-slate-600 mb-1">Desconto empréstimo (R$)</span>
+                <input id="calcLoanDiscount" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" value="0" />
+              </label>
+            </div>
+
+            <div class="mt-4 flex flex-wrap gap-3 items-center no-print">
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input id="optInss" type="checkbox" class="h-4 w-4" checked />
+                <span>Incluir INSS</span>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input id="optFgts" type="checkbox" class="h-4 w-4" checked />
+                <span>Incluir multa FGTS</span>
+              </label>
+
+              <button id="btnCalc" class="ml-auto px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">Calcular</button>
+              <button id="btnPdf" class="px-4 py-2 rounded-xl border border-slate-300">Exportar PDF</button>
+            </div>
+
+            <div class="mt-4 border-t border-slate-200 pt-4">
+              <div id="calcResult" class="text-sm text-slate-700"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div id="tab_settings" class="tabPanel hidden">
+          <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
+            <h2 class="text-xl font-bold">Config</h2>
+
+            <div class="mt-4 grid md:grid-cols-2 gap-3 no-print">
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <div class="font-semibold">Trocar PIN</div>
+                <label class="text-sm block mt-3">
+                  <span class="block text-slate-600 mb-1">PIN atual</span>
+                  <input id="pinOld" type="password" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                </label>
+                <label class="text-sm block mt-2">
+                  <span class="block text-slate-600 mb-1">Novo PIN</span>
+                  <input id="pinNew" type="password" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                </label>
+                <button id="btnChangePin" class="mt-3 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">Salvar PIN</button>
+              </div>
+
+              <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <div class="font-semibold">Backup</div>
+                <div class="text-sm text-slate-600 mt-1">Exporta/Importa JSON com os dados desta loja.</div>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  <button id="btnExport" class="px-4 py-2 rounded-xl border border-slate-300">Exportar JSON</button>
+                  <label class="px-4 py-2 rounded-xl border border-slate-300 cursor-pointer">
+                    Importar JSON
+                    <input id="fileImport" type="file" accept="application/json" class="hidden" />
                   </label>
-                  <label class="text-sm block mt-2">
-                    <span class="block text-slate-600 mb-1">Novo PIN</span>
-                    <input id="pinNew" type="password" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" />
-                  </label>
-                  <button id="btnChangePin" class="mt-3 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
-                    Salvar PIN
-                  </button>
-                  <div class="text-xs text-slate-500 mt-2">Dica: use 4 a 8 números.</div>
-                </div>
-
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-                  <div class="font-semibold">Backup</div>
-                  <div class="text-sm text-slate-600 mt-1">Exporta/Importa JSON com os dados desta loja.</div>
-                  <div class="mt-3 flex flex-wrap gap-2">
-                    <button id="btnExport" class="px-4 py-2 rounded-xl border border-slate-300">Exportar JSON</button>
-                    <label class="px-4 py-2 rounded-xl border border-slate-300 cursor-pointer">
-                      Importar JSON
-                      <input id="fileImport" type="file" accept="application/json" class="hidden" />
-                    </label>
-                    <button id="btnReset" class="px-4 py-2 rounded-xl border border-rose-300 text-rose-700">Reset loja</button>
-                  </div>
-                  <div class="text-xs text-slate-500 mt-2">Backup é por loja.</div>
+                  <button id="btnReset" class="px-4 py-2 rounded-xl border border-rose-300 text-rose-700">Reset loja</button>
                 </div>
               </div>
             </div>
+
+            <div class="mt-4 text-xs text-slate-500">
+              (Firebase será integrado depois que você criar o projeto e pegar o <span class="mono">firebaseConfig</span>.)
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ========= PWA single-file (manifest via blob) ========= */
+(function setupPWA(){
+  try {
+    const manifest = {
+      name: "RH Simples",
+      short_name: "RH",
+      start_url: "./",
+      display: "standalone",
+      background_color: "#f8fafc",
+      theme_color: "#0f172a"
+    };
+    const blob = new Blob([JSON.stringify(manifest)], {type:"application/manifest+json"});
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("link");
+    link.rel = "manifest";
+    link.href = url;
+    document.head.appendChild(link);
+  } catch {}
+
+  let deferredPrompt = null;
+  const btnInstall = document.getElementById("btnInstall");
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    btnInstall.classList.remove("hidden");
+  });
+  btnInstall.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt = null;
+    btnInstall.classList.add("hidden");
+  });
+})();
+
+/* ========= Storage / Helpers ========= */
+const LS_KEY = "pwa_rh_simples_v3";
+const SESSION_KEY = "pwa_rh_session_v1";
+
+function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+function safeNum(v){ const n = Number(v); return Number.isFinite(n) ? n : 0; }
+function formatBRL(n){ return Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); }
+function escapeHTML(str){
+  return (str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function todayISO(){
+  const d = new Date();
+  const pad = n => String(n).padStart(2,"0");
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+
+/* --- Datas DD/MM/AAAA <-> ISO --- */
+function formatISOToBR(iso){
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
+  const [y,m,d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+function parseBRToISO(br){
+  const s = String(br||"").trim();
+  const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!m) return null;
+  const dd = Number(m[1]), mm = Number(m[2]), yy = Number(m[3]);
+  if (yy < 1900 || yy > 2100) return null;
+  if (mm < 1 || mm > 12) return null;
+  if (dd < 1 || dd > 31) return null;
+  const iso = `${yy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
+  const dt = new Date(iso + "T00:00:00");
+  const ok = dt.getFullYear()===yy && (dt.getMonth()+1)===mm && dt.getDate()===dd;
+  return ok ? iso : null;
+}
+function normalizeBRDateInput(el){
+  const iso = parseBRToISO(el.value);
+  if (!iso) return false;
+  el.value = formatISOToBR(iso);
+  return true;
+}
+
+/* --- Hash PIN com fallback --- */
+async function hashPin(text){
+  text = String(text ?? "");
+  if (window.crypto && crypto.subtle && window.isSecureContext) {
+    const enc = new TextEncoder().encode(text);
+    const hash = await crypto.subtle.digest("SHA-256", enc);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+  }
+  let h = 5381;
+  for (let i = 0; i < text.length; i++) h = ((h << 5) + h) + text.charCodeAt(i);
+  return "fb_" + (h >>> 0).toString(16);
+}
+
+/* ========= DB ========= */
+function defaultDB(){
+  return {
+    version: 3,
+    stores: {
+      mana: {
+        name: "MANA DE DEUS",
+        managers: { mana_thiago: { label: "Mana Thiago", pinHash: null } },
+        employees: []
+      },
+      bogados: {
+        name: "BOGADOS PADARIA",
+        managers: { bogados_ellen: { label: "Ellen", pinHash: null } },
+        employees: []
+      }
+    }
+  };
+}
+function loadDB(){
+  const raw = localStorage.getItem(LS_KEY);
+  if (!raw) return defaultDB();
+  try { return JSON.parse(raw); } catch { return defaultDB(); }
+}
+function saveDB(db){ localStorage.setItem(LS_KEY, JSON.stringify(db)); }
+
+async function ensureDefaultPins(){
+  const db = loadDB();
+  const manaMgr = db.stores.mana.managers.mana_thiago;
+  const bogMgr  = db.stores.bogados.managers.bogados_ellen;
+  if (!manaMgr.pinHash) manaMgr.pinHash = await hashPin("1234");
+  if (!bogMgr.pinHash)  bogMgr.pinHash  = await hashPin("4321");
+  saveDB(db);
+}
+
+function setSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
+function getSession(){
+  const raw = localStorage.getItem(SESSION_KEY);
+  if (!raw) return null;
+  try { return JSON.parse(raw); } catch { return null; }
+}
+function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+
+function resolveStoreFromUser(user){
+  if (user === "mana_thiago") return "mana";
+  if (user === "bogados_ellen") return "bogados";
+  return null;
+}
+function getStoreCtx(){
+  const s = getSession();
+  if (!s) return null;
+  const db = loadDB();
+  return { session: s, db, storeKey: s.storeKey, store: db.stores[s.storeKey] };
+}
+
+/* ========= UI refs ========= */
+const viewLogin = document.getElementById("viewLogin");
+const viewApp = document.getElementById("viewApp");
+const btnLogout = document.getElementById("btnLogout");
+const whoami = document.getElementById("whoami");
+const storeName = document.getElementById("storeName");
+
+const tabBtns = Array.from(document.querySelectorAll(".tabBtn"));
+const tabPanels = {
+  employees: document.getElementById("tab_employees"),
+  calc: document.getElementById("tab_calc"),
+  settings: document.getElementById("tab_settings"),
+};
+
+const empTable = document.getElementById("empTable");
+const empSearch = document.getElementById("empSearch");
+const empSort = document.getElementById("empSort");
+const btnNewEmp = document.getElementById("btnNewEmp");
+const btnToggleDismissed = document.getElementById("btnToggleDismissed");
+
+const empEditorWrap = document.getElementById("empEditorWrap");
+const empEditorTitle = document.getElementById("empEditorTitle");
+const btnCloseEmpEditor = document.getElementById("btnCloseEmpEditor");
+const empName = document.getElementById("empName");
+const empAdmission = document.getElementById("empAdmission");
+const empSalary = document.getElementById("empSalary");
+const empLoan = document.getElementById("empLoan");
+
+const vacStart = document.getElementById("vacStart");
+const vacEnd = document.getElementById("vacEnd");
+const vacPaidValue = document.getElementById("vacPaidValue");
+const btnAddVacation = document.getElementById("btnAddVacation");
+const vacationsTable = document.getElementById("vacationsTable");
+
+const thYear = document.getElementById("thYear");
+const thDate = document.getElementById("thDate");
+const btnAddTh = document.getElementById("btnAddTh");
+const thTable = document.getElementById("thTable");
+
+const buyVacDate = document.getElementById("buyVacDate");
+const btnAddBuyVac = document.getElementById("btnAddBuyVac");
+const buyVacTable = document.getElementById("buyVacTable");
+
+const empActive = document.getElementById("empActive");
+const empDismissal = document.getElementById("empDismissal");
+const btnSaveEmp = document.getElementById("btnSaveEmp");
+const btnAddSalaryChange = document.getElementById("btnAddSalaryChange");
+const btnArchiveEmp = document.getElementById("btnArchiveEmp");
+const btnDeleteEmp = document.getElementById("btnDeleteEmp");
+const salaryHistoryTable = document.getElementById("salaryHistoryTable");
+
+const calcEmp = document.getElementById("calcEmp");
+const calcDate = document.getElementById("calcDate");
+const calcType = document.getElementById("calcType");
+const calcDaysWorked = document.getElementById("calcDaysWorked");
+const calcVacMonths = document.getElementById("calcVacMonths");
+const calcVacOverdue = document.getElementById("calcVacOverdue");
+const calcNoticeDays = document.getElementById("calcNoticeDays");
+const calcFgtsBalance = document.getElementById("calcFgtsBalance");
+const calcLoanDiscount = document.getElementById("calcLoanDiscount");
+const optInss = document.getElementById("optInss");
+const optFgts = document.getElementById("optFgts");
+const btnCalc = document.getElementById("btnCalc");
+const btnPdf = document.getElementById("btnPdf");
+const calcResult = document.getElementById("calcResult");
+
+const pinOld = document.getElementById("pinOld");
+const pinNew = document.getElementById("pinNew");
+const btnChangePin = document.getElementById("btnChangePin");
+const btnExport = document.getElementById("btnExport");
+const fileImport = document.getElementById("fileImport");
+const btnReset = document.getElementById("btnReset");
+
+/* ========= Tabs/Auth ========= */
+let currentTab = "employees";
+let showDismissed = false;
+let editingEmpId = null;
+
+function openTab(tab){
+  currentTab = tab;
+  for (const k of Object.keys(tabPanels)){
+    tabPanels[k].classList.toggle("hidden", k !== tab);
+  }
+  tabBtns.forEach(b=>{
+    const active = b.dataset.tab === tab;
+    b.classList.toggle("bg-slate-900", active);
+    b.classList.toggle("text-white", active);
+    b.classList.toggle("border-slate-900", active);
+  });
+  if (tab === "employees") renderEmployees();
+  if (tab === "calc") renderCalcEmployees();
+}
+
+function requireAuth(){
+  const s = getSession();
+  if (!s) {
+    viewApp.classList.add("hidden");
+    viewLogin.classList.remove("hidden");
+    btnLogout.classList.add("hidden");
+    return false;
+  }
+  viewLogin.classList.add("hidden");
+  viewApp.classList.remove("hidden");
+  btnLogout.classList.remove("hidden");
+
+  const ctx = getStoreCtx();
+  whoami.textContent = ctx.store.managers[s.userKey].label;
+  storeName.textContent = ctx.store.name;
+  openTab(currentTab);
+  return true;
+}
+
+/* ========= Employees ========= */
+function getEmpById(store, id){ return (store.employees || []).find(e=>e.id===id) || null; }
+function upsertEmp(store, emp){
+  store.employees = store.employees || [];
+  const idx = store.employees.findIndex(e=>e.id===emp.id);
+  if (idx >= 0) store.employees[idx] = emp;
+  else store.employees.push(emp);
+}
+function currentSalary(emp){
+  if (!emp.salaryHistory?.length) return safeNum(emp.salary || 0);
+  const sorted = [...emp.salaryHistory].sort((a,b)=> (a.date||"").localeCompare(b.date||""));
+  return safeNum(sorted[sorted.length-1].salary);
+}
+
+function ensureEmpShape(emp){
+  emp.vacations = emp.vacations || []; // [{id,startISO,endISO,paidValue}]
+  emp.thirteenthPayments = emp.thirteenthPayments || {}; // { "2024": "2024-12-20" }
+  emp.boughtVacations = emp.boughtVacations || []; // ["2025-01-10"]
+  emp.salaryHistory = emp.salaryHistory || [];
+  emp.loanBalance = safeNum(emp.loanBalance);
+  emp.status = emp.status || "active";
+  return emp;
+}
+
+function employeeSummary(emp){
+  ensureEmpShape(emp);
+  const vacCount = emp.vacations.length;
+  const thCount = Object.keys(emp.thirteenthPayments).length;
+  const buyCount = emp.boughtVacations.length;
+
+  const lastVac = emp.vacations.slice().sort((a,b)=> (a.endISO||"").localeCompare(b.endISO||""))[vacCount-1];
+  const lastThYear = Object.keys(emp.thirteenthPayments).sort().pop();
+  const lastBuy = emp.boughtVacations.slice().sort().pop();
+
+  let parts = [];
+  parts.push(`Férias: ${vacCount}`);
+  if (lastVac) parts.push(`última ${formatISOToBR(lastVac.startISO)}–${formatISOToBR(lastVac.endISO)}`);
+  parts.push(`13º: ${thCount}`);
+  if (lastThYear) parts.push(`último ${lastThYear}`);
+  parts.push(`Compra férias: ${buyCount}`);
+  if (lastBuy) parts.push(`última ${formatISOToBR(lastBuy)}`);
+  return parts.join(" • ");
+}
+
+function listEmployeesForUI(){
+  const ctx = getStoreCtx();
+  const emps = ctx.store.employees || [];
+  const q = (empSearch.value || "").trim().toLowerCase();
+
+  let filtered = emps.filter(e => {
+    const isDismissed = e.status === "dismissed";
+    if (!showDismissed && isDismissed) return false;
+    if (showDismissed && !isDismissed) return false;
+    if (q && !(e.name || "").toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  const sortBy = empSort.value;
+  filtered.sort((a,b)=>{
+    if (sortBy === "name") return (a.name||"").localeCompare(b.name||"");
+    if (sortBy === "admission") return (a.admissionDate||"").localeCompare(b.admissionDate||"");
+    return 0;
+  });
+
+  return filtered;
+}
+
+function renderEmployees(){
+  const rows = listEmployeesForUI();
+  empTable.innerHTML = rows.map(e=>{
+    ensureEmpShape(e);
+    const sal = currentSalary(e);
+    const loan = safeNum(e.loanBalance);
+    return `
+      <tr class="border-b last:border-b-0">
+        <td class="py-2 font-semibold">${escapeHTML(e.name || "")}</td>
+        <td class="py-2">${formatISOToBR(e.admissionDate) || "—"}</td>
+        <td class="py-2">${formatBRL(sal)}</td>
+        <td class="py-2 text-slate-600">${escapeHTML(employeeSummary(e))}</td>
+        <td class="py-2">${formatBRL(loan)}</td>
+        <td class="py-2 text-right no-print">
+          <button class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs" onclick="window.__openEmpEditor('${e.id}')">
+            Editar
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  btnToggleDismissed.textContent = showDismissed ? "Ver ativos" : "Ver demitidos";
+  empEditorWrap.classList.add("hidden");
+  editingEmpId = null;
+}
+
+function renderSalaryHistory(emp){
+  const hist = (emp.salaryHistory || []).slice().sort((a,b)=> (a.date||"").localeCompare(b.date||""));
+  salaryHistoryTable.innerHTML = hist.map(h=>`
+    <tr class="border-b last:border-b-0">
+      <td class="py-2">${formatISOToBR(h.date) || "—"}</td>
+      <td class="py-2">${formatBRL(h.salary)}</td>
+    </tr>
+  `).join("");
+}
+
+function renderVacations(emp){
+  ensureEmpShape(emp);
+  const list = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
+  if (!list.length){
+    vacationsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma férias registrada ainda.</td></tr>`;
+    return;
+  }
+  vacationsTable.innerHTML = list.map((v,idx)=> {
+    const text = `Tirou ${idx+1} férias no período ${formatISOToBR(v.startISO)} a ${formatISOToBR(v.endISO)} (${formatBRL(v.paidValue)})`;
+    return `
+      <tr class="border-b last:border-b-0">
+        <td class="py-2">${escapeHTML(text)}</td>
+        <td class="py-2 text-right no-print">
+          <button class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 text-xs"
+            onclick="window.__deleteVacation('${emp.id}', ${idx})">Excluir</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderThPayments(emp){
+  ensureEmpShape(emp);
+  const years = Object.keys(emp.thirteenthPayments || {}).sort((a,b)=> Number(a)-Number(b));
+  if (!years.length){
+    thTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum 13º registrado ainda.</td></tr>`;
+    return;
+  }
+  thTable.innerHTML = years.map((y,idx)=>{
+    const iso = emp.thirteenthPayments[y];
+    const text = `13º do ano de ${y} foi pago na data ${formatISOToBR(iso)}`;
+    return `
+      <tr class="border-b last:border-b-0">
+        <td class="py-2">${escapeHTML(text)}</td>
+        <td class="py-2 text-right no-print">
+          <button class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 text-xs"
+            onclick="window.__deleteTh('${emp.id}', '${y}')">Excluir</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function renderBuyVac(emp){
+  ensureEmpShape(emp);
+  const list = (emp.boughtVacations || []).slice().sort();
+  if (!list.length){
+    buyVacTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma compra de férias registrada.</td></tr>`;
+    return;
+  }
+  buyVacTable.innerHTML = list.map((iso,idx)=>{
+    const text = `Comprei as férias na data ${formatISOToBR(iso)}`;
+    return `
+      <tr class="border-b last:border-b-0">
+        <td class="py-2">${escapeHTML(text)}</td>
+        <td class="py-2 text-right no-print">
+          <button class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 text-xs"
+            onclick="window.__deleteBuyVac('${emp.id}', ${idx})">Excluir</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+window.__openEmpEditor = (id) => {
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, id);
+  if (!emp) return;
+  ensureEmpShape(emp);
+
+  editingEmpId = id;
+  empEditorTitle.textContent = "Editar funcionário";
+  empEditorWrap.classList.remove("hidden");
+
+  empName.value = emp.name || "";
+  empAdmission.value = formatISOToBR(emp.admissionDate) || "";
+  empSalary.value = currentSalary(emp) || "";
+  empLoan.value = safeNum(emp.loanBalance) || "";
+
+  empActive.checked = (emp.status !== "dismissed");
+  empDismissal.value = formatISOToBR(emp.dismissalDate) || "";
+
+  vacStart.value = ""; vacEnd.value = ""; vacPaidValue.value = "";
+  thYear.value = ""; thDate.value = "";
+  buyVacDate.value = "";
+
+  renderSalaryHistory(emp);
+  renderVacations(emp);
+  renderThPayments(emp);
+  renderBuyVac(emp);
+  renderCalcEmployees();
+};
+
+function openNewEmp(){
+  editingEmpId = null;
+  empEditorTitle.textContent = "Novo funcionário";
+  empEditorWrap.classList.remove("hidden");
+
+  empName.value = "";
+  empAdmission.value = "";
+  empSalary.value = "";
+  empLoan.value = "";
+
+  empActive.checked = true;
+  empDismissal.value = "";
+
+  vacStart.value = ""; vacEnd.value = ""; vacPaidValue.value = "";
+  thYear.value = ""; thDate.value = "";
+  buyVacDate.value = "";
+
+  salaryHistoryTable.innerHTML = "";
+  vacationsTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma férias registrada ainda.</td></tr>`;
+  thTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhum 13º registrado ainda.</td></tr>`;
+  buyVacTable.innerHTML = `<tr><td class="py-3 text-slate-500" colspan="2">Nenhuma compra de férias registrada.</td></tr>`;
+}
+
+function loadAndUpdateEmp(updatedEmp){
+  const ctx = getStoreCtx();
+  const store = ctx.store;
+  upsertEmp(store, updatedEmp);
+  ctx.db.stores[ctx.storeKey] = store;
+  return ctx.db;
+}
+
+function saveEmp(){
+  const ctx = getStoreCtx();
+  const store = ctx.store;
+
+  const name = (empName.value || "").trim();
+  const admissionISO = parseBRToISO(empAdmission.value);
+
+  const salary = safeNum(empSalary.value);
+  const loanBalance = safeNum(empLoan.value);
+
+  if (!name) return alert("Informe o nome.");
+  if (!admissionISO) return alert("Data de entrada inválida. Use DD/MM/AAAA (ex.: 17/01/2024).");
+  if (salary <= 0) return alert("Informe um salário válido.");
+
+  let emp = null;
+  if (editingEmpId) emp = getEmpById(store, editingEmpId);
+  if (!emp) {
+    emp = {
+      id: uid(),
+      name: "",
+      admissionDate: "",
+      salaryHistory: [],
+      vacations: [],
+      thirteenthPayments: {},
+      boughtVacations: [],
+      loanBalance: 0,
+      status: "active",
+      dismissalDate: ""
+    };
+  }
+  ensureEmpShape(emp);
+
+  emp.name = name;
+  emp.admissionDate = admissionISO;
+  emp.loanBalance = loanBalance;
+
+  if (!empActive.checked) {
+    emp.status = "dismissed";
+    const disISO = empDismissal.value ? parseBRToISO(empDismissal.value) : null;
+    emp.dismissalDate = disISO || todayISO();
+  } else {
+    emp.status = "active";
+    emp.dismissalDate = "";
+  }
+
+  const effectiveDate = todayISO();
+  const existingToday = emp.salaryHistory.find(h => h.date === effectiveDate);
+  if (existingToday) existingToday.salary = salary;
+  else emp.salaryHistory.push({ date: effectiveDate, salary });
+
+  upsertEmp(store, emp);
+  ctx.db.stores[ctx.storeKey] = store;
+  saveDB(ctx.db);
+
+  editingEmpId = emp.id;
+  renderEmployees();
+  window.__openEmpEditor(emp.id);
+  alert("Salvo.");
+}
+
+function addSalaryChange(){
+  const ctx = getStoreCtx();
+  const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
+  if (!emp) return alert("Abra um funcionário para registrar mudança.");
+
+  const newSalary = safeNum(prompt("Novo salário (R$):", String(currentSalary(emp) || "")));
+  if (!newSalary || newSalary <= 0) return;
+
+  const br = prompt("Data efetiva (DD/MM/AAAA):", formatISOToBR(todayISO()));
+  const iso = parseBRToISO(br);
+  if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
+
+  emp.salaryHistory.push({ date: iso, salary: newSalary });
+  saveDB(loadAndUpdateEmp(emp));
+  renderEmployees();
+  window.__openEmpEditor(emp.id);
+  alert("Mudança registrada.");
+}
+
+function archiveEmp(){
+  const ctx = getStoreCtx();
+  const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
+  if (!emp) return alert("Abra um funcionário.");
+  emp.status = "dismissed";
+  emp.dismissalDate = emp.dismissalDate || todayISO();
+  saveDB(loadAndUpdateEmp(emp));
+  renderEmployees();
+  alert("Arquivado como demitido.");
+}
+
+function deleteEmp(){
+  const ctx = getStoreCtx();
+  const store = ctx.store;
+  if (!editingEmpId) return alert("Abra um funcionário.");
+  const emp = getEmpById(store, editingEmpId);
+  if (!emp) return;
+
+  const ok = confirm(`Excluir "${emp.name}"? Isso apaga os dados da loja.`);
+  if (!ok) return;
+
+  store.employees = (store.employees || []).filter(e => e.id !== editingEmpId);
+  ctx.db.stores[ctx.storeKey] = store;
+  saveDB(ctx.db);
+
+  editingEmpId = null;
+  empEditorWrap.classList.add("hidden");
+  renderEmployees();
+}
+
+/* ========= Registros: Férias / 13º / Compra férias ========= */
+function addVacationPeriod(){
+  const ctx = getStoreCtx();
+  const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
+  if (!emp) return alert("Abra um funcionário.");
+
+  const sISO = parseBRToISO(vacStart.value);
+  const eISO = parseBRToISO(vacEnd.value);
+  if (!sISO) return alert("Data de início inválida. Use DD/MM/AAAA.");
+  if (!eISO) return alert("Data de fim inválida. Use DD/MM/AAAA.");
+  if (eISO < sISO) return alert("A data de fim não pode ser menor que a de início.");
+
+  const paid = safeNum(vacPaidValue.value);
+  if (paid <= 0) return alert("Informe um valor pago válido.");
+
+  emp.vacations.push({ id: uid(), startISO: sISO, endISO: eISO, paidValue: paid });
+  saveDB(loadAndUpdateEmp(emp));
+
+  vacStart.value = ""; vacEnd.value = ""; vacPaidValue.value = "";
+  window.__openEmpEditor(emp.id);
+}
+
+window.__deleteVacation = (empId, idx) => {
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, empId);
+  if (!emp) return;
+  const ok = confirm("Excluir este período de férias?");
+  if (!ok) return;
+  emp.vacations.splice(idx, 1);
+  saveDB(loadAndUpdateEmp(emp));
+  window.__openEmpEditor(emp.id);
+};
+
+function addThPayment(){
+  const ctx = getStoreCtx();
+  const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
+  if (!emp) return alert("Abra um funcionário.");
+
+  const year = Number(thYear.value);
+  if (!year || year < 2000 || year > 2100) return alert("Ano inválido.");
+  const iso = parseBRToISO(thDate.value);
+  if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
+
+  emp.thirteenthPayments[String(year)] = iso;
+  saveDB(loadAndUpdateEmp(emp));
+
+  thYear.value = ""; thDate.value = "";
+  window.__openEmpEditor(emp.id);
+}
+
+window.__deleteTh = (empId, year) => {
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, empId);
+  if (!emp) return;
+  const ok = confirm(`Excluir o 13º do ano ${year}?`);
+  if (!ok) return;
+  delete emp.thirteenthPayments[year];
+  saveDB(loadAndUpdateEmp(emp));
+  window.__openEmpEditor(emp.id);
+};
+
+function addBuyVac(){
+  const ctx = getStoreCtx();
+  const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
+  if (!emp) return alert("Abra um funcionário.");
+  const iso = parseBRToISO(buyVacDate.value);
+  if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
+
+  emp.boughtVacations.push(iso);
+  saveDB(loadAndUpdateEmp(emp));
+
+  buyVacDate.value = "";
+  window.__openEmpEditor(emp.id);
+}
+
+window.__deleteBuyVac = (empId, idx) => {
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, empId);
+  if (!emp) return;
+  const ok = confirm("Excluir esta compra de férias?");
+  if (!ok) return;
+  emp.boughtVacations.splice(idx, 1);
+  saveDB(loadAndUpdateEmp(emp));
+  window.__openEmpEditor(emp.id);
+};
+
+/* ========= Rescisão (simples) ========= */
+function calcINSSSimple(base){
+  base = Math.max(0, base);
+  return Math.min(base * 0.11, 900);
+}
+function monthsFor13th(terminationISO){
+  if (!terminationISO) return 0;
+  const d = new Date(terminationISO + "T00:00:00");
+  const m = d.getMonth() + 1;
+  const day = d.getDate();
+  return (m - 1) + (day >= 15 ? 1 : 0);
+}
+function labelType(t){
+  if (t==="sem_justa_causa") return "Sem justa causa";
+  if (t==="pedido_demissao") return "Pedido de demissão";
+  if (t==="acordo") return "Acordo";
+  return t;
+}
+function line(label, value){
+  return `
+    <div class="flex items-center justify-between gap-3">
+      <div class="text-sm text-slate-600">${escapeHTML(label)}</div>
+      <div class="text-sm font-semibold">${formatBRL(value)}</div>
+    </div>
+  `;
+}
+function renderCalcEmployees(){
+  const ctx = getStoreCtx();
+  if (!ctx) return;
+  const emps = (ctx.store.employees || []).filter(e => e.status !== "dismissed");
+  calcEmp.innerHTML = emps.map(e=>`<option value="${e.id}">${escapeHTML(e.name)}</option>`).join("");
+  calcDate.value = calcDate.value || todayISO();
+  const selected = getEmpById(ctx.store, calcEmp.value);
+  if (selected) calcLoanDiscount.value = safeNum(selected.loanBalance);
+}
+function doCalc(){
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, calcEmp.value);
+  if (!emp) return alert("Selecione um funcionário.");
+
+  const term = calcDate.value;
+  if (!term) return alert("Informe a data de desligamento.");
+
+  const salary = currentSalary(emp);
+  const daysWorked = Math.max(0, Math.min(31, Number(calcDaysWorked.value||0)));
+  const vacMonths = Math.max(0, Math.min(12, Number(calcVacMonths.value||0)));
+  const vacOverdue = Math.max(0, Math.min(3, Number(calcVacOverdue.value||0)));
+  const noticeDaysRaw = Math.max(0, Math.min(120, Number(calcNoticeDays.value||0)));
+  const fgtsBal = safeNum(calcFgtsBalance.value);
+  const loanDisc = safeNum(calcLoanDiscount.value);
+
+  const type = calcType.value;
+  const daily = salary / 30;
+
+  const saldoSalario = daily * daysWorked;
+  const m13 = monthsFor13th(term);
+  const decimoTerceiro = (salary / 12) * m13;
+
+  const feriasProp = (salary / 12) * vacMonths;
+  const feriasVencidas = salary * vacOverdue;
+  const feriasTotal = feriasProp + feriasVencidas;
+  const umTerco = feriasTotal / 3;
+
+  let noticeDays = noticeDaysRaw;
+  if (type === "pedido_demissao") noticeDays = 0;
+  if (type === "acordo") noticeDays = noticeDaysRaw / 2;
+  const avisoPrevio = daily * noticeDays;
+
+  let fgtsRate = 0.40;
+  if (type === "acordo") fgtsRate = 0.20;
+  if (type === "pedido_demissao") fgtsRate = 0.00;
+  const multaFgts = (optFgts.checked ? fgtsBal * fgtsRate : 0);
+
+  const baseInss = saldoSalario + avisoPrevio + decimoTerceiro;
+  const inss = (optInss.checked ? calcINSSSimple(baseInss) : 0);
+
+  const bruto = saldoSalario + decimoTerceiro + feriasTotal + umTerco + avisoPrevio + multaFgts;
+  const descontos = inss + loanDisc;
+  const liquido = bruto - descontos;
+
+  calcResult.innerHTML = `
+    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+      <div class="text-sm text-slate-500">Resumo</div>
+      <div class="text-lg font-bold mt-1">${escapeHTML(emp.name)} • ${escapeHTML(ctx.store.name)}</div>
+      <div class="text-sm text-slate-600">Desligamento: <span class="font-semibold">${term}</span> • Tipo: <span class="font-semibold">${escapeHTML(labelType(type))}</span></div>
+
+      <div class="mt-4 grid md:grid-cols-2 gap-3">
+        <div class="bg-white border border-slate-200 rounded-2xl p-3">
+          <div class="font-semibold">Proventos</div>
+          <div class="mt-2 space-y-1">
+            ${line("Saldo de salário", saldoSalario)}
+            ${line(`13º proporcional (${m13}/12)`, decimoTerceiro)}
+            ${line(`Férias proporcionais (${vacMonths}/12)`, feriasProp)}
+            ${line(`Férias vencidas (${vacOverdue} período)`, feriasVencidas)}
+            ${line("1/3 constitucional", umTerco)}
+            ${line(`Aviso prévio (${noticeDays.toFixed(0)} dias)`, avisoPrevio)}
+            ${line(`Multa FGTS (${(fgtsRate*100).toFixed(0)}%)`, multaFgts)}
+          </div>
+        </div>
+
+        <div class="bg-white border border-slate-200 rounded-2xl p-3">
+          <div class="font-semibold">Descontos</div>
+          <div class="mt-2 space-y-1">
+            ${line("INSS", inss)}
+            ${line("Desconto empréstimo", loanDisc)}
           </div>
 
-        </section>
+          <div class="mt-4 border-t border-slate-200 pt-3">
+            <div class="flex items-center justify-between">
+              <div class="text-sm text-slate-600">Total bruto</div>
+              <div class="font-bold">${formatBRL(bruto)}</div>
+            </div>
+            <div class="flex items-center justify-between mt-1">
+              <div class="text-sm text-slate-600">Total descontos</div>
+              <div class="font-bold">${formatBRL(descontos)}</div>
+            </div>
+            <div class="flex items-center justify-between mt-2">
+              <div class="text-base font-semibold">Total líquido</div>
+              <div class="text-base font-bold">${formatBRL(liquido)}</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
-  </main>
-
-  <script>
-    // ========= PWA single-file (manifest via blob) =========
-    (function setupPWA(){
-      try {
-        const manifest = {
-          name: "RH Simples",
-          short_name: "RH",
-          start_url: "./",
-          display: "standalone",
-          background_color: "#f8fafc",
-          theme_color: "#0f172a"
-        };
-        const blob = new Blob([JSON.stringify(manifest)], {type:"application/manifest+json"});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("link");
-        link.rel = "manifest";
-        link.href = url;
-        document.head.appendChild(link);
-      } catch {}
-
-      let deferredPrompt = null;
-      const btnInstall = document.getElementById("btnInstall");
-      window.addEventListener("beforeinstallprompt", (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        btnInstall.classList.remove("hidden");
-      });
-      btnInstall.addEventListener("click", async () => {
-        if (!deferredPrompt) return;
-        deferredPrompt.prompt();
-        deferredPrompt = null;
-        btnInstall.classList.add("hidden");
-      });
-    })();
-
-    // ========= Helpers / Storage =========
-    const LS_KEY = "pwa_rh_simples_v2"; // bump versão por causa do novo formato e férias
-    const SESSION_KEY = "pwa_rh_session_v1";
-
-    function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
-    function safeNum(v){ const n = Number(v); return Number.isFinite(n) ? n : 0; }
-    function formatBRL(n){ return Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); }
-    function escapeHTML(str){
-      return (str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-
-    function todayISO(){
-      const d = new Date();
-      const pad = n => String(n).padStart(2,"0");
-      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-    }
-
-    // --- Datas DD/MM/AAAA <-> ISO (YYYY-MM-DD)
-    function formatISOToBR(iso){
-      if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
-      const [y,m,d] = iso.split("-");
-      return `${d}/${m}/${y}`;
-    }
-    function parseBRToISO(br){
-      const s = String(br||"").trim();
-      const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-      if (!m) return null;
-      const dd = Number(m[1]), mm = Number(m[2]), yy = Number(m[3]);
-      if (yy < 1900 || yy > 2100) return null;
-      if (mm < 1 || mm > 12) return null;
-      if (dd < 1 || dd > 31) return null;
-
-      const iso = `${yy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
-      // valida data real
-      const dt = new Date(iso + "T00:00:00");
-      const ok = dt.getFullYear()===yy && (dt.getMonth()+1)===mm && dt.getDate()===dd;
-      return ok ? iso : null;
-    }
-    function normalizeBRDateInput(el){
-      const iso = parseBRToISO(el.value);
-      if (!iso) return false;
-      el.value = formatISOToBR(iso);
-      return true;
-    }
-
-    function addMonths(iso, months){
-      const d = new Date(iso + "T00:00:00");
-      const day = d.getDate();
-      d.setMonth(d.getMonth() + months);
-      if (d.getDate() < day) d.setDate(0);
-      return d.toISOString().slice(0,10);
-    }
-    function vacationDueISO(admissionISO){ return admissionISO ? addMonths(admissionISO, 24) : ""; }
-
-    // Hash PIN com fallback
-    async function hashPin(text){
-      text = String(text ?? "");
-      if (window.crypto && crypto.subtle && window.isSecureContext) {
-        const enc = new TextEncoder().encode(text);
-        const hash = await crypto.subtle.digest("SHA-256", enc);
-        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
-      }
-      let h = 5381;
-      for (let i = 0; i < text.length; i++) h = ((h << 5) + h) + text.charCodeAt(i);
-      return "fb_" + (h >>> 0).toString(16);
-    }
-
-    function defaultDB(){
-      return {
-        version: 2,
-        stores: {
-          mana: {
-            name: "MANA DE DEUS",
-            managers: { mana_thiago: { label: "Mana Thiago", pinHash: null } },
-            employees: []
-          },
-          bogados: {
-            name: "BOGADOS PADARIA",
-            managers: { bogados_ellen: { label: "Ellen", pinHash: null } },
-            employees: []
-          }
-        }
-      };
-    }
-    function loadDB(){
-      const raw = localStorage.getItem(LS_KEY);
-      if (!raw) return defaultDB();
-      try { return JSON.parse(raw); } catch { return defaultDB(); }
-    }
-    function saveDB(db){ localStorage.setItem(LS_KEY, JSON.stringify(db)); }
-
-    async function ensureDefaultPins(){
-      const db = loadDB();
-      const manaMgr = db.stores.mana.managers.mana_thiago;
-      const bogMgr  = db.stores.bogados.managers.bogados_ellen;
-      if (!manaMgr.pinHash) manaMgr.pinHash = await hashPin("1234");
-      if (!bogMgr.pinHash)  bogMgr.pinHash  = await hashPin("4321");
-      saveDB(db);
-    }
-
-    function setSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
-    function getSession(){
-      const raw = localStorage.getItem(SESSION_KEY);
-      if (!raw) return null;
-      try { return JSON.parse(raw); } catch { return null; }
-    }
-    function clearSession(){ localStorage.removeItem(SESSION_KEY); }
-
-    function resolveStoreFromUser(user){
-      if (user === "mana_thiago") return "mana";
-      if (user === "bogados_ellen") return "bogados";
-      return null;
-    }
-
-    function getStoreCtx(){
-      const s = getSession();
-      if (!s) return null;
-      const db = loadDB();
-      return { session: s, db, storeKey: s.storeKey, store: db.stores[s.storeKey] };
-    }
-
-    // ========= UI refs =========
-    const viewLogin = document.getElementById("viewLogin");
-    const viewApp = document.getElementById("viewApp");
-    const btnLogout = document.getElementById("btnLogout");
-    const whoami = document.getElementById("whoami");
-    const storeName = document.getElementById("storeName");
-
-    const tabBtns = Array.from(document.querySelectorAll(".tabBtn"));
-    const tabPanels = {
-      employees: document.getElementById("tab_employees"),
-      calc: document.getElementById("tab_calc"),
-      settings: document.getElementById("tab_settings"),
-    };
-
-    const empTable = document.getElementById("empTable");
-    const empSearch = document.getElementById("empSearch");
-    const empSort = document.getElementById("empSort");
-    const btnNewEmp = document.getElementById("btnNewEmp");
-    const btnToggleDismissed = document.getElementById("btnToggleDismissed");
-
-    const empEditorWrap = document.getElementById("empEditorWrap");
-    const empEditorTitle = document.getElementById("empEditorTitle");
-    const btnCloseEmpEditor = document.getElementById("btnCloseEmpEditor");
-    const empName = document.getElementById("empName");
-    const empAdmission = document.getElementById("empAdmission");
-    const empSalary = document.getElementById("empSalary");
-    const empLoan = document.getElementById("empLoan");
-    const vacPaidYear = document.getElementById("vacPaidYear");
-    const thPaidYear = document.getElementById("thPaidYear");
-    const btnMarkVacPaid = document.getElementById("btnMarkVacPaid");
-    const btnMarkThPaid = document.getElementById("btnMarkThPaid");
-    const empActive = document.getElementById("empActive");
-    const empDismissal = document.getElementById("empDismissal");
-    const btnSaveEmp = document.getElementById("btnSaveEmp");
-    const btnAddSalaryChange = document.getElementById("btnAddSalaryChange");
-    const btnArchiveEmp = document.getElementById("btnArchiveEmp");
-    const btnDeleteEmp = document.getElementById("btnDeleteEmp");
-    const salaryHistoryTable = document.getElementById("salaryHistoryTable");
-
-    // férias períodos
-    const vacStart = document.getElementById("vacStart");
-    const vacEnd = document.getElementById("vacEnd");
-    const vacPaidValue = document.getElementById("vacPaidValue");
-    const btnAddVacation = document.getElementById("btnAddVacation");
-    const vacationsTable = document.getElementById("vacationsTable");
-
-    const calcEmp = document.getElementById("calcEmp");
-    const calcDate = document.getElementById("calcDate");
-    const calcType = document.getElementById("calcType");
-    const calcDaysWorked = document.getElementById("calcDaysWorked");
-    const calcVacMonths = document.getElementById("calcVacMonths");
-    const calcVacOverdue = document.getElementById("calcVacOverdue");
-    const calcNoticeDays = document.getElementById("calcNoticeDays");
-    const calcFgtsBalance = document.getElementById("calcFgtsBalance");
-    const calcLoanDiscount = document.getElementById("calcLoanDiscount");
-    const optInss = document.getElementById("optInss");
-    const optFgts = document.getElementById("optFgts");
-    const btnCalc = document.getElementById("btnCalc");
-    const btnPdf = document.getElementById("btnPdf");
-    const calcResult = document.getElementById("calcResult");
-
-    const pinOld = document.getElementById("pinOld");
-    const pinNew = document.getElementById("pinNew");
-    const btnChangePin = document.getElementById("btnChangePin");
-    const btnExport = document.getElementById("btnExport");
-    const fileImport = document.getElementById("fileImport");
-    const btnReset = document.getElementById("btnReset");
-
-    // ========= Tabs/Auth =========
-    let currentTab = "employees";
-    let showDismissed = false;
-    let editingEmpId = null;
-
-    function openTab(tab){
-      currentTab = tab;
-      for (const k of Object.keys(tabPanels)){
-        tabPanels[k].classList.toggle("hidden", k !== tab);
-      }
-      tabBtns.forEach(b=>{
-        const active = b.dataset.tab === tab;
-        b.classList.toggle("bg-slate-900", active);
-        b.classList.toggle("text-white", active);
-        b.classList.toggle("border-slate-900", active);
-      });
-      if (tab === "employees") renderEmployees();
-      if (tab === "calc") renderCalcEmployees();
-    }
-
-    function requireAuth(){
-      const s = getSession();
-      if (!s) {
-        viewApp.classList.add("hidden");
-        viewLogin.classList.remove("hidden");
-        btnLogout.classList.add("hidden");
-        return false;
-      }
-      viewLogin.classList.add("hidden");
-      viewApp.classList.remove("hidden");
-      btnLogout.classList.remove("hidden");
-
-      const ctx = getStoreCtx();
-      whoami.textContent = ctx.store.managers[s.userKey].label;
-      storeName.textContent = ctx.store.name;
-      openTab(currentTab);
-      return true;
-    }
-
-    // ========= Employees =========
-    function getEmpById(store, id){ return (store.employees || []).find(e=>e.id===id) || null; }
-    function upsertEmp(store, emp){
-      store.employees = store.employees || [];
-      const idx = store.employees.findIndex(e=>e.id===emp.id);
-      if (idx >= 0) store.employees[idx] = emp;
-      else store.employees.push(emp);
-    }
-    function currentSalary(emp){
-      if (!emp.salaryHistory?.length) return safeNum(emp.salary || 0);
-      const sorted = [...emp.salaryHistory].sort((a,b)=> (a.date||"").localeCompare(b.date||""));
-      return safeNum(sorted[sorted.length-1].salary);
-    }
-
-    function listEmployeesForUI(){
-      const ctx = getStoreCtx();
-      const emps = ctx.store.employees || [];
-      const q = (empSearch.value || "").trim().toLowerCase();
-
-      let filtered = emps.filter(e => {
-        const isDismissed = e.status === "dismissed";
-        if (!showDismissed && isDismissed) return false;
-        if (showDismissed && !isDismissed) return false;
-        if (q && !(e.name || "").toLowerCase().includes(q)) return false;
-        return true;
-      });
-
-      const sortBy = empSort.value;
-      filtered.sort((a,b)=>{
-        if (sortBy === "name") return (a.name||"").localeCompare(b.name||"");
-        if (sortBy === "admission") return (a.admissionDate||"").localeCompare(b.admissionDate||"");
-        if (sortBy === "vacationDue") return vacationDueISO(a.admissionDate).localeCompare(vacationDueISO(b.admissionDate));
-        return 0;
-      });
-
-      return filtered;
-    }
-
-    function renderEmployees(){
-      const rows = listEmployeesForUI();
-      empTable.innerHTML = rows.map(e=>{
-        const sal = currentSalary(e);
-        const vacDue = vacationDueISO(e.admissionDate);
-        const loan = safeNum(e.loanBalance);
-        return `
-          <tr class="border-b last:border-b-0">
-            <td class="py-2 font-semibold">${escapeHTML(e.name || "")}</td>
-            <td class="py-2">${formatISOToBR(e.admissionDate) || "—"}</td>
-            <td class="py-2">${formatBRL(sal)}</td>
-            <td class="py-2">${formatISOToBR(vacDue) || "—"}</td>
-            <td class="py-2">${formatBRL(loan)}</td>
-            <td class="py-2 text-right no-print">
-              <button class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs" onclick="window.__openEmpEditor('${e.id}')">
-                Editar
-              </button>
-            </td>
-          </tr>
-        `;
-      }).join("");
-
-      btnToggleDismissed.textContent = showDismissed ? "Ver ativos" : "Ver demitidos";
-      empEditorWrap.classList.add("hidden");
-      editingEmpId = null;
-    }
-
-    function renderSalaryHistory(emp){
-      const hist = (emp.salaryHistory || []).slice().sort((a,b)=> (a.date||"").localeCompare(b.date||""));
-      salaryHistoryTable.innerHTML = hist.map(h=>`
-        <tr class="border-b last:border-b-0">
-          <td class="py-2">${formatISOToBR(h.date) || "—"}</td>
-          <td class="py-2">${formatBRL(h.salary)}</td>
-        </tr>
-      `).join("");
-    }
-
-    function renderVacations(emp){
-      const list = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
-      vacationsTable.innerHTML = list.map((v,idx)=>`
-        <tr class="border-b last:border-b-0">
-          <td class="py-2">
-            ${formatISOToBR(v.startISO) || "—"} a ${formatISOToBR(v.endISO) || "—"}
-          </td>
-          <td class="py-2">${formatBRL(v.paidValue)}</td>
-          <td class="py-2 text-right no-print">
-            <button class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 text-xs"
-              onclick="window.__deleteVacation('${emp.id}', ${idx})">
-              Excluir
-            </button>
-          </td>
-        </tr>
-      `).join("");
-
-      if (!list.length){
-        vacationsTable.innerHTML = `
-          <tr>
-            <td class="py-3 text-slate-500" colspan="3">Nenhum período de férias registrado ainda.</td>
-          </tr>
-        `;
-      }
-    }
-
-    window.__openEmpEditor = (id) => {
-      const ctx = getStoreCtx();
-      const emp = getEmpById(ctx.store, id);
-      if (!emp) return;
-
-      // migração leve (caso emp antigo sem vacations)
-      emp.vacations = emp.vacations || [];
-
-      editingEmpId = id;
-      empEditorTitle.textContent = "Editar funcionário";
-      empEditorWrap.classList.remove("hidden");
-
-      empName.value = emp.name || "";
-      empAdmission.value = formatISOToBR(emp.admissionDate) || "";
-      empSalary.value = currentSalary(emp) || "";
-      empLoan.value = safeNum(emp.loanBalance) || "";
-
-      empActive.checked = (emp.status !== "dismissed");
-      empDismissal.value = formatISOToBR(emp.dismissalDate) || "";
-
-      vacPaidYear.value = "";
-      thPaidYear.value = "";
-
-      // limpa inputs de férias
-      vacStart.value = "";
-      vacEnd.value = "";
-      vacPaidValue.value = "";
-
-      renderSalaryHistory(emp);
-      renderVacations(emp);
-      renderCalcEmployees();
-    };
-
-    function openNewEmp(){
-      editingEmpId = null;
-      empEditorTitle.textContent = "Novo funcionário";
-      empEditorWrap.classList.remove("hidden");
-
-      empName.value = "";
-      empAdmission.value = "";
-      empSalary.value = "";
-      empLoan.value = "";
-
-      empActive.checked = true;
-      empDismissal.value = "";
-
-      vacPaidYear.value = "";
-      thPaidYear.value = "";
-      salaryHistoryTable.innerHTML = "";
-
-      vacStart.value = "";
-      vacEnd.value = "";
-      vacPaidValue.value = "";
-      vacationsTable.innerHTML = `
-        <tr>
-          <td class="py-3 text-slate-500" colspan="3">Nenhum período de férias registrado ainda.</td>
-        </tr>
-      `;
-    }
-
-    function loadAndUpdateEmp(updatedEmp){
-      const ctx = getStoreCtx();
-      const store = ctx.store;
-      upsertEmp(store, updatedEmp);
-      ctx.db.stores[ctx.storeKey] = store;
-      return ctx.db;
-    }
-
-    function saveEmp(){
-      const ctx = getStoreCtx();
-      const store = ctx.store;
-
-      const name = (empName.value || "").trim();
-      const admissionBR = (empAdmission.value || "").trim();
-      const admissionISO = parseBRToISO(admissionBR);
-
-      const salary = safeNum(empSalary.value);
-      const loanBalance = safeNum(empLoan.value);
-
-      if (!name) return alert("Informe o nome.");
-      if (!admissionISO) return alert("Data de entrada inválida. Use DD/MM/AAAA (ex.: 17/01/2024).");
-      if (salary <= 0) return alert("Informe um salário válido.");
-
-      let emp = null;
-      if (editingEmpId) emp = getEmpById(store, editingEmpId);
-      if (!emp) {
-        emp = {
-          id: uid(),
-          name: "",
-          admissionDate: "",
-          salaryHistory: [],
-          vacationPaidYears: {},
-          thirteenthPaidYears: {},
-          vacations: [],
-          loanBalance: 0,
-          status: "active",
-          dismissalDate: ""
-        };
-      }
-
-      emp.vacations = emp.vacations || [];
-
-      emp.name = name;
-      emp.admissionDate = admissionISO;
-      emp.loanBalance = loanBalance;
-
-      if (!empActive.checked) {
-        emp.status = "dismissed";
-        const disISO = empDismissal.value ? parseBRToISO(empDismissal.value) : null;
-        emp.dismissalDate = disISO || todayISO();
-      } else {
-        emp.status = "active";
-        emp.dismissalDate = "";
-      }
-
-      emp.salaryHistory = emp.salaryHistory || [];
-      const effectiveDate = todayISO();
-      const existingToday = emp.salaryHistory.find(h => h.date === effectiveDate);
-      if (existingToday) existingToday.salary = salary;
-      else emp.salaryHistory.push({ date: effectiveDate, salary });
-
-      upsertEmp(store, emp);
-      ctx.db.stores[ctx.storeKey] = store;
-      saveDB(ctx.db);
-
-      editingEmpId = emp.id;
-      renderEmployees();
-      window.__openEmpEditor(emp.id);
-      alert("Salvo.");
-    }
-
-    function addSalaryChange(){
-      const ctx = getStoreCtx();
-      const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
-      if (!emp) return alert("Abra um funcionário para registrar mudança.");
-
-      const newSalary = safeNum(prompt("Novo salário (R$):", String(currentSalary(emp) || "")));
-      if (!newSalary || newSalary <= 0) return;
-
-      const br = prompt("Data efetiva (DD/MM/AAAA):", formatISOToBR(todayISO()));
-      const iso = parseBRToISO(br);
-      if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
-
-      emp.salaryHistory = emp.salaryHistory || [];
-      emp.salaryHistory.push({ date: iso, salary: newSalary });
-
-      saveDB(loadAndUpdateEmp(emp));
-      renderEmployees();
-      window.__openEmpEditor(emp.id);
-      alert("Mudança registrada.");
-    }
-
-    function markYearPaid(kind){
-      const ctx = getStoreCtx();
-      const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
-      if (!emp) return alert("Abra um funcionário.");
-
-      const year = Number(kind === "vac" ? vacPaidYear.value : thPaidYear.value);
-      if (!year || year < 2000 || year > 2100) return alert("Ano inválido.");
-
-      if (kind === "vac") {
-        emp.vacationPaidYears = emp.vacationPaidYears || {};
-        emp.vacationPaidYears[String(year)] = true;
-      } else {
-        emp.thirteenthPaidYears = emp.thirteenthPaidYears || {};
-        emp.thirteenthPaidYears[String(year)] = true;
-      }
-
-      saveDB(loadAndUpdateEmp(emp));
-      window.__openEmpEditor(emp.id);
-      alert("Marcado.");
-    }
-
-    function archiveEmp(){
-      const ctx = getStoreCtx();
-      const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
-      if (!emp) return alert("Abra um funcionário.");
-
-      emp.status = "dismissed";
-      emp.dismissalDate = emp.dismissalDate || todayISO();
-
-      saveDB(loadAndUpdateEmp(emp));
-      renderEmployees();
-      alert("Arquivado como demitido.");
-    }
-
-    function deleteEmp(){
-      const ctx = getStoreCtx();
-      const store = ctx.store;
-      if (!editingEmpId) return alert("Abra um funcionário.");
-
-      const emp = getEmpById(store, editingEmpId);
-      if (!emp) return;
-
-      const ok = confirm(`Excluir "${emp.name}"? Isso apaga os dados da loja.`);
-      if (!ok) return;
-
-      store.employees = (store.employees || []).filter(e => e.id !== editingEmpId);
-      ctx.db.stores[ctx.storeKey] = store;
-      saveDB(ctx.db);
-
-      editingEmpId = null;
-      empEditorWrap.classList.add("hidden");
-      renderEmployees();
-    }
-
-    function addVacationPeriod(){
-      const ctx = getStoreCtx();
-      const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
-      if (!emp) return alert("Abra um funcionário.");
-
-      const sISO = parseBRToISO(vacStart.value);
-      const eISO = parseBRToISO(vacEnd.value);
-      if (!sISO) return alert("Data de início inválida. Use DD/MM/AAAA.");
-      if (!eISO) return alert("Data de fim inválida. Use DD/MM/AAAA.");
-      if (eISO < sISO) return alert("A data de fim não pode ser menor que a de início.");
-
-      const paid = safeNum(vacPaidValue.value);
-      if (paid <= 0) return alert("Informe um valor pago válido.");
-
-      emp.vacations = emp.vacations || [];
-      emp.vacations.push({ id: uid(), startISO: sISO, endISO: eISO, paidValue: paid });
-
-      saveDB(loadAndUpdateEmp(emp));
-      vacStart.value = "";
-      vacEnd.value = "";
-      vacPaidValue.value = "";
-
-      window.__openEmpEditor(emp.id);
-      alert("Férias registradas.");
-    }
-
-    window.__deleteVacation = (empId, idx) => {
-      const ctx = getStoreCtx();
-      const emp = getEmpById(ctx.store, empId);
-      if (!emp) return;
-      emp.vacations = emp.vacations || [];
-      const ok = confirm("Excluir este período de férias?");
-      if (!ok) return;
-
-      emp.vacations.splice(idx, 1);
-      saveDB(loadAndUpdateEmp(emp));
-      window.__openEmpEditor(emp.id);
-    };
-
-    // ========= Rescisão (simples) =========
-    function calcINSSSimple(base){
-      base = Math.max(0, base);
-      return Math.min(base * 0.11, 900);
-    }
-    function monthsFor13th(terminationISO){
-      if (!terminationISO) return 0;
-      const d = new Date(terminationISO + "T00:00:00");
-      const m = d.getMonth() + 1;
-      const day = d.getDate();
-      return (m - 1) + (day >= 15 ? 1 : 0);
-    }
-    function labelType(t){
-      if (t==="sem_justa_causa") return "Sem justa causa";
-      if (t==="pedido_demissao") return "Pedido de demissão";
-      if (t==="acordo") return "Acordo";
-      return t;
-    }
-    function line(label, value){
-      return `
-        <div class="flex items-center justify-between gap-3">
-          <div class="text-sm text-slate-600">${escapeHTML(label)}</div>
-          <div class="text-sm font-semibold">${formatBRL(value)}</div>
-        </div>
-      `;
-    }
-
-    function renderCalcEmployees(){
-      const ctx = getStoreCtx();
-      if (!ctx) return;
-
-      const emps = (ctx.store.employees || []).filter(e => e.status !== "dismissed");
-      calcEmp.innerHTML = emps.map(e=>`<option value="${e.id}">${escapeHTML(e.name)}</option>`).join("");
-
-      calcDate.value = calcDate.value || todayISO();
-      const selected = getEmpById(ctx.store, calcEmp.value);
-      if (selected) calcLoanDiscount.value = safeNum(selected.loanBalance);
-    }
-
-    function doCalc(){
-      const ctx = getStoreCtx();
-      const emp = getEmpById(ctx.store, calcEmp.value);
-      if (!emp) return alert("Selecione um funcionário.");
-
-      const term = calcDate.value;
-      if (!term) return alert("Informe a data de desligamento.");
-
-      const salary = currentSalary(emp);
-      const daysWorked = Math.max(0, Math.min(31, Number(calcDaysWorked.value||0)));
-      const vacMonths = Math.max(0, Math.min(12, Number(calcVacMonths.value||0)));
-      const vacOverdue = Math.max(0, Math.min(3, Number(calcVacOverdue.value||0)));
-      const noticeDaysRaw = Math.max(0, Math.min(120, Number(calcNoticeDays.value||0)));
-      const fgtsBal = safeNum(calcFgtsBalance.value);
-      const loanDisc = safeNum(calcLoanDiscount.value);
-
-      const type = calcType.value;
-      const daily = salary / 30;
-
-      const saldoSalario = daily * daysWorked;
-      const m13 = monthsFor13th(term);
-      const decimoTerceiro = (salary / 12) * m13;
-
-      const feriasProp = (salary / 12) * vacMonths;
-      const feriasVencidas = salary * vacOverdue;
-      const feriasTotal = feriasProp + feriasVencidas;
-      const umTerco = feriasTotal / 3;
-
-      let noticeDays = noticeDaysRaw;
-      if (type === "pedido_demissao") noticeDays = 0;
-      if (type === "acordo") noticeDays = noticeDaysRaw / 2;
-      const avisoPrevio = daily * noticeDays;
-
-      let fgtsRate = 0.40;
-      if (type === "acordo") fgtsRate = 0.20;
-      if (type === "pedido_demissao") fgtsRate = 0.00;
-      const multaFgts = (optFgts.checked ? fgtsBal * fgtsRate : 0);
-
-      const baseInss = saldoSalario + avisoPrevio + decimoTerceiro;
-      const inss = (optInss.checked ? calcINSSSimple(baseInss) : 0);
-
-      const bruto = saldoSalario + decimoTerceiro + feriasTotal + umTerco + avisoPrevio + multaFgts;
-      const descontos = inss + loanDisc;
-      const liquido = bruto - descontos;
-
-      calcResult.innerHTML = `
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
-          <div class="text-sm text-slate-500">Resumo</div>
-          <div class="text-lg font-bold mt-1">${escapeHTML(emp.name)} • ${escapeHTML(ctx.store.name)}</div>
-          <div class="text-sm text-slate-600">Desligamento: <span class="font-semibold">${term}</span> • Tipo: <span class="font-semibold">${escapeHTML(labelType(type))}</span></div>
-
-          <div class="mt-4 grid md:grid-cols-2 gap-3">
-            <div class="bg-white border border-slate-200 rounded-2xl p-3">
-              <div class="font-semibold">Proventos</div>
-              <div class="mt-2 space-y-1">
-                ${line("Saldo de salário", saldoSalario)}
-                ${line(`13º proporcional (${m13}/12)`, decimoTerceiro)}
-                ${line(`Férias proporcionais (${vacMonths}/12)`, feriasProp)}
-                ${line(`Férias vencidas (${vacOverdue} período)`, feriasVencidas)}
-                ${line("1/3 constitucional", umTerco)}
-                ${line(`Aviso prévio (${noticeDays.toFixed(0)} dias)`, avisoPrevio)}
-                ${line(`Multa FGTS (${(fgtsRate*100).toFixed(0)}%)`, multaFgts)}
-              </div>
-            </div>
-
-            <div class="bg-white border border-slate-200 rounded-2xl p-3">
-              <div class="font-semibold">Descontos</div>
-              <div class="mt-2 space-y-1">
-                ${line("INSS", inss)}
-                ${line("Desconto empréstimo", loanDisc)}
-              </div>
-
-              <div class="mt-4 border-t border-slate-200 pt-3">
-                <div class="flex items-center justify-between">
-                  <div class="text-sm text-slate-600">Total bruto</div>
-                  <div class="font-bold">${formatBRL(bruto)}</div>
-                </div>
-                <div class="flex items-center justify-between mt-1">
-                  <div class="text-sm text-slate-600">Total descontos</div>
-                  <div class="font-bold">${formatBRL(descontos)}</div>
-                </div>
-                <div class="flex items-center justify-between mt-2">
-                  <div class="text-base font-semibold">Total líquido</div>
-                  <div class="text-base font-bold">${formatBRL(liquido)}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="text-xs text-slate-500 mt-3">
-            Cálculo simples e ajustável (modelo prático).
-          </div>
-        </div>
-      `;
-      return { emp, term, type };
-    }
-
-    function exportPDF(){
-      const r = doCalc();
-      if (!r) return;
-
-      const ctx = getStoreCtx();
-      const win = window.open("", "_blank");
-      win.document.open();
-      win.document.write(`
-        <!doctype html><html lang="pt-BR"><head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Rescisão - ${escapeHTML(r.emp.name)}</title>
-        <style>body{font-family:Arial,sans-serif;padding:18px}</style>
-        </head><body>
-          <h2>Rescisão (simples)</h2>
-          <div style="color:#666;font-size:12px">
-            Loja: <b>${escapeHTML(ctx.store.name)}</b> • Funcionário: <b>${escapeHTML(r.emp.name)}</b><br>
-            Data: <b>${escapeHTML(r.term)}</b> • Tipo: <b>${escapeHTML(labelType(r.type))}</b>
-          </div>
-          <div style="height:12px"></div>
-          ${calcResult.innerHTML}
-        </body></html>
-      `);
-      win.document.close();
-      win.onload = () => win.print();
-    }
-
-    // ========= Settings =========
-    async function changePin(){
-      const ctx = getStoreCtx();
-      const userKey = ctx.session.userKey;
-      const mgr = ctx.store.managers[userKey];
-
-      const oldPin = (pinOld.value || "").trim();
-      const newPin = (pinNew.value || "").trim();
-
-      if (newPin.length < 4) return alert("Novo PIN muito curto (mínimo 4).");
-      if (!oldPin) return alert("Informe o PIN atual.");
-
-      const oldHash = await hashPin(oldPin);
-      if (oldHash !== mgr.pinHash) return alert("PIN atual incorreto.");
-
-      mgr.pinHash = await hashPin(newPin);
-      ctx.db.stores[ctx.storeKey] = ctx.store;
-      saveDB(ctx.db);
-
-      pinOld.value = "";
-      pinNew.value = "";
-      alert("PIN alterado.");
-    }
-
-    function exportJSON(){
-      const ctx = getStoreCtx();
-      const payload = { storeKey: ctx.storeKey, exportedAt: new Date().toISOString(), store: ctx.store };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `backup_${ctx.storeKey}_${todayISO()}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function importJSON(file){
-      const ctx = getStoreCtx();
-      const fr = new FileReader();
-      fr.onload = () => {
-        try {
-          const parsed = JSON.parse(fr.result);
-          if (!parsed || !parsed.store) return alert("JSON inválido.");
-          ctx.db.stores[ctx.storeKey].employees = parsed.store.employees || [];
-          saveDB(ctx.db);
-          renderEmployees();
-          alert("Importado.");
-        } catch {
-          alert("Falha ao ler JSON.");
-        }
-      };
-      fr.readAsText(file);
-    }
-
-    function resetStore(){
-      const ok = confirm("Resetar dados desta loja? (Funcionários, marcações, empréstimos).");
-      if (!ok) return;
-
-      const ctx = getStoreCtx();
-      ctx.db.stores[ctx.storeKey].employees = [];
+      <div class="text-xs text-slate-500 mt-3">Cálculo simples e ajustável (modelo prático).</div>
+    </div>
+  `;
+  return { emp, term, type };
+}
+function exportPDF(){
+  const r = doCalc();
+  if (!r) return;
+
+  const ctx = getStoreCtx();
+  const win = window.open("", "_blank");
+  win.document.open();
+  win.document.write(`
+    <!doctype html><html lang="pt-BR"><head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Rescisão - ${escapeHTML(r.emp.name)}</title>
+    <style>body{font-family:Arial,sans-serif;padding:18px}</style>
+    </head><body>
+      <h2>Rescisão (simples)</h2>
+      <div style="color:#666;font-size:12px">
+        Loja: <b>${escapeHTML(ctx.store.name)}</b> • Funcionário: <b>${escapeHTML(r.emp.name)}</b><br>
+        Data: <b>${escapeHTML(r.term)}</b> • Tipo: <b>${escapeHTML(labelType(r.type))}</b>
+      </div>
+      <div style="height:12px"></div>
+      ${calcResult.innerHTML}
+    </body></html>
+  `);
+  win.document.close();
+  win.onload = () => win.print();
+}
+
+/* ========= Settings ========= */
+async function changePin(){
+  const ctx = getStoreCtx();
+  const userKey = ctx.session.userKey;
+  const mgr = ctx.store.managers[userKey];
+
+  const oldPin = (pinOld.value || "").trim();
+  const newPin = (pinNew.value || "").trim();
+
+  if (newPin.length < 4) return alert("Novo PIN muito curto (mínimo 4).");
+  if (!oldPin) return alert("Informe o PIN atual.");
+
+  const oldHash = await hashPin(oldPin);
+  if (oldHash !== mgr.pinHash) return alert("PIN atual incorreto.");
+
+  mgr.pinHash = await hashPin(newPin);
+  ctx.db.stores[ctx.storeKey] = ctx.store;
+  saveDB(ctx.db);
+
+  pinOld.value = "";
+  pinNew.value = "";
+  alert("PIN alterado.");
+}
+function exportJSON(){
+  const ctx = getStoreCtx();
+  const payload = { storeKey: ctx.storeKey, exportedAt: new Date().toISOString(), store: ctx.store };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `backup_${ctx.storeKey}_${todayISO()}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function importJSON(file){
+  const ctx = getStoreCtx();
+  const fr = new FileReader();
+  fr.onload = () => {
+    try {
+      const parsed = JSON.parse(fr.result);
+      if (!parsed || !parsed.store) return alert("JSON inválido.");
+      ctx.db.stores[ctx.storeKey].employees = parsed.store.employees || [];
       saveDB(ctx.db);
       renderEmployees();
-      alert("Loja resetada.");
+      alert("Importado.");
+    } catch {
+      alert("Falha ao ler JSON.");
     }
+  };
+  fr.readAsText(file);
+}
+function resetStore(){
+  const ok = confirm("Resetar dados desta loja? (Funcionários e registros).");
+  if (!ok) return;
+  const ctx = getStoreCtx();
+  ctx.db.stores[ctx.storeKey].employees = [];
+  saveDB(ctx.db);
+  renderEmployees();
+  alert("Loja resetada.");
+}
 
-    // ========= Events =========
-    document.getElementById("btnLogin").addEventListener("click", async () => {
-      const user = document.getElementById("loginUser").value;
-      const pin = (document.getElementById("loginPin").value || "").trim();
-      if (!pin) return alert("Informe o PIN.");
+/* ========= Events ========= */
+document.getElementById("btnLogin").addEventListener("click", async () => {
+  const user = document.getElementById("loginUser").value;
+  const pin = (document.getElementById("loginPin").value || "").trim();
+  if (!pin) return alert("Informe o PIN.");
 
-      await ensureDefaultPins();
+  await ensureDefaultPins();
+  const storeKey = resolveStoreFromUser(user);
+  const db = loadDB();
+  const mgr = db.stores[storeKey].managers[user];
 
-      const storeKey = resolveStoreFromUser(user);
-      const db = loadDB();
-      const mgr = db.stores[storeKey].managers[user];
+  const pinHash = await hashPin(pin);
+  if (pinHash !== mgr.pinHash) return alert("PIN incorreto.");
 
-      const pinHash = await hashPin(pin);
-      if (pinHash !== mgr.pinHash) return alert("PIN incorreto.");
+  setSession({ userKey: user, storeKey });
+  document.getElementById("loginPin").value = "";
+  requireAuth();
+});
 
-      setSession({ userKey: user, storeKey });
-      document.getElementById("loginPin").value = "";
-      requireAuth();
-    });
+btnLogout.addEventListener("click", () => { clearSession(); requireAuth(); });
+tabBtns.forEach(b => b.addEventListener("click", ()=> openTab(b.dataset.tab)));
 
-    btnLogout.addEventListener("click", () => { clearSession(); requireAuth(); });
-    tabBtns.forEach(b => b.addEventListener("click", ()=> openTab(b.dataset.tab)));
+empSearch.addEventListener("input", renderEmployees);
+empSort.addEventListener("change", renderEmployees);
 
-    empSearch.addEventListener("input", renderEmployees);
-    empSort.addEventListener("change", renderEmployees);
+btnNewEmp.addEventListener("click", openNewEmp);
+btnCloseEmpEditor.addEventListener("click", ()=> empEditorWrap.classList.add("hidden"));
+btnToggleDismissed.addEventListener("click", ()=>{ showDismissed = !showDismissed; renderEmployees(); });
 
-    btnNewEmp.addEventListener("click", openNewEmp);
-    btnCloseEmpEditor.addEventListener("click", ()=> empEditorWrap.classList.add("hidden"));
-    btnToggleDismissed.addEventListener("click", ()=>{ showDismissed = !showDismissed; renderEmployees(); });
+btnSaveEmp.addEventListener("click", saveEmp);
+btnAddSalaryChange.addEventListener("click", addSalaryChange);
+btnArchiveEmp.addEventListener("click", archiveEmp);
+btnDeleteEmp.addEventListener("click", deleteEmp);
 
-    btnSaveEmp.addEventListener("click", saveEmp);
-    btnAddSalaryChange.addEventListener("click", addSalaryChange);
-    btnArchiveEmp.addEventListener("click", archiveEmp);
-    btnDeleteEmp.addEventListener("click", deleteEmp);
+btnAddVacation.addEventListener("click", addVacationPeriod);
+btnAddTh.addEventListener("click", addThPayment);
+btnAddBuyVac.addEventListener("click", addBuyVac);
 
-    btnMarkVacPaid.addEventListener("click", ()=> markYearPaid("vac"));
-    btnMarkThPaid.addEventListener("click", ()=> markYearPaid("th"));
+empAdmission.addEventListener("blur", ()=> normalizeBRDateInput(empAdmission));
+empDismissal.addEventListener("blur", ()=> { if (empDismissal.value.trim()) normalizeBRDateInput(empDismissal); });
+vacStart.addEventListener("blur", ()=> { if (vacStart.value.trim()) normalizeBRDateInput(vacStart); });
+vacEnd.addEventListener("blur", ()=> { if (vacEnd.value.trim()) normalizeBRDateInput(vacEnd); });
+thDate.addEventListener("blur", ()=> { if (thDate.value.trim()) normalizeBRDateInput(thDate); });
+buyVacDate.addEventListener("blur", ()=> { if (buyVacDate.value.trim()) normalizeBRDateInput(buyVacDate); });
 
-    btnAddVacation.addEventListener("click", addVacationPeriod);
+calcEmp.addEventListener("change", ()=>{
+  const ctx = getStoreCtx();
+  const emp = getEmpById(ctx.store, calcEmp.value);
+  if (emp) calcLoanDiscount.value = safeNum(emp.loanBalance);
+});
+btnCalc.addEventListener("click", doCalc);
+btnPdf.addEventListener("click", exportPDF);
 
-    // normaliza datas nos campos ao sair (evita erro de digitação)
-    empAdmission.addEventListener("blur", ()=> normalizeBRDateInput(empAdmission));
-    empDismissal.addEventListener("blur", ()=> { if (empDismissal.value.trim()) normalizeBRDateInput(empDismissal); });
-    vacStart.addEventListener("blur", ()=> { if (vacStart.value.trim()) normalizeBRDateInput(vacStart); });
-    vacEnd.addEventListener("blur", ()=> { if (vacEnd.value.trim()) normalizeBRDateInput(vacEnd); });
+btnChangePin.addEventListener("click", changePin);
+btnExport.addEventListener("click", exportJSON);
+fileImport.addEventListener("change", (e)=>{
+  const f = e.target.files?.[0];
+  if (f) importJSON(f);
+  e.target.value = "";
+});
+btnReset.addEventListener("click", resetStore);
 
-    calcEmp.addEventListener("change", ()=>{
-      const ctx = getStoreCtx();
-      const emp = getEmpById(ctx.store, calcEmp.value);
-      if (emp) calcLoanDiscount.value = safeNum(emp.loanBalance);
-    });
-
-    btnCalc.addEventListener("click", doCalc);
-    btnPdf.addEventListener("click", exportPDF);
-
-    btnChangePin.addEventListener("click", changePin);
-    btnExport.addEventListener("click", exportJSON);
-    fileImport.addEventListener("change", (e)=>{
-      const f = e.target.files?.[0];
-      if (f) importJSON(f);
-      e.target.value = "";
-    });
-    btnReset.addEventListener("click", resetStore);
-
-    // Boot
-    (async function boot(){
-      await ensureDefaultPins();
-      requireAuth();
-      calcDate.value = todayISO();
-    })();
-  </script>
+/* Boot */
+(async function boot(){
+  await ensureDefaultPins();
+  requireAuth();
+  calcDate.value = todayISO();
+})();
+</script>
 </body>
 </html>

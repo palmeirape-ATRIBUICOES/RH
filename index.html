@@ -14,6 +14,7 @@
 
   <style>
     @media print { .no-print { display:none !important; } body { background:#fff !important; } }
+    .help { font-size: 12px; color: rgb(100 116 139); }
   </style>
 </head>
 
@@ -109,7 +110,8 @@
             <div class="text-sm text-slate-600 mt-1">
               • “Deve tirar férias até” = entrada + 24 meses (modelo simples).<br>
               • Marque férias/13º “pago” por ano.<br>
-              • Empréstimo vira desconto na rescisão.
+              • Empréstimo vira desconto na rescisão.<br>
+              • Datas no app: <b>DD/MM/AAAA</b>.
             </div>
           </div>
         </aside>
@@ -122,7 +124,7 @@
               <div class="flex flex-col md:flex-row md:items-center gap-3 md:justify-between">
                 <div>
                   <h2 class="text-xl font-bold">Funcionários</h2>
-                  <p class="text-sm text-slate-600">Adicione, edite salário, marque pagamentos e arquive demitidos.</p>
+                  <p class="text-sm text-slate-600">Adicione, edite salário, marque pagamentos e registre férias por período.</p>
                 </div>
                 <div class="flex gap-2 no-print">
                   <button id="btnNewEmp" class="px-3 py-2 rounded-xl bg-slate-900 text-white text-sm">+ Novo</button>
@@ -161,7 +163,7 @@
               <div class="flex items-start justify-between gap-3">
                 <div>
                   <h3 class="text-lg font-bold" id="empEditorTitle">Novo funcionário</h3>
-                  <p class="text-sm text-slate-600">Dados básicos + histórico de salário.</p>
+                  <p class="text-sm text-slate-600">Dados básicos + salário + férias (por período).</p>
                 </div>
                 <button id="btnCloseEmpEditor" class="no-print px-3 py-2 rounded-xl border border-slate-300 text-sm">Fechar</button>
               </div>
@@ -171,9 +173,13 @@
                   <span class="block text-slate-600 mb-1">Nome</span>
                   <input id="empName" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Nome do funcionário" />
                 </label>
+
                 <label class="text-sm">
-                  <span class="block text-slate-600 mb-1">Data de entrada</span>
-                  <input id="empAdmission" type="date" class="w-full rounded-xl border border-slate-300 px-3 py-2" />
+                  <span class="block text-slate-600 mb-1">Data de entrada (DD/MM/AAAA)</span>
+                  <input id="empAdmission" inputmode="numeric"
+                    class="w-full rounded-xl border border-slate-300 px-3 py-2"
+                    placeholder="17/01/2024" />
+                  <div class="help mt-1">Formato: <b>DD/MM/AAAA</b></div>
                 </label>
 
                 <label class="text-sm">
@@ -205,6 +211,47 @@
                 </button>
               </div>
 
+              <!-- FÉRIAS POR PERÍODO -->
+              <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <div class="text-sm font-semibold">Férias por período</div>
+                    <div class="text-sm text-slate-600">Registre períodos tirados e valor pago.</div>
+                  </div>
+                </div>
+
+                <div class="mt-3 grid md:grid-cols-4 gap-3 no-print">
+                  <label class="text-sm">
+                    <span class="block text-slate-600 mb-1">Início (DD/MM/AAAA)</span>
+                    <input id="vacStart" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="15/01/2024" />
+                  </label>
+                  <label class="text-sm">
+                    <span class="block text-slate-600 mb-1">Fim (DD/MM/AAAA)</span>
+                    <input id="vacEnd" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="14/02/2024" />
+                  </label>
+                  <label class="text-sm">
+                    <span class="block text-slate-600 mb-1">Valor pago (R$)</span>
+                    <input id="vacPaidValue" type="number" step="0.01" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 2500" />
+                  </label>
+                  <button id="btnAddVacation" class="mt-6 md:mt-0 px-4 py-2 rounded-xl bg-slate-900 text-white font-semibold">
+                    + Adicionar
+                  </button>
+                </div>
+
+                <div class="mt-3 overflow-x-auto">
+                  <table class="w-full text-sm">
+                    <thead class="text-slate-500">
+                      <tr class="border-b">
+                        <th class="text-left py-2">Período</th>
+                        <th class="text-left py-2">Valor pago</th>
+                        <th class="text-right py-2 no-print">Ações</th>
+                      </tr>
+                    </thead>
+                    <tbody id="vacationsTable"></tbody>
+                  </table>
+                </div>
+              </div>
+
               <div class="mt-4 text-sm">
                 <div class="text-slate-600">Status</div>
                 <div class="flex flex-wrap items-center gap-3 mt-1">
@@ -213,8 +260,8 @@
                     <span>Ativo</span>
                   </label>
                   <label class="inline-flex items-center gap-2">
-                    <span class="text-slate-600">Data de demissão (se demitido)</span>
-                    <input id="empDismissal" type="date" class="rounded-xl border border-slate-300 px-3 py-2" />
+                    <span class="text-slate-600">Data de demissão (DD/MM/AAAA)</span>
+                    <input id="empDismissal" inputmode="numeric" class="rounded-xl border border-slate-300 px-3 py-2" placeholder="10/02/2026" />
                   </label>
                 </div>
               </div>
@@ -248,7 +295,7 @@
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
               <h2 class="text-xl font-bold">Cálculo de Rescisão (simples)</h2>
               <p class="text-sm text-slate-600">
-                Exportar PDF: botão “Exportar PDF”. (Sem inserir &lt;/script&gt; dentro de template)
+                Exportar PDF: botão “Exportar PDF”.
               </p>
 
               <div class="mt-4 grid md:grid-cols-3 gap-3 no-print">
@@ -406,14 +453,9 @@
     })();
 
     // ========= Helpers / Storage =========
-    const LS_KEY = "pwa_rh_simples_v1";
+    const LS_KEY = "pwa_rh_simples_v2"; // bump versão por causa do novo formato e férias
     const SESSION_KEY = "pwa_rh_session_v1";
 
-    function todayISO(){
-      const d = new Date();
-      const pad = n => String(n).padStart(2,"0");
-      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-    }
     function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
     function safeNum(v){ const n = Number(v); return Number.isFinite(n) ? n : 0; }
     function formatBRL(n){ return Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); }
@@ -421,8 +463,43 @@
       return (str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
         .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
-    function addMonths(dateISO, months){
-      const d = new Date(dateISO + "T00:00:00");
+
+    function todayISO(){
+      const d = new Date();
+      const pad = n => String(n).padStart(2,"0");
+      return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    }
+
+    // --- Datas DD/MM/AAAA <-> ISO (YYYY-MM-DD)
+    function formatISOToBR(iso){
+      if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return "";
+      const [y,m,d] = iso.split("-");
+      return `${d}/${m}/${y}`;
+    }
+    function parseBRToISO(br){
+      const s = String(br||"").trim();
+      const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+      if (!m) return null;
+      const dd = Number(m[1]), mm = Number(m[2]), yy = Number(m[3]);
+      if (yy < 1900 || yy > 2100) return null;
+      if (mm < 1 || mm > 12) return null;
+      if (dd < 1 || dd > 31) return null;
+
+      const iso = `${yy}-${String(mm).padStart(2,"0")}-${String(dd).padStart(2,"0")}`;
+      // valida data real
+      const dt = new Date(iso + "T00:00:00");
+      const ok = dt.getFullYear()===yy && (dt.getMonth()+1)===mm && dt.getDate()===dd;
+      return ok ? iso : null;
+    }
+    function normalizeBRDateInput(el){
+      const iso = parseBRToISO(el.value);
+      if (!iso) return false;
+      el.value = formatISOToBR(iso);
+      return true;
+    }
+
+    function addMonths(iso, months){
+      const d = new Date(iso + "T00:00:00");
       const day = d.getDate();
       d.setMonth(d.getMonth() + months);
       if (d.getDate() < day) d.setDate(0);
@@ -430,6 +507,7 @@
     }
     function vacationDueISO(admissionISO){ return admissionISO ? addMonths(admissionISO, 24) : ""; }
 
+    // Hash PIN com fallback
     async function hashPin(text){
       text = String(text ?? "");
       if (window.crypto && crypto.subtle && window.isSecureContext) {
@@ -444,7 +522,7 @@
 
     function defaultDB(){
       return {
-        version: 1,
+        version: 2,
         stores: {
           mana: {
             name: "MANA DE DEUS",
@@ -535,6 +613,13 @@
     const btnDeleteEmp = document.getElementById("btnDeleteEmp");
     const salaryHistoryTable = document.getElementById("salaryHistoryTable");
 
+    // férias períodos
+    const vacStart = document.getElementById("vacStart");
+    const vacEnd = document.getElementById("vacEnd");
+    const vacPaidValue = document.getElementById("vacPaidValue");
+    const btnAddVacation = document.getElementById("btnAddVacation");
+    const vacationsTable = document.getElementById("vacationsTable");
+
     const calcEmp = document.getElementById("calcEmp");
     const calcDate = document.getElementById("calcDate");
     const calcType = document.getElementById("calcType");
@@ -609,6 +694,7 @@
       const sorted = [...emp.salaryHistory].sort((a,b)=> (a.date||"").localeCompare(b.date||""));
       return safeNum(sorted[sorted.length-1].salary);
     }
+
     function listEmployeesForUI(){
       const ctx = getStoreCtx();
       const emps = ctx.store.employees || [];
@@ -642,9 +728,9 @@
         return `
           <tr class="border-b last:border-b-0">
             <td class="py-2 font-semibold">${escapeHTML(e.name || "")}</td>
-            <td class="py-2">${e.admissionDate || "—"}</td>
+            <td class="py-2">${formatISOToBR(e.admissionDate) || "—"}</td>
             <td class="py-2">${formatBRL(sal)}</td>
-            <td class="py-2">${vacDue || "—"}</td>
+            <td class="py-2">${formatISOToBR(vacDue) || "—"}</td>
             <td class="py-2">${formatBRL(loan)}</td>
             <td class="py-2 text-right no-print">
               <button class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs" onclick="window.__openEmpEditor('${e.id}')">
@@ -664,10 +750,36 @@
       const hist = (emp.salaryHistory || []).slice().sort((a,b)=> (a.date||"").localeCompare(b.date||""));
       salaryHistoryTable.innerHTML = hist.map(h=>`
         <tr class="border-b last:border-b-0">
-          <td class="py-2">${h.date || "—"}</td>
+          <td class="py-2">${formatISOToBR(h.date) || "—"}</td>
           <td class="py-2">${formatBRL(h.salary)}</td>
         </tr>
       `).join("");
+    }
+
+    function renderVacations(emp){
+      const list = (emp.vacations || []).slice().sort((a,b)=> (a.startISO||"").localeCompare(b.startISO||""));
+      vacationsTable.innerHTML = list.map((v,idx)=>`
+        <tr class="border-b last:border-b-0">
+          <td class="py-2">
+            ${formatISOToBR(v.startISO) || "—"} a ${formatISOToBR(v.endISO) || "—"}
+          </td>
+          <td class="py-2">${formatBRL(v.paidValue)}</td>
+          <td class="py-2 text-right no-print">
+            <button class="px-3 py-1.5 rounded-xl border border-rose-300 text-rose-700 text-xs"
+              onclick="window.__deleteVacation('${emp.id}', ${idx})">
+              Excluir
+            </button>
+          </td>
+        </tr>
+      `).join("");
+
+      if (!list.length){
+        vacationsTable.innerHTML = `
+          <tr>
+            <td class="py-3 text-slate-500" colspan="3">Nenhum período de férias registrado ainda.</td>
+          </tr>
+        `;
+      }
     }
 
     window.__openEmpEditor = (id) => {
@@ -675,22 +787,31 @@
       const emp = getEmpById(ctx.store, id);
       if (!emp) return;
 
+      // migração leve (caso emp antigo sem vacations)
+      emp.vacations = emp.vacations || [];
+
       editingEmpId = id;
       empEditorTitle.textContent = "Editar funcionário";
       empEditorWrap.classList.remove("hidden");
 
       empName.value = emp.name || "";
-      empAdmission.value = emp.admissionDate || "";
+      empAdmission.value = formatISOToBR(emp.admissionDate) || "";
       empSalary.value = currentSalary(emp) || "";
       empLoan.value = safeNum(emp.loanBalance) || "";
 
       empActive.checked = (emp.status !== "dismissed");
-      empDismissal.value = emp.dismissalDate || "";
+      empDismissal.value = formatISOToBR(emp.dismissalDate) || "";
 
       vacPaidYear.value = "";
       thPaidYear.value = "";
 
+      // limpa inputs de férias
+      vacStart.value = "";
+      vacEnd.value = "";
+      vacPaidValue.value = "";
+
       renderSalaryHistory(emp);
+      renderVacations(emp);
       renderCalcEmployees();
     };
 
@@ -710,6 +831,15 @@
       vacPaidYear.value = "";
       thPaidYear.value = "";
       salaryHistoryTable.innerHTML = "";
+
+      vacStart.value = "";
+      vacEnd.value = "";
+      vacPaidValue.value = "";
+      vacationsTable.innerHTML = `
+        <tr>
+          <td class="py-3 text-slate-500" colspan="3">Nenhum período de férias registrado ainda.</td>
+        </tr>
+      `;
     }
 
     function loadAndUpdateEmp(updatedEmp){
@@ -725,12 +855,14 @@
       const store = ctx.store;
 
       const name = (empName.value || "").trim();
-      const admissionDate = empAdmission.value || "";
+      const admissionBR = (empAdmission.value || "").trim();
+      const admissionISO = parseBRToISO(admissionBR);
+
       const salary = safeNum(empSalary.value);
       const loanBalance = safeNum(empLoan.value);
 
       if (!name) return alert("Informe o nome.");
-      if (!admissionDate) return alert("Informe a data de entrada.");
+      if (!admissionISO) return alert("Data de entrada inválida. Use DD/MM/AAAA (ex.: 17/01/2024).");
       if (salary <= 0) return alert("Informe um salário válido.");
 
       let emp = null;
@@ -743,19 +875,23 @@
           salaryHistory: [],
           vacationPaidYears: {},
           thirteenthPaidYears: {},
+          vacations: [],
           loanBalance: 0,
           status: "active",
           dismissalDate: ""
         };
       }
 
+      emp.vacations = emp.vacations || [];
+
       emp.name = name;
-      emp.admissionDate = admissionDate;
+      emp.admissionDate = admissionISO;
       emp.loanBalance = loanBalance;
 
       if (!empActive.checked) {
         emp.status = "dismissed";
-        emp.dismissalDate = empDismissal.value || todayISO();
+        const disISO = empDismissal.value ? parseBRToISO(empDismissal.value) : null;
+        emp.dismissalDate = disISO || todayISO();
       } else {
         emp.status = "active";
         emp.dismissalDate = "";
@@ -785,11 +921,12 @@
       const newSalary = safeNum(prompt("Novo salário (R$):", String(currentSalary(emp) || "")));
       if (!newSalary || newSalary <= 0) return;
 
-      const date = prompt("Data efetiva (YYYY-MM-DD):", todayISO());
-      if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return alert("Data inválida.");
+      const br = prompt("Data efetiva (DD/MM/AAAA):", formatISOToBR(todayISO()));
+      const iso = parseBRToISO(br);
+      if (!iso) return alert("Data inválida. Use DD/MM/AAAA.");
 
       emp.salaryHistory = emp.salaryHistory || [];
-      emp.salaryHistory.push({ date, salary: newSalary });
+      emp.salaryHistory.push({ date: iso, salary: newSalary });
 
       saveDB(loadAndUpdateEmp(emp));
       renderEmployees();
@@ -850,6 +987,45 @@
       empEditorWrap.classList.add("hidden");
       renderEmployees();
     }
+
+    function addVacationPeriod(){
+      const ctx = getStoreCtx();
+      const emp = editingEmpId ? getEmpById(ctx.store, editingEmpId) : null;
+      if (!emp) return alert("Abra um funcionário.");
+
+      const sISO = parseBRToISO(vacStart.value);
+      const eISO = parseBRToISO(vacEnd.value);
+      if (!sISO) return alert("Data de início inválida. Use DD/MM/AAAA.");
+      if (!eISO) return alert("Data de fim inválida. Use DD/MM/AAAA.");
+      if (eISO < sISO) return alert("A data de fim não pode ser menor que a de início.");
+
+      const paid = safeNum(vacPaidValue.value);
+      if (paid <= 0) return alert("Informe um valor pago válido.");
+
+      emp.vacations = emp.vacations || [];
+      emp.vacations.push({ id: uid(), startISO: sISO, endISO: eISO, paidValue: paid });
+
+      saveDB(loadAndUpdateEmp(emp));
+      vacStart.value = "";
+      vacEnd.value = "";
+      vacPaidValue.value = "";
+
+      window.__openEmpEditor(emp.id);
+      alert("Férias registradas.");
+    }
+
+    window.__deleteVacation = (empId, idx) => {
+      const ctx = getStoreCtx();
+      const emp = getEmpById(ctx.store, empId);
+      if (!emp) return;
+      emp.vacations = emp.vacations || [];
+      const ok = confirm("Excluir este período de férias?");
+      if (!ok) return;
+
+      emp.vacations.splice(idx, 1);
+      saveDB(loadAndUpdateEmp(emp));
+      window.__openEmpEditor(emp.id);
+    };
 
     // ========= Rescisão (simples) =========
     function calcINSSSimple(base){
@@ -987,7 +1163,6 @@
       return { emp, term, type };
     }
 
-    // ✅ CORRIGIDO: sem inserir <script> no HTML (evita quebrar o script principal)
     function exportPDF(){
       const r = doCalc();
       if (!r) return;
@@ -1000,9 +1175,7 @@
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>Rescisão - ${escapeHTML(r.emp.name)}</title>
-        <style>
-          body{font-family:Arial,sans-serif;padding:18px}
-        </style>
+        <style>body{font-family:Arial,sans-serif;padding:18px}</style>
         </head><body>
           <h2>Rescisão (simples)</h2>
           <div style="color:#666;font-size:12px">
@@ -1122,6 +1295,14 @@
 
     btnMarkVacPaid.addEventListener("click", ()=> markYearPaid("vac"));
     btnMarkThPaid.addEventListener("click", ()=> markYearPaid("th"));
+
+    btnAddVacation.addEventListener("click", addVacationPeriod);
+
+    // normaliza datas nos campos ao sair (evita erro de digitação)
+    empAdmission.addEventListener("blur", ()=> normalizeBRDateInput(empAdmission));
+    empDismissal.addEventListener("blur", ()=> { if (empDismissal.value.trim()) normalizeBRDateInput(empDismissal); });
+    vacStart.addEventListener("blur", ()=> { if (vacStart.value.trim()) normalizeBRDateInput(vacStart); });
+    vacEnd.addEventListener("blur", ()=> { if (vacEnd.value.trim()) normalizeBRDateInput(vacEnd); });
 
     calcEmp.addEventListener("change", ()=>{
       const ctx = getStoreCtx();

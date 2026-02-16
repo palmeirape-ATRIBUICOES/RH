@@ -4,17 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#0f172a" />
-  <title>PWA RH Simples - Leve Mais Fibra</title>
+  <title>RH Simples - 2 Lojas</title>
 
-  <link rel="manifest" href="manifest.json" />
+  <!-- Tailwind CDN (warning no console é normal) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* Print (PDF) */
-    @media print {
-      .no-print { display: none !important; }
-      body { background: #fff !important; }
-    }
+    @media print { .no-print { display:none !important; } body { background:#fff !important; } }
   </style>
 </head>
 
@@ -22,8 +18,8 @@
   <header class="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-slate-200">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
       <div class="min-w-0">
-        <div class="font-bold truncate">PWA RH Simples</div>
-        <div class="text-xs text-slate-500" id="subHeader">Offline • 2 lojas • Gerentes</div>
+        <div class="font-bold truncate">RH Simples</div>
+        <div class="text-xs text-slate-500" id="subHeader">Offline (localStorage) • 2 lojas • Gerentes</div>
       </div>
 
       <div class="flex items-center gap-2">
@@ -59,7 +55,8 @@
 
           <label class="text-sm">
             <span class="block text-slate-600 mb-1">PIN</span>
-            <input id="loginPin" type="password" inputmode="numeric" class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 1234" />
+            <input id="loginPin" type="password" inputmode="numeric"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2" placeholder="Ex.: 1234" />
           </label>
 
           <button id="btnLogin" class="mt-1 w-full rounded-xl bg-slate-900 text-white px-4 py-2 font-semibold">
@@ -67,8 +64,13 @@
           </button>
 
           <div class="text-xs text-slate-500">
-            Primeiro uso (padrão): <span class="font-semibold">Mana Thiago = 1234</span> • <span class="font-semibold">Ellen = 4321</span>.
-            Depois você pode trocar o PIN no painel.
+            Primeiro uso (padrão): <span class="font-semibold">Mana Thiago = 1234</span> •
+            <span class="font-semibold">Ellen = 4321</span>.
+            Depois você pode trocar o PIN em <b>Config</b>.
+          </div>
+
+          <div class="text-xs text-slate-500">
+            Dica (se der problema de login): limpe os dados do site/app (cache do PWA).
           </div>
         </div>
       </div>
@@ -100,10 +102,10 @@
           </div>
 
           <div class="mt-4 bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
-            <div class="text-sm font-semibold">Atalhos</div>
+            <div class="text-sm font-semibold">Notas</div>
             <div class="text-sm text-slate-600 mt-1">
-              • Férias “deve tirar até” é calculado (12 + 12 meses).<br>
-              • Marque “pago” por ano (férias e 13º).<br>
+              • “Deve tirar férias até” = entrada + 24 meses (modelo simples).<br>
+              • Marque férias/13º “pago” por ano.<br>
               • Empréstimo vira desconto na rescisão.
             </div>
           </div>
@@ -223,7 +225,6 @@
 
               <div class="mt-4 bg-slate-50 border border-slate-200 rounded-2xl p-3">
                 <div class="text-sm font-semibold">Histórico de salário</div>
-                <div class="text-sm text-slate-600">O salário atual também entra como registro quando você salva.</div>
                 <div class="mt-2 overflow-x-auto">
                   <table class="w-full text-sm">
                     <thead class="text-slate-500">
@@ -245,7 +246,7 @@
               <h2 class="text-xl font-bold">Cálculo de Rescisão (simples)</h2>
               <p class="text-sm text-slate-600">
                 Você escolhe o funcionário, a data, e decide incluir ou não: INSS, FGTS e multa 40%.
-                A exportação em PDF funciona via “Imprimir / Salvar como PDF”.
+                Exportar PDF: botão “Exportar PDF”.
               </p>
 
               <div class="mt-4 grid md:grid-cols-3 gap-3 no-print">
@@ -301,7 +302,7 @@
               <div class="mt-4 flex flex-wrap gap-3 items-center no-print">
                 <label class="inline-flex items-center gap-2 text-sm">
                   <input id="optInss" type="checkbox" class="h-4 w-4" checked />
-                  <span>Incluir INSS (tabela 2026)</span>
+                  <span>Incluir INSS</span>
                 </label>
                 <label class="inline-flex items-center gap-2 text-sm">
                   <input id="optFgts" type="checkbox" class="h-4 w-4" checked />
@@ -326,7 +327,7 @@
           <div id="tab_settings" class="tabPanel hidden">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
               <h2 class="text-xl font-bold">Config</h2>
-              <p class="text-sm text-slate-600">Trocar PIN, exportar/importar dados e reset.</p>
+              <p class="text-sm text-slate-600">Trocar PIN, exportar/importar dados e reset da loja.</p>
 
               <div class="mt-4 grid md:grid-cols-2 gap-3 no-print">
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
@@ -347,7 +348,7 @@
 
                 <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
                   <div class="font-semibold">Backup</div>
-                  <div class="text-sm text-slate-600 mt-1">Exporta/Importa um JSON com todos os dados da sua loja.</div>
+                  <div class="text-sm text-slate-600 mt-1">Exporta/Importa JSON com os dados desta loja.</div>
                   <div class="mt-3 flex flex-wrap gap-2">
                     <button id="btnExport" class="px-4 py-2 rounded-xl border border-slate-300">Exportar JSON</button>
                     <label class="px-4 py-2 rounded-xl border border-slate-300 cursor-pointer">
@@ -356,12 +357,8 @@
                     </label>
                     <button id="btnReset" class="px-4 py-2 rounded-xl border border-rose-300 text-rose-700">Reset loja</button>
                   </div>
-                  <div class="text-xs text-slate-500 mt-2">Backup é por loja (cada gerente baixa o seu).</div>
+                  <div class="text-xs text-slate-500 mt-2">Backup é por loja.</div>
                 </div>
-              </div>
-
-              <div class="mt-4 text-xs text-slate-500">
-                INSS: alíquotas progressivas 2026 (teto R$ 8.475,55). :contentReference[oaicite:1]{index=1}
               </div>
             </div>
           </div>
@@ -372,65 +369,99 @@
   </main>
 
   <script>
-    // ----------------------------
-    // PWA install + Service Worker
-    // ----------------------------
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("./sw.js").catch(()=>{});
-    }
+    // ==========================================================
+    // PWA "single file": cria manifest + tenta registrar SW via blob
+    // ==========================================================
+    (function setupPWA(){
+      try {
+        // Manifest em blob
+        const manifest = {
+          name: "RH Simples",
+          short_name: "RH",
+          start_url: "./",
+          display: "standalone",
+          background_color: "#f8fafc",
+          theme_color: "#0f172a"
+        };
+        const blob = new Blob([JSON.stringify(manifest)], {type:"application/manifest+json"});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("link");
+        link.rel = "manifest";
+        link.href = url;
+        document.head.appendChild(link);
+      } catch {}
 
-    let deferredPrompt = null;
-    const btnInstall = document.getElementById("btnInstall");
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      btnInstall.classList.remove("hidden");
-    });
-    btnInstall.addEventListener("click", async () => {
-      if (!deferredPrompt) return;
-      deferredPrompt.prompt();
-      deferredPrompt = null;
-      btnInstall.classList.add("hidden");
-    });
+      // Install prompt (se o navegador liberar)
+      let deferredPrompt = null;
+      const btnInstall = document.getElementById("btnInstall");
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        btnInstall.classList.remove("hidden");
+      });
+      btnInstall.addEventListener("click", async () => {
+        if (!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt = null;
+        btnInstall.classList.add("hidden");
+      });
 
-    // ----------------------------
-    // Storage
-    // ----------------------------
+      // Service Worker via blob (pode falhar em alguns navegadores; app continua funcionando)
+      if ("serviceWorker" in navigator) {
+        try {
+          const swCode = `
+            const CACHE = "rh-singlefile-v3";
+            self.addEventListener("install", e => self.skipWaiting());
+            self.addEventListener("activate", e => self.clients.claim());
+          `;
+          const swBlob = new Blob([swCode], {type:"text/javascript"});
+          const swUrl = URL.createObjectURL(swBlob);
+          navigator.serviceWorker.register(swUrl).catch(()=>{});
+        } catch {}
+      }
+    })();
+
+    // ==========================================================
+    // Helpers
+    // ==========================================================
     const LS_KEY = "pwa_rh_simples_v1";
+    const SESSION_KEY = "pwa_rh_session_v1";
 
     function todayISO(){
       const d = new Date();
       const pad = n => String(n).padStart(2,"0");
       return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
     }
-
-    function uid(){
-      return Math.random().toString(16).slice(2) + Date.now().toString(16);
+    function uid(){ return Math.random().toString(16).slice(2) + Date.now().toString(16); }
+    function safeNum(v){ const n = Number(v); return Number.isFinite(n) ? n : 0; }
+    function formatBRL(n){ return Number(n||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}); }
+    function escapeHTML(str){
+      return (str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;").replaceAll("'","&#039;");
     }
-
     function addMonths(dateISO, months){
       const d = new Date(dateISO + "T00:00:00");
       const day = d.getDate();
       d.setMonth(d.getMonth() + months);
-      // Ajuste simples p/ meses curtos
       if (d.getDate() < day) d.setDate(0);
       return d.toISOString().slice(0,10);
     }
-
-    function formatBRL(n){
-      const v = Number(n || 0);
-      return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    function vacationDueISO(admissionISO){
+      if (!admissionISO) return "";
+      return addMonths(admissionISO, 24);
     }
 
-    function safeNum(v){
-      const n = Number(v);
-      return Number.isFinite(n) ? n : 0;
-    }
-
-    async function sha256(text){
-      const enc = new TextEncoder().encode(text);
-      const hash = await crypto.subtle.digest("SHA-256", enc);
-      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+    // Hash PIN com fallback (para não travar login em ambientes problemáticos)
+    async function hashPin(text){
+      text = String(text ?? "");
+      if (window.crypto && crypto.subtle && window.isSecureContext) {
+        const enc = new TextEncoder().encode(text);
+        const hash = await crypto.subtle.digest("SHA-256", enc);
+        return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+      }
+      let h = 5381;
+      for (let i = 0; i < text.length; i++) h = ((h << 5) + h) + text.charCodeAt(i);
+      return "fb_" + (h >>> 0).toString(16);
     }
 
     function defaultDB(){
@@ -439,47 +470,33 @@
         stores: {
           mana: {
             name: "MANA DE DEUS",
-            managers: {
-              mana_thiago: { label: "Mana Thiago", pinHash: null },
-            },
+            managers: { mana_thiago: { label: "Mana Thiago", pinHash: null } },
             employees: []
           },
           bogados: {
             name: "BOGADOS PADARIA",
-            managers: {
-              bogados_ellen: { label: "Ellen", pinHash: null },
-            },
+            managers: { bogados_ellen: { label: "Ellen", pinHash: null } },
             employees: []
           }
         }
       };
     }
-
     function loadDB(){
       const raw = localStorage.getItem(LS_KEY);
       if (!raw) return defaultDB();
       try { return JSON.parse(raw); } catch { return defaultDB(); }
     }
-    function saveDB(db){
-      localStorage.setItem(LS_KEY, JSON.stringify(db));
-    }
+    function saveDB(db){ localStorage.setItem(LS_KEY, JSON.stringify(db)); }
 
-    // Initialize default PINs (first run)
     async function ensureDefaultPins(){
       const db = loadDB();
       const manaMgr = db.stores.mana.managers.mana_thiago;
       const bogMgr  = db.stores.bogados.managers.bogados_ellen;
-
-      if (!manaMgr.pinHash) manaMgr.pinHash = await sha256("1234");
-      if (!bogMgr.pinHash)  bogMgr.pinHash  = await sha256("4321");
-
+      if (!manaMgr.pinHash) manaMgr.pinHash = await hashPin("1234");
+      if (!bogMgr.pinHash)  bogMgr.pinHash  = await hashPin("4321");
       saveDB(db);
     }
 
-    // ----------------------------
-    // Auth session (localStorage)
-    // ----------------------------
-    const SESSION_KEY = "pwa_rh_session_v1";
     function setSession(s){ localStorage.setItem(SESSION_KEY, JSON.stringify(s)); }
     function getSession(){
       const raw = localStorage.getItem(SESSION_KEY);
@@ -494,13 +511,19 @@
       return null;
     }
 
-    // ----------------------------
+    function getStoreCtx(){
+      const s = getSession();
+      if (!s) return null;
+      const db = loadDB();
+      return { session: s, db, storeKey: s.storeKey, store: db.stores[s.storeKey] };
+    }
+
+    // ==========================================================
     // UI refs
-    // ----------------------------
+    // ==========================================================
     const viewLogin = document.getElementById("viewLogin");
     const viewApp = document.getElementById("viewApp");
     const btnLogout = document.getElementById("btnLogout");
-
     const whoami = document.getElementById("whoami");
     const storeName = document.getElementById("storeName");
 
@@ -561,19 +584,12 @@
     const fileImport = document.getElementById("fileImport");
     const btnReset = document.getElementById("btnReset");
 
-    // ----------------------------
-    // State
-    // ----------------------------
+    // ==========================================================
+    // State & Tabs
+    // ==========================================================
     let currentTab = "employees";
     let showDismissed = false;
     let editingEmpId = null;
-
-    function getStoreCtx(){
-      const s = getSession();
-      if (!s) return null;
-      const db = loadDB();
-      return { session: s, db, storeKey: s.storeKey, store: db.stores[s.storeKey] };
-    }
 
     function openTab(tab){
       currentTab = tab;
@@ -609,24 +625,23 @@
       return true;
     }
 
-    // ----------------------------
-    // Vacation due calculation
-    // "Deve tirar até" = fim do período concessivo = admissão + 24 meses (simplificado)
-    // ----------------------------
-    function vacationDueISO(admissionISO){
-      if (!admissionISO) return "";
-      return addMonths(admissionISO, 24);
+    // ==========================================================
+    // Employees
+    // ==========================================================
+    function getEmpById(store, id){
+      return (store.employees || []).find(e=>e.id===id) || null;
     }
-
+    function upsertEmp(store, emp){
+      store.employees = store.employees || [];
+      const idx = store.employees.findIndex(e=>e.id===emp.id);
+      if (idx >= 0) store.employees[idx] = emp;
+      else store.employees.push(emp);
+    }
     function currentSalary(emp){
       if (!emp.salaryHistory?.length) return safeNum(emp.salary || 0);
       const sorted = [...emp.salaryHistory].sort((a,b)=> (a.date||"").localeCompare(b.date||""));
       return safeNum(sorted[sorted.length-1].salary);
     }
-
-    // ----------------------------
-    // Employees
-    // ----------------------------
     function listEmployeesForUI(){
       const ctx = getStoreCtx();
       const emps = ctx.store.employees || [];
@@ -665,7 +680,7 @@
             <td class="py-2">${vacDue || "—"}</td>
             <td class="py-2">${formatBRL(loan)}</td>
             <td class="py-2 text-right no-print">
-              <button class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs" onclick="openEmpEditor('${e.id}')">
+              <button class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs" onclick="window.__openEmpEditor('${e.id}')">
                 Editar
               </button>
             </td>
@@ -678,21 +693,6 @@
       editingEmpId = null;
     }
 
-    function escapeHTML(str){
-      return (str||"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
-    }
-
-    function getEmpById(store, id){
-      return (store.employees || []).find(e=>e.id===id) || null;
-    }
-
-    function upsertEmp(store, emp){
-      store.employees = store.employees || [];
-      const idx = store.employees.findIndex(e=>e.id===emp.id);
-      if (idx >= 0) store.employees[idx] = emp;
-      else store.employees.push(emp);
-    }
-
     function renderSalaryHistory(emp){
       const hist = (emp.salaryHistory || []).slice().sort((a,b)=> (a.date||"").localeCompare(b.date||""));
       salaryHistoryTable.innerHTML = hist.map(h=>`
@@ -703,7 +703,7 @@
       `).join("");
     }
 
-    window.openEmpEditor = (id) => {
+    window.__openEmpEditor = (id) => {
       const ctx = getStoreCtx();
       const emp = getEmpById(ctx.store, id);
       if (!emp) return;
@@ -724,8 +724,6 @@
       thPaidYear.value = "";
 
       renderSalaryHistory(emp);
-
-      // Fill calc loan default when selected
       renderCalcEmployees();
     };
 
@@ -745,6 +743,14 @@
       vacPaidYear.value = "";
       thPaidYear.value = "";
       salaryHistoryTable.innerHTML = "";
+    }
+
+    function loadAndUpdateEmp(updatedEmp){
+      const ctx = getStoreCtx();
+      const store = ctx.store;
+      upsertEmp(store, updatedEmp);
+      ctx.db.stores[ctx.storeKey] = store;
+      return ctx.db;
     }
 
     function saveEmp(){
@@ -780,7 +786,6 @@
       emp.admissionDate = admissionDate;
       emp.loanBalance = loanBalance;
 
-      // status
       if (!empActive.checked) {
         emp.status = "dismissed";
         emp.dismissalDate = empDismissal.value || todayISO();
@@ -789,7 +794,6 @@
         emp.dismissalDate = "";
       }
 
-      // add/overwrite latest salary record for today (or admission date if no history)
       emp.salaryHistory = emp.salaryHistory || [];
       const effectiveDate = todayISO();
       const existingToday = emp.salaryHistory.find(h => h.date === effectiveDate);
@@ -797,13 +801,12 @@
       else emp.salaryHistory.push({ date: effectiveDate, salary });
 
       upsertEmp(store, emp);
-
       ctx.db.stores[ctx.storeKey] = store;
       saveDB(ctx.db);
 
       editingEmpId = emp.id;
       renderEmployees();
-      window.openEmpEditor(emp.id);
+      window.__openEmpEditor(emp.id);
       alert("Salvo.");
     }
 
@@ -823,16 +826,8 @@
 
       saveDB(loadAndUpdateEmp(emp));
       renderEmployees();
-      window.openEmpEditor(emp.id);
+      window.__openEmpEditor(emp.id);
       alert("Mudança registrada.");
-    }
-
-    function loadAndUpdateEmp(updatedEmp){
-      const ctx = getStoreCtx();
-      const store = ctx.store;
-      upsertEmp(store, updatedEmp);
-      ctx.db.stores[ctx.storeKey] = store;
-      return ctx.db;
     }
 
     function markYearPaid(kind){
@@ -852,7 +847,7 @@
       }
 
       saveDB(loadAndUpdateEmp(emp));
-      window.openEmpEditor(emp.id);
+      window.__openEmpEditor(emp.id);
       alert("Marcado.");
     }
 
@@ -873,6 +868,7 @@
       const ctx = getStoreCtx();
       const store = ctx.store;
       if (!editingEmpId) return alert("Abra um funcionário.");
+
       const emp = getEmpById(store, editingEmpId);
       if (!emp) return;
 
@@ -888,38 +884,38 @@
       renderEmployees();
     }
 
-    // ----------------------------
-    // Rescisão calculator (simples)
-    // ----------------------------
-    // INSS 2026 (progressivo) — alíquotas 7,5%, 9%, 12%, 14% e teto 8.475,55. :contentReference[oaicite:2]{index=2}
-    function calcINSS2026(base){
-      let b = Math.min(Math.max(0, base), 8475.55);
-      const faixas = [
-        { upTo: 1621.00, rate: 0.075 },
-        { upTo: 2902.84, rate: 0.09  },
-        { upTo: 4354.27, rate: 0.12  },
-        { upTo: 8475.55, rate: 0.14  },
-      ];
-
-      let prev = 0;
-      let total = 0;
-      for (const f of faixas){
-        if (b <= prev) break;
-        const portion = Math.min(b, f.upTo) - prev;
-        total += portion * f.rate;
-        prev = f.upTo;
-      }
-      return total;
+    // ==========================================================
+    // Rescisão (simples)
+    // ==========================================================
+    function calcINSSSimple(base){
+      // Modelo simples e aproximado (p/ não travar o app).
+      // Você pode desligar no checkbox.
+      base = Math.max(0, base);
+      // Aproximação: 11% até teto, cap 900 (placeholder). Ajuste se quiser.
+      return Math.min(base * 0.11, 900);
     }
 
     function monthsFor13th(terminationISO){
-      // Regra prática: mês conta se trabalhou >= 15 dias no mês.
       if (!terminationISO) return 0;
       const d = new Date(terminationISO + "T00:00:00");
-      const m = d.getMonth() + 1; // 1..12
+      const m = d.getMonth() + 1;
       const day = d.getDate();
-      // meses completos antes + mês atual se >=15
       return (m - 1) + (day >= 15 ? 1 : 0);
+    }
+
+    function labelType(t){
+      if (t==="sem_justa_causa") return "Sem justa causa";
+      if (t==="pedido_demissao") return "Pedido de demissão";
+      if (t==="acordo") return "Acordo";
+      return t;
+    }
+    function line(label, value){
+      return `
+        <div class="flex items-center justify-between gap-3">
+          <div class="text-sm text-slate-600">${escapeHTML(label)}</div>
+          <div class="text-sm font-semibold">${formatBRL(value)}</div>
+        </div>
+      `;
     }
 
     function renderCalcEmployees(){
@@ -929,10 +925,8 @@
       const emps = (ctx.store.employees || []).filter(e => e.status !== "dismissed");
       calcEmp.innerHTML = emps.map(e=>`<option value="${e.id}">${escapeHTML(e.name)}</option>`).join("");
 
-      // Defaults
       calcDate.value = calcDate.value || todayISO();
 
-      // If selected, set loan discount from employee
       const selected = getEmpById(ctx.store, calcEmp.value);
       if (selected) calcLoanDiscount.value = safeNum(selected.loanBalance);
     }
@@ -948,62 +942,45 @@
       const salary = currentSalary(emp);
       const daysWorked = Math.max(0, Math.min(31, Number(calcDaysWorked.value||0)));
       const vacMonths = Math.max(0, Math.min(12, Number(calcVacMonths.value||0)));
-      const vacOverdue = Math.max(0, Math.min(3, Number(calcVacOverdue.value||0))); // limite prático
+      const vacOverdue = Math.max(0, Math.min(3, Number(calcVacOverdue.value||0)));
       const noticeDaysRaw = Math.max(0, Math.min(120, Number(calcNoticeDays.value||0)));
       const fgtsBal = safeNum(calcFgtsBalance.value);
       const loanDisc = safeNum(calcLoanDiscount.value);
 
       const type = calcType.value;
-
-      // salário base por dia (simplificação)
       const daily = salary / 30;
 
-      // Verb as
       const saldoSalario = daily * daysWorked;
-
-      // 13º proporcional (prático) - 1/12 por mês contado
       const m13 = monthsFor13th(term);
       const decimoTerceiro = (salary / 12) * m13;
 
-      // férias proporcionais e vencidas (simples)
       const feriasProp = (salary / 12) * vacMonths;
       const feriasVencidas = salary * vacOverdue;
       const feriasTotal = feriasProp + feriasVencidas;
       const umTerco = feriasTotal / 3;
 
-      // aviso prévio (regra do tipo)
       let noticeDays = noticeDaysRaw;
-      if (type === "pedido_demissao") noticeDays = 0; // simplificado
-      if (type === "acordo") noticeDays = noticeDaysRaw / 2; // metade
+      if (type === "pedido_demissao") noticeDays = 0;
+      if (type === "acordo") noticeDays = noticeDaysRaw / 2;
       const avisoPrevio = daily * noticeDays;
 
-      // FGTS multa
       let fgtsRate = 0.40;
       if (type === "acordo") fgtsRate = 0.20;
       if (type === "pedido_demissao") fgtsRate = 0.00;
-
       const multaFgts = (optFgts.checked ? fgtsBal * fgtsRate : 0);
 
-      // INSS: aplicar sobre verbas salariais (saldo + aviso + 13º) - simplificação
       const baseInss = saldoSalario + avisoPrevio + decimoTerceiro;
-      const inss = (optInss.checked ? calcINSS2026(baseInss) : 0);
+      const inss = (optInss.checked ? calcINSSSimple(baseInss) : 0);
 
-      const bruto =
-        saldoSalario +
-        decimoTerceiro +
-        feriasTotal +
-        umTerco +
-        avisoPrevio +
-        multaFgts;
-
+      const bruto = saldoSalario + decimoTerceiro + feriasTotal + umTerco + avisoPrevio + multaFgts;
       const descontos = inss + loanDisc;
       const liquido = bruto - descontos;
 
-      const html = `
+      calcResult.innerHTML = `
         <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
           <div class="text-sm text-slate-500">Resumo</div>
           <div class="text-lg font-bold mt-1">${escapeHTML(emp.name)} • ${escapeHTML(ctx.store.name)}</div>
-          <div class="text-sm text-slate-600">Desligamento: <span class="font-semibold">${term}</span> • Tipo: <span class="font-semibold">${labelType(type)}</span></div>
+          <div class="text-sm text-slate-600">Desligamento: <span class="font-semibold">${term}</span> • Tipo: <span class="font-semibold">${escapeHTML(labelType(type))}</span></div>
 
           <div class="mt-4 grid md:grid-cols-2 gap-3">
             <div class="bg-white border border-slate-200 rounded-2xl p-3">
@@ -1022,7 +999,7 @@
             <div class="bg-white border border-slate-200 rounded-2xl p-3">
               <div class="font-semibold">Descontos</div>
               <div class="mt-2 space-y-1">
-                ${line("INSS (base saláriais)", inss)}
+                ${line("INSS", inss)}
                 ${line("Desconto empréstimo", loanDisc)}
               </div>
 
@@ -1044,79 +1021,45 @@
           </div>
 
           <div class="text-xs text-slate-500 mt-3">
-            Cálculo simples e ajustável. INSS 2026 progressivo (teto R$ 8.475,55). :contentReference[oaicite:3]{index=3}
+            Cálculo simples e ajustável (modelo prático).
           </div>
         </div>
       `;
-
-      calcResult.innerHTML = html;
-      return { html, emp, term, type };
-    }
-
-    function labelType(t){
-      if (t==="sem_justa_causa") return "Sem justa causa";
-      if (t==="pedido_demissao") return "Pedido de demissão";
-      if (t==="acordo") return "Acordo";
-      return t;
-    }
-
-    function line(label, value){
-      return `
-        <div class="flex items-center justify-between gap-3">
-          <div class="text-sm text-slate-600">${escapeHTML(label)}</div>
-          <div class="text-sm font-semibold">${formatBRL(value)}</div>
-        </div>
-      `;
+      return { emp, term, type };
     }
 
     function exportPDF(){
-      const result = doCalc();
-      if (!result) return;
-
+      const r = doCalc();
+      if (!r) return;
       const ctx = getStoreCtx();
-      const emp = result.emp;
-
       const win = window.open("", "_blank");
-      const doc = win.document;
-
-      doc.open();
-      doc.write(`
-        <!doctype html>
-        <html lang="pt-BR">
-        <head>
-          <meta charset="utf-8" />
-          <meta name="viewport" content="width=device-width,initial-scale=1" />
-          <title>Rescisão - ${escapeHTML(emp.name)}</title>
-          <style>
-            body { font-family: Arial, sans-serif; padding: 18px; }
-            .box { border: 1px solid #ddd; border-radius: 12px; padding: 14px; }
-            .muted { color: #666; font-size: 12px; }
-          </style>
-        </head>
-        <body>
+      win.document.open();
+      win.document.write(`
+        <!doctype html><html lang="pt-BR"><head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Rescisão - ${escapeHTML(r.emp.name)}</title>
+        <style>
+          body{font-family:Arial,sans-serif;padding:18px}
+          .no-print{display:none}
+        </style>
+        </head><body>
           <h2>Rescisão (simples)</h2>
-          <div class="muted">
-            Loja: <b>${escapeHTML(ctx.store.name)}</b> • Funcionário: <b>${escapeHTML(emp.name)}</b><br>
-            Data: <b>${escapeHTML(result.term)}</b> • Tipo: <b>${escapeHTML(labelType(result.type))}</b>
+          <div style="color:#666;font-size:12px">
+            Loja: <b>${escapeHTML(ctx.store.name)}</b> • Funcionário: <b>${escapeHTML(r.emp.name)}</b><br>
+            Data: <b>${escapeHTML(r.term)}</b> • Tipo: <b>${escapeHTML(labelType(r.type))}</b>
           </div>
           <div style="height:12px"></div>
           ${calcResult.innerHTML}
-          <div style="height:12px"></div>
-          <div class="muted">
-            Exportado do PWA RH Simples. Salve como PDF na janela de impressão.
-          </div>
-          <script>
-            window.onload = () => window.print();
-          </script>
-        </body>
-        </html>
+          <script>window.onload=()=>window.print();</script>
+        </body></html>
       `);
-      doc.close();
+      win.document.close();
     }
 
-    // ----------------------------
-    // Settings: pin change, backup
-    // ----------------------------
+    // ==========================================================
+    // Settings
+    // ==========================================================
     async function changePin(){
       const ctx = getStoreCtx();
       const userKey = ctx.session.userKey;
@@ -1128,11 +1071,10 @@
       if (newPin.length < 4) return alert("Novo PIN muito curto (mínimo 4).");
       if (!oldPin) return alert("Informe o PIN atual.");
 
-      const oldHash = await sha256(oldPin);
+      const oldHash = await hashPin(oldPin);
       if (oldHash !== mgr.pinHash) return alert("PIN atual incorreto.");
 
-      mgr.pinHash = await sha256(newPin);
-
+      mgr.pinHash = await hashPin(newPin);
       ctx.db.stores[ctx.storeKey] = ctx.store;
       saveDB(ctx.db);
 
@@ -1163,9 +1105,7 @@
         try {
           const parsed = JSON.parse(fr.result);
           if (!parsed || !parsed.store) return alert("JSON inválido.");
-          // Importa somente na loja atual
           ctx.db.stores[ctx.storeKey].employees = parsed.store.employees || [];
-          // Mantém managers/pins da loja atual por segurança
           saveDB(ctx.db);
           renderEmployees();
           alert("Importado.");
@@ -1187,19 +1127,21 @@
       alert("Loja resetada.");
     }
 
-    // ----------------------------
+    // ==========================================================
     // Events
-    // ----------------------------
+    // ==========================================================
     document.getElementById("btnLogin").addEventListener("click", async () => {
       const user = document.getElementById("loginUser").value;
       const pin = (document.getElementById("loginPin").value || "").trim();
       if (!pin) return alert("Informe o PIN.");
 
+      await ensureDefaultPins(); // garante que pins existem antes do login
+
       const storeKey = resolveStoreFromUser(user);
       const db = loadDB();
       const mgr = db.stores[storeKey].managers[user];
-      const pinHash = await sha256(pin);
 
+      const pinHash = await hashPin(pin);
       if (pinHash !== mgr.pinHash) return alert("PIN incorreto.");
 
       setSession({ userKey: user, storeKey });
@@ -1207,10 +1149,7 @@
       requireAuth();
     });
 
-    btnLogout.addEventListener("click", () => {
-      clearSession();
-      requireAuth();
-    });
+    btnLogout.addEventListener("click", () => { clearSession(); requireAuth(); });
 
     tabBtns.forEach(b => b.addEventListener("click", ()=> openTab(b.dataset.tab)));
 
@@ -1219,10 +1158,7 @@
 
     btnNewEmp.addEventListener("click", openNewEmp);
     btnCloseEmpEditor.addEventListener("click", ()=> empEditorWrap.classList.add("hidden"));
-    btnToggleDismissed.addEventListener("click", ()=>{
-      showDismissed = !showDismissed;
-      renderEmployees();
-    });
+    btnToggleDismissed.addEventListener("click", ()=>{ showDismissed = !showDismissed; renderEmployees(); });
 
     btnSaveEmp.addEventListener("click", saveEmp);
     btnAddSalaryChange.addEventListener("click", addSalaryChange);
@@ -1250,9 +1186,7 @@
     });
     btnReset.addEventListener("click", resetStore);
 
-    // ----------------------------
     // Boot
-    // ----------------------------
     (async function boot(){
       await ensureDefaultPins();
       requireAuth();
